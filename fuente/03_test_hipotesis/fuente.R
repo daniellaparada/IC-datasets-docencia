@@ -4,6 +4,7 @@
 # https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31
 # https://meteostat.net/es/station/87582?t=2019-01-01/2019-12-31
 # https://meteostat.net/es/station/87582?t=2023-01-01/2023-03-31
+# http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson
 
 require(ggplot2)
 require(tidyverse)
@@ -11,6 +12,9 @@ require(ggfortify)
 require(plotly)
 require(vroom)
 require(effsize)
+library(sf)
+library(osmdata)
+library(ggmap)
 
 # importo datos de flujo vehicular 2022 (¡ROTO! Faltan 8 meses aprox)
 #colnames(flujo) <- c("fecha","hora","autopista","dispnom","dispub","sentido","displat","displong","veh")
@@ -23,6 +27,33 @@ flujo19 <- vroom("flujo-vehicular-por-radares-2019.csv")
 flujo23 <- vroom("flujo-vehicular-por-radares-2023.csv")
 flujo23$fecha <- as.Date(flujo23$fecha,tryFormats = c("%d/%m/%Y"))
 
+# importo el mapa de CABA
+barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
+  select(BARRIO, COMUNA)
+
+# importo datos de flujo vehicular 2019 y agrupo por radar
+flujo19 <- vroom("flujo-vehicular-por-radares-2019.csv") %>%
+  group_by(disp_ubicacion) %>% 
+  summarise(n = sum(cantidad),
+            lat = mean(lat),
+            long = mean(long)) %>%
+  drop_na() 
+
+paleta <- colorQuantile("YlOrRd", flujo19$n, n=6)
+
+# Radares
+leaflet(flujo19) %>% 
+  addTiles() %>%
+  addCircleMarkers(lng= ~long, 
+                   lat= ~lat,
+                   fillOpacity=0.9,
+                   radius=~100*n/(sum(n)),
+                   weight=1,
+                   color = ~paleta(n),
+                   stroke = FALSE) 
+
+# importo datos de flujo vehicular 2019
+flujo19 <- vroom("flujo-vehicular-por-radares-2019.csv")
 
 # Miro los viajes en un sentido en Lugones altura Esma
 flujo19 <- flujo19 %>%
@@ -196,3 +227,5 @@ t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
        mu = 0, paired = FALSE, conf.level = 0.95)
 mean(datos1$n)
 mean(datos2$n)
+
+

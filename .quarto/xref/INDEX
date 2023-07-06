@@ -1,17 +1,17 @@
 {
+  "03_test_hipotesis.qmd": {
+    "03_test_hipotesis.html": "f02b1fe1"
+  },
   "index.qmd": {
-    "index.html": "1ba9e44e"
+    "index.html": "645749c4"
   },
   "01_regresion.qmd": {
-    "01_regresion.html": "31a363af"
+    "01_regresion.html": "e662e8d7"
   },
   "02_regresion_multiple.qmd": {
-    "02_regresion_multiple.html": "a13a65d6"
-  },
-  "03_test_hipotesis.qmd": {
-    "03_test_hipotesis.html": "c949f9c9"
+    "02_regresion_multiple.html": "4e58a350"
   },
   "references.qmd": {
-    "references.html": "03b6f6f2"
+    "references.html": "660a7ac2"
   }
 }

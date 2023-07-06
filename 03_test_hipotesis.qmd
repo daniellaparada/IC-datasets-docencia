@@ -4,7 +4,7 @@ Presentamos un ejemplo para test de hipótesis a partir de datos reales de clima
 
 # Test de hipótesis
 
-A continuación, se muestran algunos posibles tests de hipótesis para datos de flujo vehicular en CABA usando, en algunos casos, incorporando variables climáticas.
+A continuación, se muestran algunos posibles análisis para datos de flujo vehicular en CABA usando, en algunos casos, incorporando variables climáticas.
 
 ```{r, message=FALSE, warning=FALSE}
 # Librerías necesarias
@@ -14,11 +14,45 @@ require(ggfortify)
 require(plotly)
 require(vroom)
 require(effsize)
+require(sf)
+require(osmdata)
+require(ggmap)
+require(leaflet)
 ```
 
 ## Exploración inicial
 
-En el dataset reducido `flujo-vehicular.csv` se incluyen datos de XXX.
+```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
+# importo el mapa de CABA
+barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
+  select(BARRIO, COMUNA)
+
+# importo datos de flujo vehicular 2019
+flujo19 <- vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv") %>%
+  group_by(disp_ubicacion) %>% 
+  summarise(n = sum(cantidad),
+            lat = mean(lat),
+            long = mean(long)) %>%
+  drop_na() 
+
+paleta <- colorQuantile("YlOrRd", flujo19$n, n=6)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+# Radares
+leaflet(flujo19) %>% 
+  addTiles() %>%
+  addCircleMarkers(lng= ~long, 
+                   lat= ~lat,
+                   fillOpacity=0.9,
+                   radius=~100*n/(sum(n)),
+                   weight=1,
+                   color = ~paleta(n),
+                   stroke = FALSE) 
+```
+
+En el dataset reducido `flujo-vehicular.csv` se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
 
 El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación se muestran 10 datos de dicho conjunto.
 
@@ -30,6 +64,8 @@ options(scipen=999)
 ```{r, message=FALSE, warning=FALSE}
 knitr::kable(datos[1:10,], caption = "Dataset reducido, primeras 10 observaciones.")
 ```
+
+Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023.
 
 Como puede verse en el siguiente gráfico XXX
 
@@ -44,7 +80,7 @@ ggplotly(ggplot(data = datos, aes(x=n19, y=n23, key=fecha)) +
   source = "select", tooltip = c("key"))
 ```
 
-Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023.
+Los días 20 y 21 de febrero de 2023 corresponden a feriados de carnaval, mientras que los días 9 y 16 de enero de 2019 Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023.
 
 ```{r echo=FALSE}
 # Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023

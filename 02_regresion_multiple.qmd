@@ -1,0 +1,338 @@
+Presentamos un ejemplo de modelos de regresión a partir de datos reales de clima y de uso del sistema de bicicletas Ecobici de la Ciudad Autónoma de Buenos Aires.
+
+![Cómo *MidJourney* imagina que se ilustra este problema bajo el *prompt*: */imagine an enchanting illustration of Buenos Aires, with the obelisk at the center of the image, during a rainy day, where the focal point is the bustling bicycle usage*.](./fuente/02_regresion_multiple/apertura.png){fig-align="center"}
+
+# Regresión múltiple
+
+A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de ciertas variables climáticas.
+
+```{r, message=FALSE, warning=FALSE}
+# Librerías necesarias
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(kableExtra)
+```
+
+## Exploración inicial
+
+En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://www.dropbox.com/scl/fi/t7ugylb5berc8qnvr4gl9/clima-bici.csv?rlkey=a8vtm7882evbrm4q3ysplqvc1&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+require(knitr)
+options(scipen=999)
+datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(datos[1:10,], caption = "Dataset reducido, primeras 10 observaciones.")
+```
+
+Como puede verse en el siguiente gráfico, la cantidad de registros de viajes de esa duración varía en función de la temperatura del día, de las precipitaciones, y de si se trata de un día de la semana (lunes a viernes) o fin de semana (sábado y domingo), entre otros.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = datos, aes(x=tavg, y=n, key=fecha, size=prcp, color=tipo_dia)) + 
+  labs(x = "Temperatura media", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 2)) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+El sistema de Ecobici es un sistema público de transporte y, como tal, es razonable que su uso sea intensivo durante los días hábiles, lo que explica las tendencias separadas que se ven en el gráfico anterior. Sin embargo, en el conjunto de datos no se tiene información de feriados, por lo que hay algunas observaciones del grupo verde (lunes a viernes) que se observan próximos a los del grupo rojo (fines de semana). También hay fines de semana que coinciden con feriados en los que típicamente hay menos movimiento; y también ocurre lo contrario: fines de semana de uso atípico, como el de aquel domingo 18 de diciembre de 2022 en que Argentina se coronó campeón Mundial, y cuya observación, aunque de color rojo (domingo), se ubica dentro de la nube de puntos verdes.
+
+El tamaño de los puntos del gráfico anterior es proporcional al nivel de precipitación (en mm) del día. Sin embargo, una observación (27/02/22) registra una precipitación tan alta (más de 240 mm) que limita la posibilidad de apreciar qué ocurre, en general, cuando llueve y las lluvias no son tan extremas en términos de precipitación acumulada [(acá una noticia al respecto)](https://www.pagina12.com.ar/404361-clima-en-buenos-aires-el-pronostico-del-tiempo-para-este-dom).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(datos[58,], caption = "Datos del 27 de febrero.")
+```
+
+Para lo que sigue, removemos esa observación.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+datos <- datos[-58,]
+ggplotly(ggplot(data = datos, aes(x=tavg, y=n, key=fecha, size=prcp, color=tipo_dia)) + 
+  labs(x = "Temperatura media", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 2)) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+En efecto, los puntos más grandes de cada "nube" de color se encuentran ubicados por debajo de la tendencia general del resto de los puntos de su clase. Es decir, los días con mayor nivel de precipitación, la cantidad de usos del sistema de Ecobici se reduce notablemente, tanto para días hábiles como fines de semana. En particular, las tendencias por tipo de día se observan más "limpias" cuando se filtra por días en los que no se registran precipitaciones, como se observa a continuación.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos, lluvia=="No llueve"), aes(x=tavg, y=n, key=fecha, color=tipo_dia)) + 
+  labs(x = "Temperatura media", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 2)) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+### Primeros ajustes con temperatura y precipitaciones
+
+Se incorpora la variable de precipitaciones (`prcp`) además de la temperatura (`tavg`) a un modelo de regresión para predecir la cantidad de bicicletas utilizadas por día (`n`). En esta primera exploración, no se distingue por tipo de día (`tipo_dia`).
+
+```{r, message=FALSE, warning=FALSE}
+fitlm = lm(n ~ tavg + prcp, data = datos)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+summary(fitlm)
+ct <- round(fitlm$coefficients[2],2)
+cp <- round(fitlm$coefficients[3],2)
+```
+
+El coeficiente estimado para la variable del nivel de precipitación es $`r cp`$, lo que sugiere que el incremento en el nivel de lluvia hace disminuir la cantidad de bicicletas que se usan en un día, razonablemente con lo esperado y observado.
+
+Lo contrario ocurre con la temperatura, cuyo coeficiente estimado es $`r ct`$, que sugiere que el aumento de temperatura incrementa el uso del sistema Ecobici.
+
+Para lo que sigue, trabajamos con una reducción inicial de los datos a los días "lluviososo y templados", es decir, a las observaciones que registran precipitación no nula y temperatura media inferior a 25°, e incorporamos la variable de precipitaciones en un modelo de regresión múltiple.
+
+```{r, message=FALSE, warning=FALSE}
+datosfilt <- filter(datos, 
+                    lluvia=="Llueve",
+                    tavg<25)
+ggplotly(ggplot(data = datosfilt, aes(x=tavg, y=n, key=fecha, size=prcp, color=tipo_dia)) + 
+  labs(x = "Temperatura media", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm",
+              formula = y ~ x) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+#### Días de semana lluviosos y templados
+
+```{r, message=FALSE, warning=FALSE}
+datosfilt <- filter(datos, 
+                    lluvia=="Llueve",
+                    tipo_dia=="Lunes a viernes",
+                    tavg<25) 
+fitlm = lm(n ~ tavg + prcp, data = datosfilt)
+summary(fitlm)
+```
+
+#### Fines de semana lluviosos y templados
+
+```{r, message=FALSE, warning=FALSE}
+datosfilt <- filter(datos, 
+                    lluvia=="Llueve",
+                    tipo_dia=="Fin de semana",
+                    tavg<25)
+
+fitlm = lm(n ~ tavg + prcp, data = datosfilt)
+summary(fitlm)
+```
+
+### Predicción
+
+Para una primera evaluación de estos modelos, buscamos predecir la cantidad de usos del sistema Ecobici para un día de semana, con temperatura media de 24° y con un nivel de precipitaciones de 5 mm.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+nd <- data.frame(tavg=24,prcp=5,tipo_dia="Lunes a viernes")
+knitr::kable(nd,caption = "Nueva observación a predecir.")
+```
+
+Ajustamos diferentes modelos de acuerdo con la exploración inicial y vemos las predicciones y sus intervalos de confianza de nivel $95\%$.
+
+```{r, message=FALSE, warning=FALSE}
+datosfilt <- filter(datos, 
+                    lluvia=="Llueve",
+                    tipo_dia=="Lunes a viernes",
+                    tavg<25)
+
+m1 <- lm(n ~ 1, data = datos)
+m2 <- lm(n ~ 1, data = datosfilt)
+m3 <- lm(n ~ tavg, data = datos)
+m4 <- lm(n ~ tavg, data = datosfilt)
+m5 <- lm(n ~ tavg + prcp, data = datos)
+m6 <- lm(n ~ tavg + prcp, data = datosfilt)
+
+predichos <- rbind(predict(m1, nd, interval = "prediction"),
+                   predict(m2, nd, interval = "prediction"),
+                   predict(m3, nd, interval = "prediction"),
+                   predict(m4, nd, interval = "prediction"),
+                   predict(m5, nd, interval = "prediction"),
+                   predict(m6, nd, interval = "prediction"))
+
+predichos <- cbind(predichos, predichos[,3]-predichos[,2])
+
+rownames(predichos) <- c("Modelo 1: Todos los datos -> mean(n)",
+                         "Modelo 2: LaV, lluvia, <25° -> mean(n)",
+                         "Modelo 3: Todos los datos -> tavg",
+                         "Modelo 4: LaV, lluvia, <25° -> tavg",
+                         "Modelo 5: Todos los datos -> tavg + prcp",
+                         "Modelo 6: LaV, lluvia, <25° -> tavg + prcp")
+
+colnames(predichos) <- c("Pred", "linf", "lsup", "long")
+
+knitr::kable(data.frame(predichos),caption = "Predicciones con diferentes ajustes.")
+```
+
+Como es de esperar, el modelo que da lugar a un intervalo de predicción de menor longitud para esta nueva observación es el que incorpora datos de temperatura y precipitaciones, pero que fue construido con el *dataset* reducido a días de semana, templados y con lluvias.
+
+## Modelo completo: temperatura, precipitaciones y tipo de día
+
+Buscamos un modelo más versátil y con buena capacidad predictiva. Para lo que sigue, transformamos la variable `tipo_dia` en una categórica (`finde`) representando por 1 a los días de fin de semana, y por 0, a los días de semana. Trabajamos con el *dataset* completo.
+
+```{r, message=FALSE, warning=FALSE}
+datos_tr <- datos %>%
+  mutate(finde = ifelse(tipo_dia=="Lunes a viernes",0,1)) %>%
+  select(c(1,2,3,6,10))
+
+knitr::kable(datos_tr[1:10,],caption = "Datos con variable categórica para tipo de día, primeras 10 observaciones.")
+```
+
+Evaluamos un modelo que incorpora los datos de temperatura, precipitaciones y tipo de día a través de la variable categórica creada.
+
+```{r, message=FALSE, warning=FALSE}
+fitlm = lm(n ~ poly(tavg,2) + prcp + finde, data = datos_tr)
+summary(fitlm)
+coef <- round(fitlm$coefficients,0)
+```
+
+Los coeficiente estimados sugieren que la cantidad basal de usos del sistema es de $`r coef[1]`$ y que, *ceteris paribus*, ocurre lo siguiente:
+
+-   como la relación entre la cantidad de usos y la temperatura es modelada con un polinomio de grado 2 y con coeficientes $`r coef[2]`$ y $`r coef[3]`$, para cada grado en la variable temperatura respectivamente, se penaliza la cantidad de usos por temperaturas extremas (comportamiento que ya habíamos comentado en el capítulo 1),
+
+-   los usos disminuyen por la presencia de lluvia, a razón de $`r coef[4]`$ por cada mm de precipitaciones registrado y,
+
+-   el mayor impacto en la cantidad de usos reside en el tipo de día, registrando una reducción de $`r -coef[5]`$ usos los fines de semana respecto de los días de semana.
+
+### Predicción
+
+Volvemos a predecir la cantidad de usos del sistema Ecobici para un día de semana, con temperatura media de 24° y con un nivel de precipitaciones de 5 mm y comparamos con los predichos anteriores.
+
+```{r, message=FALSE, warning=FALSE}
+nd <- data.frame(tavg=24,prcp=5,finde=0)
+
+predicho_nuevo <- predict(fitlm, nd, interval = "prediction")
+predicho_nuevo <- cbind(predicho_nuevo, predicho_nuevo[,3]-predicho_nuevo[,2])
+
+colnames(predicho_nuevo) <- c("Pred", "linf", "lsup", "long")
+rownames(predicho_nuevo) <- c("Modelo completo: Todos los datos -> tavg + tavg^2 + prcp + finde")
+
+knitr::kable(data.frame(rbind(predichos,predicho_nuevo)),caption = "Predicciones con diferentes ajustes.")
+```
+
+Como es de esperar, la predicción dada por el modelo completo parece ser más precisa que las de los restantes. Más aún, como el modelo estima a partir del conjunto de datos completo, su desempeño se mantiene, incluso para la predicción de la cantidad de usos del sistema Ecobici más generales, como por ejemplo, para un fin de semana, con temperatura media de 25°, sin lluvias, y en relación con los predichos anteriores.
+
+```{r, message=FALSE, warning=FALSE}
+nd2 <- data.frame(tavg=20,prcp=0,finde=1)
+
+knitr::kable(nd2,caption = "Otra nueva observación a predecir.")
+```
+
+```{r, message=FALSE, warning=FALSE}
+predicho_nuevo <- predict(fitlm, nd2, interval = "prediction")
+predicho_nuevo <- cbind(predicho_nuevo, predicho_nuevo[,3]-predicho_nuevo[,2])
+colnames(predicho_nuevo) <- c("Pred", "linf", "lsup", "long")
+rownames(predicho_nuevo) <- c("Modelo completo: Todos los datos -> tavg + tavg^2 + prcp + finde")
+
+predichos <- rbind(predict(m1, nd2, interval = "prediction"),
+                   predict(m2, nd2, interval = "prediction"),
+                   predict(m3, nd2, interval = "prediction"),
+                   predict(m4, nd2, interval = "prediction"),
+                   predict(m5, nd2, interval = "prediction"),
+                   predict(m6, nd2, interval = "prediction"))
+
+predichos <- cbind(predichos, predichos[,3]-predichos[,2])
+
+rownames(predichos) <- c("Modelo 1: Todos los datos -> mean(n)",
+                         "Modelo 2: LaV, lluvia, <25° -> mean(n)",
+                         "Modelo 3: Todos los datos -> tavg",
+                         "Modelo 4: LaV, lluvia, <25° -> tavg",
+                         "Modelo 5: Todos los datos -> tavg + prcp",
+                         "Modelo 6: LaV, lluvia, <25° -> tavg + prcp")
+
+colnames(predichos) <- c("Pred", "linf", "lsup", "long")
+
+knitr::kable(data.frame(rbind(predichos,predicho_nuevo)),caption = "Predicciones con diferentes ajustes.")
+```
+
+Mientras todas las demás predicciones rondan valores entre $8000$ y $10000$, el modelo completo predice alrededor de $4300$ usos, dando lugar, además, al intervalo de menor longitud observada. Es decir, el modelo de regresión múltiple que parece más adecuado para el problema es:
+
+> **`n ~ tavg + tavg^2 + prcp + finde`.**
+
+# Acerca de los datos
+
+A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
+
+También se incluye el enlace de descarga al dataset reducido, `clima-bici.csv`, con el que se desarrolló el ejemplo.
+
+## Sobre el *dataset* de clima
+
+Los datos de este ejemplo corresponden a datos de clima del año 2022 tomados de la base de datos meteorológicos y climáticos de MeteoStat [(disponibles acá)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31). En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582), desde el 1ro de enero de 2022 hasta el 31 de diciembre de 2022, y un conjunto reducido de variables.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+clima <- read_csv("./fuente/02_regresion_multiple/registro_tiempo_aeroparque.csv") %>% 
+  select(c(1:5,7:8,10))
+```
+
+## Sobre el *dataset* de Ecobici
+
+Los datos de este ejemplo corresponden a datos de uso del sistema Ecobici de la Ciudad de Buenos Aires [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas). En particular, se consideran los datos del año 2022 correspondientes a viajes de entre 5 minutos y 1 hora de duración.
+
+Ecobici es el sistema de transporte público de bicicletas de la Ciudad de Buenos Aires, que tiene estaciones automáticas con bicicletas a disposición las 24 horas, todos los días del año. El sistema es gratuito para todas las personas residentes del país de lunes a viernes (días hábiles) con hasta cuatro viajes de 30 minutos cada uno. Sin embargo, si se utiliza por un tiempo mayor que el indicado o durante los fines de semana, existen diferentes pases con variados costos. A modo de referencia, el pase que habilita a hacer 6 viajes diarios de hasta 60 minutos cada uno cualquier día de la semana tiene un costo de \$1.785 (junio 2023).
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+trips <- read_csv("./fuente/02_regresion_multiple/trips_2022.csv", 
+                       col_types = cols(fecha_origen_recorrido = col_datetime(format = "%Y-%m-%d %H:%M:%S"))) %>% 
+  mutate(fecha = format(as_date( ymd_hms(fecha_destino_recorrido )))) %>% 
+  filter(duracion_recorrido >300 && duracion_recorrido < 3600) %>% 
+  group_by(fecha) %>% 
+  count() %>% 
+  mutate(fecha = as_date(fecha))
+```
+
+## *Dataset* pre-procesado: `clima-bici.csv`
+
+Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `clima-bici.csv`, a partir de los datos de clima y de uso del sistema Ecobici, en el que se dispone de las siguientes variables.
+
+-   `fecha`: fecha, en el formato año-mes-día.
+-   `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
+-   `tmed`: temperatura media (°C) registrada en esa fecha.
+-   `tmin`: temperatura mínima (°C) registrada en esa fecha.
+-   `tmax`: temperatura máxima (°C) registrada en esa fecha.
+-   `prcp`: precipitaciones (mm) registrada en esa fecha.
+-   `dia`: día de la semana de la fecha indicada.
+-   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
+-   `lluvia`: condición de lluvia (Llueve: `prcp`\>0, No llueve: `prcp`=0) de la fecha indicada.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+trips <- trips %>% 
+  filter(fecha >= min(clima$date) & fecha <= max(clima$date))
+
+datos <- left_join(trips, clima, by = c("fecha" = "date")) %>% 
+  drop_na() %>% 
+  mutate(dia = weekdays(fecha),
+         tipo_dia = ifelse(dia %in% c("sábado", "domingo"), "Fin de semana", "Lunes a viernes"),
+         lluvia = ifelse(prcp == 0, "No llueve", "Llueve")) 
+```
+
+# Librerías
+
+Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(kableExtra)
+require(knitr)
+```
+
+```{r message=FALSE, warning=FALSE}
+sessionInfo()
+```
+
+# Referencias
+
+-   MeteoStat [(info disponible acá](https://meteostat.net) [y datos disponibles acá.)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31)
+
+-   Sistema Ecobici de la Ciudad Autónoma de Buenos Aires [(info disponible acá](https://baecobici.com.ar/#/es/inicio) [y datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas)

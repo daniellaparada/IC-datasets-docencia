@@ -1,0 +1,233 @@
+---
+title: "Test de hipótesis"
+output:
+  bookdown::gitbook:
+    split_by: none
+    self_contained: true
+    lib_dir: assets
+    config:
+      toolbar:
+        position: static
+  bookdown::pdf_book:
+    keep_tex: true
+  bookdown::html_book:
+    css: toc.css
+documentclass: book
+date: '14 de junio de 2023'
+---
+# Ejemplo con datos de flujo vehicular y de clima en CABA
+
+Presentamos un ejemplo para test de hipótesis a partir de datos reales de clima y de uso del sistema de biblicetas Ecobici de la Ciudad Autónoma de Buenos Aires.
+
+```{r, echo=FALSE, fig.align="center", out.width="70%", fig.cap="Cómo MidJourney imagina que se ilustra este problema."}
+knitr::include_graphics("G:/Mi unidad/_CONICET IC/_2023/[Proyecto] Datasets para docencia/_NuevoEnfoque/03-Test de hipótesis [final, ver con GS]/03-apertura.png")
+```
+
+
+# Ejemplo desarrollado
+
+A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de ciertas variables climáticas.
+
+## Exploración inicial
+
+En el dataset reducido `flujo-vehicular.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022. 
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+require(ggplot2)
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(vroom)
+require(effsize)
+datos <- read_csv("flujo-vehicular.csv")
+options(scipen=999)
+```
+
+El dataset `flujo-vehicular.csv` se encuentra [acá](https://drive.google.com/file/d/1XOQsGZiz06IC7ip2yj_l28c-ojJZ2bZ1/view?usp=sharing). A continuación se muestran  10 datos de dicho conjunto.
+
+```{r}
+knitr::kable(datos[1:10,], caption = "Dataset reducido")
+```
+
+Como puede verse en el siguiente gráfico XXX
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = datos, aes(x=n19, y=n23, key=fecha)) + 
+  labs(x = "Flujo vehicular Lugones (Esma) 2019", y= "Flujo vehicular Lugones (Esma) 2023") +
+  xlim(0, 140000) +
+  ylim(0, 140000) +
+  geom_point(colour = "firebrick") + 
+  geom_abline(slope=1,intercept=0,show.legend = F,linetype="dashed") +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023.
+
+```{r echo=FALSE}
+# Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023
+recambios <- c(4,7,20,21)
+flujosout <- datos[-recambios,]
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = flujosout, aes(x=n19, y=n23, key=fecha)) +
+  labs(x = "Flujo vehicular Lugones (Esma) 2019", y= "Flujo vehicular Lugones (Esma) 2023") +
+  xlim(100000, 140000) +
+  ylim(100000, 140000) +
+  geom_point(colour = "firebrick") + 
+  geom_abline(slope=1,intercept=0,show.legend = F,linetype="dashed") +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Gráfico
+fl <- data.frame(flujo = c(flujosout$n19,flujosout$n23),
+                 dia = c(flujosout$fecha,flujosout$fecha),
+                 anio = as.factor(c(rep("2019", length(flujosout$n19)),
+                                    rep("2023", length(flujosout$n23))))) 
+
+labs = fl$dia[c(1,8,16,24,32,40,48,56)]
+
+ggplotly(ggplot(data = fl, aes(x=dia, y=flujo, color=anio, key=dia)) + 
+  labs(x = "Día (solo para lunes a viernes de ambos años)", y= "Flujo vehicular Lugones (Esma)", color = "Año") + 
+  geom_point() + 
+  scale_x_discrete(breaks=seq(1,8,1),labels=labs) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+## Test para diferencia de medias
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Test para diferencia de medias
+t.test(x = flujosout$n19, y = flujosout$n23, alternative = "two.sided",
+       mu = 0, paired = TRUE, conf.level = 0.99)
+
+# Effectsize
+cohen.d(d = flujosout$n19, f = flujosout$n23, paired = TRUE)
+```
+
+## Incorporamos datos de clima
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+datos <- read_csv("flujo-clima.csv")
+```
+
+```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+flujoclima <- datos
+ggplotly(ggplot(data = filter(flujoclima), aes(x=factor(dia, level=c("lunes","martes","miércoles","jueves","viernes","sábado","domingo")), 
+                                      y=n, color=tipo_dia, key=prcp)) + 
+  geom_point(aes(size=prcp)) +
+  labs(x = "Días de la semana", y= "Flujo vehicular Lugones (Esma)", 
+       color = "Tipo de día", size = "Precipitaciones") + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+¿Hay diferencia en el flujo medio cuando llueve (días hábiles)?
+
+```{r message=FALSE, warning=FALSE}
+# Días de semana con lluvia: 20 datos
+datos1 <- flujoclima %>%
+  filter(prcp>0, 
+         tipo_dia == "Lunes a viernes")
+
+# Días de semana sin lluvia: 45 datos
+datos2 <- flujoclima %>%
+  filter(prcp==0, 
+         tipo_dia == "Lunes a viernes")
+
+boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
+        names=c("Lluvia", "Sin lluvia"))
+```
+
+Test para diferencia de medias
+
+```{r message=FALSE, warning=FALSE}
+# Test para diferencia de medias
+t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
+       mu = 0, paired = FALSE, conf.level = 0.95)
+```
+
+¿Hay diferencia en el flujo medio entre lunes y miércoles?
+
+```{r message=FALSE, warning=FALSE}
+# Días de semana con lluvia: 13 datos
+datos1 <- flujoclima %>%
+  filter(dia == "lunes")
+
+# Días de semana sin lluvia: 13 datos
+datos2 <- flujoclima %>%
+  filter(dia == "miércoles")
+
+boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
+        names=c("Lunes", "Miércoles"))
+```
+
+Test para diferencia de medias
+
+```{r message=FALSE, warning=FALSE}
+t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
+       mu = 0, paired = FALSE, conf.level = 0.95)
+```
+
+
+# Acerca de los datos
+
+A continuación, se detallan aspectos de los datasets que conformaron el dataset reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
+
+También se incluye el enlace de descarga al dataset reducido, `flujo-vehicular.csv`, con el que se desarrolló el ejemplo.
+
+
+## Sobre el dataset de clima
+
+Los datos de este ejemplo corresponden a datos de clima del año 2022 tomados de la base de datos meteorológicos y climáticos de MeteoStat [(disponibles acá)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31). En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582), desde el 1ro de enero de 2022 hasta el 31 de diciembre de 2022, y un conjunto reducido de variables.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+
+```
+
+
+## Sobre el dataset de flujo vehicular
+
+Los datos de este ejemplo corresponden a datos de uso del sistema Ecobici de la Ciudad de Buenos Aires [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas). En particular, se consideran los datos del año 2022 correspondientes a viajes de entre 5 minutos y 1 hora de duración.
+
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+
+```
+
+
+## Dataset pre-procesado
+
+Para reducir los datos al estudio de interés, se crea un dataset conjunto, `flujo-vehicular.csv`, a partir de los datos de clima y de uso del sistema Ecobici en el que se dispone de las siguientes variables.
+
+[AJUSTAR]
+
+- `fecha`: fecha, en el formato año-mes-día.
+- `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
+- `tmed`: temperatura media (°C) registrada en esa fecha.
+- `tmin`: temperatura mínima (°C) registrada en esa fecha.
+- `tmax`: temperatura máxima (°C) registrada en esa fecha.
+- `prcp`: precipitaciones (mm) registrada en esa fecha.
+- `wdir`: dirección del viento (°) registrada en esa fecha.
+- `wspd`: velocidad del viento (km/h) registrada en esa fecha.
+- `pres`: presión atmosférica (hPa) registrada en esa fecha.
+- `dia`: día de la semana de la fecha indicada.
+- `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
+- `lluvia`: condición de lluvia (Llueve: `prcp`>0, No llueve: `prcp`=0) de la fecha indicada.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+
+```
+
+
+# Referencias
+
+- MeteoStat [(info disponible acá ](https://meteostat.net) [y datos disponibles acá.)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31)
+
+- Sistema Ecobici de la Ciudad Autónoma de Buenos Aires [(info disponible acá ](https://baecobici.com.ar/#/es/inicio) [y datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas)
+

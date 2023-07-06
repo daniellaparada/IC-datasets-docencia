@@ -1,0 +1,6 @@
+# Bibliografía {.unnumbered}
+
+Ver si va (ejemplo dummy)
+
+::: {#refs}
+:::

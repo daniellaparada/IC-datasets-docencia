@@ -1,0 +1,33 @@
+project:
+  type: book
+
+lang: es
+
+book:
+  title: "datasets-docencia"
+  author: "Instituto de Cálculo"
+  date: last-modified
+  chapters:
+    - index.qmd
+    - 01_regresion.qmd
+    - 02_regresion_multiple.qmd
+    - 03_test_hipotesis.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+
+execute:
+  freeze: auto
+
+prefer-html: true
+
+code-fold: true
+code-overflow: wrap
+code-summary: "Ver código"
+
+editor: visual
+

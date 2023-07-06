@@ -1,0 +1,323 @@
+Presentamos un ejemplo de modelos de regresión a partir de datos reales de temperatura y uso del sistema de bicicletas Ecobici de la Ciudad Autónoma de Buenos Aires.
+
+![Cómo *MidJourney* imagina que se ilustra este problema bajo el *prompt*: */imagine an enchanting illustration of Buenos Aires, with the obelisk at the center of the image, and colorful weather elements interacting with a road and a bicycle path*.](./fuente/01_regresion/apertura.png){fig-align="center"}
+
+# Regresión
+
+A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de la temperatura, distinguiendo por usos en días de semana o fin de semana.
+
+```{r, message=FALSE, warning=FALSE}
+# Librerías necesarias
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(kableExtra)
+require(knitr)
+```
+
+## Exploración inicial
+
+En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 3 de junio de 2023.
+
+El *dataset* `temp-bici.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/sbkltjty7b4mwdylr36lk/temp-bici.csv?rlkey=cg8o308ve82u0q68o0wb41u61&dl=0). A continuación se muestran 10 datos de dicho conjunto.
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+options(scipen=999)
+datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
+```
+
+```{r}
+knitr::kable(datos[1:10,], caption = "Dataset reducido")
+```
+
+Como puede verse en el siguiente gráfico, la cantidad de registros de viajes de esa duración varía en función de la temperatura máxima del día, y de si se trata de un día de la semana (lunes a viernes) o fin de semana (sábado y domingo).
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=tmax, y=n, key=fecha, col=tipo_dia)) + 
+  labs(x = "Temperatura máxima", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+En el gráfico se observa una tendencia similar en cuanto a cómo varía la cantidad de usos diarios del sistema en función de la temperatura máxima del día. Sin embargo, y aunque la tendencia es similar, la cantidad de usos se reduce notablemente los fines de semana.
+
+Tales tendencias se mantienen, ya sea que se considere la temperatura media o la mínima, como se muestra en los siguientes gráficos; aunque se observa una tendencia ligeramente distinta para los fines de semana.
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=tmed, y=n, key=fecha, col=tipo_dia)) + 
+  labs(x = "Temperatura media", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=tmin, y=n, key=fecha, col=tipo_dia)) + 
+  labs(x = "Temperatura mínima", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+El sistema de Ecobici es un sistema público de transporte y, como tal, es razonable que su uso sea intensivo durante los días hábiles, lo que explica las tendencias separadas que se ven en los gráficos anteriores. Sin embargo, en el conjunto de datos no se tiene información de feriados, por lo que hay algunas observaciones del grupo verde (lunes a viernes) que se observan próximos a los del grupo rojo (fines de semana). El 1ro de mayo es una de ellas. También hay fines de semana que coinciden con feriados en los que típicamente hay menos movimiento, como ocurre con la observación roja que corresponde al 1ro de enero. Y también ocurre lo contrario: fines de semana de uso atípico, como el de aquel domingo 18 de diciembre de 2022 en que Argentina se coronó campeón Mundial, y cuya observación, aunque de color rojo (domingo), se ubica dentro de la nube de puntos verdes.
+
+Este *dataset* no cuenta con datos de precipitaciones para las fechas observadas, lo que podría ayudar a explicar las mermas en el uso del sistema de Ecobici de ciertas fechas \[para más información sobre esto, puede consultarse el capítulo 3\]. Sin embargo, es notable ver que existe cierta tendencia entre la intensidad del uso y la temperatura. Y tal tendencia no obedece únicamente a una cuestión de temporadas climáticas (estaciones del año, por ejemplo). Esto puede observarse en los siguientes gráficos, en donde se muestra que la evolución de la temperatura en función de la fecha del año no exhibe el mismo comportamiento que el uso del sistema Ecobici.
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=fecha, y=n, key=tmax, col=tipo_dia)) + 
+  labs(x = "Fecha", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=fecha, y=tmax)) + 
+  labs(x = "Fecha", y= "Temperatura máxima") + 
+  geom_point() + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+Esto sugiere que un ajuste lineal podría no ser el más adecuado para modelar la relación entre estas variables. En la siguiente sección, se prueban ajustes lineales y cuadráticos para explicar el uso del sistema Ecobici en función de la temperatura máxima diaria, tanto para días de semana como para fines de semana.
+
+## Ajuste lineal
+
+El ajuste lineal sobre el *dataset* completo muestra lo que anticipaban los gráficos anteriores. Aun cuando se ajusta por tipo de día, no se capta por completo la relación que se observa entre las variables a partir de los datos.
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=tmax, y=n, color=tipo_dia, key=fecha)) + 
+  labs(x = "Temperatura máxima", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+### Gráficos de diagnóstico
+
+Los gráficos de diagnóstico exhiben estructura en los residuos en ambos ajustes.
+
+#### **Día de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ tmax, 
+            data = datos[datos$tipo_dia=="Lunes a viernes",]), 
+         label.size = 3)
+```
+
+Las observaciones 122, 135 y 236 corresponden a los siguientes casos (todos feriados nacionales).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[datos$tipo_dia=="Lunes a viernes",]
+knitr::kable(a[c(121,135,236),])
+```
+
+#### **Fin de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ tmax, 
+            data = datos[datos$tipo_dia=="Fin de semana",]), 
+         label.size = 3)
+```
+
+Las observaciones 13, 42, 58 y 62 corresponden a los siguientes casos.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[datos$tipo_dia=="Fin de semana",]
+knitr::kable(a[c(13, 42, 58, 62),])
+```
+
+## Ajuste cuadrático
+
+El ajuste cuadrático mejora el ajuste anterior y parece modelar mejor la estructura observada.
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos), aes(x=tmax, y=n, color=tipo_dia, key=fecha)) + 
+  labs(x = "Temperatura máxima", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 2)) +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+### Gráficos de diagnóstico
+
+En efecto, los gráficos de diagnóstico confirman que parte de la estructura de los residuos fue resuelta.
+
+#### **Día de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ poly(tmax, 2), 
+            data = datos[datos$tipo_dia=="Lunes a viernes",]), 
+         label.size = 3)
+```
+
+Las observaciones 10, 121, 135, 220 y 236 corresponden a los siguientes casos (todos feriados nacionales).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[datos$tipo_dia=="Lunes a viernes",]
+knitr::kable(a[c(10, 121, 135, 220, 236),])
+```
+
+#### **Fin de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ poly(tmax, 2), 
+            data = datos[datos$tipo_dia=="Fin de semana",]), 
+         label.size = 3)
+```
+
+Las observaciones 42, 58 y 62 corresponden a los siguientes casos.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[datos$tipo_dia=="Fin de semana",]
+knitr::kable(a[c(42, 58, 62),])
+```
+
+## Ajuste lineal para días templados
+
+El ajuste podría ser lineal para explicar el uso del sistema Ecobici para días templados, por ejemplo, con temperaturas máximas inferiores a los 25°C.
+
+```{r, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = filter(datos, tmax<25), aes(x=tmax, y=n, color=tipo_dia, key=fecha)) + 
+  labs(x = "Temperatura máxima (menor que 25°C)", y= "Cantidad de usos de Ecobici") + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+### Gráficos de diagnóstico
+
+Los gráficos de diagnóstico exhiben menos estructura en los residuos respecto del ajuste lineal que cuando se consideraban todas las posibles temperaturas máximas. Es decir, parece razonable suponer que la tendencia en el uso del sistema Ecobici es creciente en relación con la temperatura máxima, siempre que esta no exceda cierto límite.
+
+#### **Día de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ tmax, 
+            data = datos[(datos$tipo_dia=="Lunes a viernes" &
+                           datos$tmax<25),]), 
+         label.size = 3)
+```
+
+Las observaciones 10, 110, 122 y 135 corresponden a los siguientes casos (todos feriados nacionales).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[(datos$tipo_dia=="Lunes a viernes" &
+                           datos$tmax<25),]
+knitr::kable(a[c(10, 110,122,135),])
+```
+
+#### **Fin de semana**
+
+```{r, message=FALSE, warning=FALSE}
+autoplot(lm(n ~ tmax, 
+            data = datos[(datos$tipo_dia=="Fin de semana" &
+                           datos$tmax<25),]), 
+         label.size = 3)
+```
+
+Las observaciones 42, 46 y 48 corresponden a los siguientes casos.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+a <- datos[(datos$tipo_dia=="Fin de semana" &
+                           datos$tmax<25),]
+knitr::kable(a[c(42,46,48),])
+```
+
+------------------------------------------------------------------------
+
+# Acerca de los datos
+
+A continuación, se detallan aspectos de los conjuntos de datos que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
+
+También se incluye el enlace de descarga al dataset reducido, `temp-bici.csv`, con el que se desarrolló el ejemplo.
+
+## Sobre el *dataset* de temperatura
+
+Los datos de este ejemplo corresponden a datos de temperatura de los últimos 365 días tomados del Servicio Meterológico Nacional [(disponibles acá)](https://ssl.smn.gob.ar/dpd/zipopendata.php?dato=regtemp). En particular, se considerarán los datos procesados de temperatura mínimas y máximas registradas en Aeroparque desde el 4 de junio de 2022 al 3 de junio de 2023.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+temperatura <- read_table("./fuente/01_regresion/registro_temperatura365d_smn.txt") %>% 
+  slice(2:n()) %>% 
+  filter(NOMBRE == "AEROPARQUE") %>% 
+  select(1:3) %>% 
+  mutate(fecha = dmy(FECHA),
+         tmin = as.double(TMIN),
+         tmax = as.double(TMAX),
+         tmed = 0.5*(tmin+tmax))
+```
+
+## Sobre el *dataset* de Ecobici
+
+Los datos de este ejemplo corresponden a datos de uso del sistema Ecobici de la Ciudad de Buenos Aires [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas). En particular, se considerarán los datos de los años 2022 y 2023 correspondientes a viajes de entre 5 minutos y 1 hora de duración.
+
+Ecobici es el sistema de transporte público de bicicletas de la Ciudad de Buenos Aires, que tiene estaciones automáticas con bicicletas a disposición las 24 horas, todos los días del año. El sistema es gratuito para todas las personas residentes del país de lunes a viernes (días hábiles) con hasta cuatro viajes de 30 minutos cada uno. Sin embargo, si se utiliza por un tiempo mayor que el indicado o durante los fines de semana, existen diferentes pases con variados costos. A modo de referencia, el pase que habilita a hacer 6 viajes diarios de hasta 60 minutos cada uno cualquier día de la semana tiene un costo de \$1.785 (junio 2023).
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+trips_2022 <- read_csv("./fuente/01_regresion/trips_2022.csv", 
+                       col_types = cols(fecha_origen_recorrido = col_datetime(format = "%Y-%m-%d %H:%M:%S"))) %>% 
+  mutate(fecha = format(as_date( ymd_hms(fecha_destino_recorrido )))) %>% 
+  filter(duracion_recorrido >300 && duracion_recorrido < 3600) %>% 
+  group_by(fecha) %>% 
+  count() %>% 
+  mutate(fecha = as_date(fecha))
+
+trips_2023 <- read_csv("./fuente/01_regresion/trips_2023.csv", 
+                       col_types = cols(fecha_origen_recorrido = col_datetime(format = "%Y-%m-%d %H:%M:%S"))) %>% 
+  mutate(fecha = format(as_date( ymd_hms(fecha_destino_recorrido )))) %>% 
+  filter(duracion_recorrido >300 && duracion_recorrido < 3600) %>% 
+  group_by(fecha) %>% 
+  count() %>% 
+  mutate(fecha = as_date(fecha))
+
+trips <- rbind(trips_2022, trips_2023)
+```
+
+## *Dataset* pre-procesado: `temp-bici.csv`
+
+Para reducir los datos al estudio de interés, se crea un dataset conjunto, `temp-bici.csv`, a partir de los datos de temperatura y de uso del sistema Ecobici en el que se dispone de las siguientes variables.
+
+-   `fecha`: fecha, en el formato año-mes-día.
+-   `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
+-   `tmin`: temperatura mínima registrada en esa fecha.
+-   `tmax`: temperatura máxima registrada en esa fecha.
+-   `tmed`: temperatura media, construida como el promedio entre la temperatura mínima y máxima de esa fecha.
+-   `dia`: día de la semana de la fecha indicada.
+-   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+trips <- trips %>% 
+  filter(fecha >= min(temperatura$fecha) & fecha <= max(temperatura$fecha))
+
+datos <- left_join(trips, temperatura, by = c("fecha" = "fecha")) %>% 
+  drop_na() %>% 
+  mutate(dia = weekdays(fecha),
+         tipo_dia = ifelse(dia %in% c("sábado", "domingo"), "Fin de semana", "Lunes a viernes")) %>% 
+  select(c(1,2,6:10)) 
+```
+
+# Librerías
+
+Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(kableExtra)
+require(knitr)
+```
+
+```{r message=FALSE, warning=FALSE}
+sessionInfo()
+```
+
+# Referencias
+
+-   Servicio Meteorológico Nacional [(info disponible acá](https://www.smn.gob.ar/) y [datos disponibles acá.)](https://www.smn.gob.ar/descarga-de-datos)
+
+-   Sistema Ecobici de la Ciudad Autónoma de Buenos Aires [(info disponible acá](https://baecobici.com.ar/#/es/inicio) y [datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas)

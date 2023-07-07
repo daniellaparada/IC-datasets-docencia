@@ -4,7 +4,7 @@ Presentamos un ejemplo para test de hipótesis a partir de datos reales de clima
 
 # Test de hipótesis
 
-A continuación, se muestran algunos posibles análisis para datos de flujo vehicular en CABA usando, en algunos casos, incorporando variables climáticas.
+A continuación, se muestran algunos posibles análisis para datos de flujo vehicular en CABA incorporando, en algunos casos, variables climáticas.
 
 ```{r, message=FALSE, warning=FALSE}
 # Librerías necesarias
@@ -59,7 +59,7 @@ mapa19 <-flujo19 %>%
 mapa19
 ```
 
-Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar. 
+Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar (a efectos creativos, se representan sobre un mapa en formato acuarelas, [conocer más](http://maps.stamen.com/)).
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo el mapa de CABA
@@ -214,13 +214,20 @@ t.test(x = flujosout$n19, y = flujosout$n23, alternative = "two.sided",
 cohen.d(d = flujosout$n19, f = flujosout$n23, paired = TRUE)
 ```
 
-En efecto, el $p-valor$ es $0.0000323$, y a partir de esta muestra y bajo las consideraciones ya mencionadas, rechazaríamos el supuesto de igualdad de flujos medios para ambos años, durante días hábiles del primer trimestre en ese radar. El tamaño del efecto parece ser moderado.
+En efecto, el $p-$valor es $0.0000323$, y a partir de esta muestra y bajo las consideraciones ya mencionadas, rechazaríamos el supuesto de igualdad de flujos medios para ambos años, durante días hábiles del primer trimestre en ese radar. El tamaño del efecto parece ser moderado.
 
 ## Incorporamos datos de clima
+
+Para lo que sigue, trabajamos con el *dataset* reducido `flujo-clima.csv` en el que se incluyen datos del flujo vehicular del primer trimestre de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A, junto con datos de temperatura promedio y precipitaciones.
+
+El dataset `flujo-clima.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
+
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
 ```
+
+Un gráfico del flujo vehicular por tipo de día y según nivel de precipitaciones, parece mostrar lo esperado: el el flujo vehicular en ese punto de la ciudad es mayor los días de semana que los fines de semana. Sin embargo, no parece haber una tendencia notable que impacte en el flujo vehicular a partir de las precipitaciones. Dicha tendencia podría ser creciente, asumiendo que los días en que se registran mayores niveles de precipitaciones más personas utilizan el auto; o bien decreciente, sugiriendo que hay menor tránsito vehicular porque las personas prefieren suspender aquellas actividades fuera de sus hogares que no sean esenciales.
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 flujoclima <- datos
@@ -233,15 +240,28 @@ ggplotly(ggplot(data = filter(flujoclima), aes(x=factor(dia, level=c("lunes","ma
   source = "select", tooltip = c("key"))
 ```
 
-¿Hay diferencia en el flujo medio cuando llueve (días hábiles)?
+Algunas preguntas que pueden surgir a partir del gráfico son, por ejemplo:
+- ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
+- ¿Hay diferencia en el flujo vehicular medio de los días miércoles respecto de los días viernes?
+
+Siempre, claro, recordando que estamos restringiendo el análisis al flujo vehicular detectado por el radar RD171, en la autopista Lugones, altura Esma.
+
+Como hicimos antes, para lo que sigue, descartamos las observaciones correspondientes a los días 20 y 21 de febrero y 24 de marzo, únicos feriados nacionales del trimestre.
+
+```{r echo=FALSE}
+# Removemos feriados
+feriados <- c(51,52,83)
+flujoclima <- flujoclima[-feriados,]
+```
+Del total de días hábiles, entonces, tenemos $19$ observaciones que resultan de días de semana con lluvia, y $43$ observaciones para días de semana sin lluvia.
 
 ```{r message=FALSE, warning=FALSE}
-# Días de semana con lluvia: 20 datos
+# Días de semana con lluvia: 19 datos
 datos1 <- flujoclima %>%
   filter(prcp>0, 
          tipo_dia == "Lunes a viernes")
 
-# Días de semana sin lluvia: 45 datos
+# Días de semana sin lluvia: 43 datos
 datos2 <- flujoclima %>%
   filter(prcp==0, 
          tipo_dia == "Lunes a viernes")
@@ -250,35 +270,57 @@ boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
         names=c("Lluvia", "Sin lluvia"))
 ```
 
-Test para diferencia de medias
+Realizamos un test t para diferencia de medias.
 
 ```{r message=FALSE, warning=FALSE}
 # Test para diferencia de medias
 t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
        mu = 0, paired = FALSE, conf.level = 0.95)
+cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
+Con un $p-$valor de $0.6953$, no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios. Es decir, a partir de la evidencia provista por la muestra, no es posible descartar que el flujo vehicular medio en días sin lluvia difiera del flujo medio cuando llueve.
 
-¿Hay diferencia en el flujo medio entre lunes y miércoles?
+Podemos hacer otro test para ver si hay diferencia significativa para suponer que el flujo medio de los miércoles difiere del de los lunes. Las observaciones son menos, ya que en el primer trimestre solo se registran $13$ miércoles y $12$ viernes, considerando que se removió el 24 de marzo.
 
 ```{r message=FALSE, warning=FALSE}
 # Días de semana con lluvia: 13 datos
 datos1 <- flujoclima %>%
-  filter(dia == "lunes")
+  filter(dia == "miércoles")
 
 # Días de semana sin lluvia: 13 datos
 datos2 <- flujoclima %>%
-  filter(dia == "miércoles")
+  filter(dia == "viernes")
 
 boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
-        names=c("Lunes", "Miércoles"))
+        names=c("Miércoles", "Viernes"))
 ```
-
-Test para diferencia de medias
 
 ```{r message=FALSE, warning=FALSE}
 t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
        mu = 0, paired = FALSE, conf.level = 0.95)
+cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
+Nuevamente, y con un $p-$valor de $0.5629$, concluimos que no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre esos días, algo que al "ojo desnudo" podría parecer significativo. Ocurre, sin embargo, que la variabilidad exhibida en los flujos de los días viernes, parece ser mayor, como se observa en ambos gráficos previos. Una comparación que sí esperaría conducir a un rechazo de la igualdad de flujos medios podría ser la de miércoles y sábados. 
+
+```{r message=FALSE, warning=FALSE}
+# Días de semana con lluvia: 13 datos
+datos1 <- flujoclima %>%
+  filter(dia == "miércoles")
+
+# Días de semana sin lluvia: 13 datos
+datos2 <- flujoclima %>%
+  filter(dia == "sábado")
+
+boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
+        names=c("Miércoles", "Sábado"))
+```
+```{r message=FALSE, warning=FALSE}
+t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
+       mu = 0, paired = FALSE, conf.level = 0.95)
+cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
+```
+El test arroja un $p-$valor prácticamente nulo: podemos concluir que hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre los días miércoles y los días sábados. Además, el tamaño del efecto es grande.
+
 
 # Acerca de los datos
 
@@ -288,51 +330,52 @@ También se incluye el enlace de descarga al dataset reducido, `clima-flujo.csv`
 
 ## Sobre el *dataset* de clima
 
-Los datos de este ejemplo corresponden a datos de clima del año 2022 tomados de la base de datos meteorológicos y climáticos de MeteoStat [(disponibles acá)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31). En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582), desde XXX, y un conjunto reducido de variables.
+Los datos de este ejemplo corresponden a datos de clima del año 2023 tomados de la base de datos meteorológicos y climáticos de MeteoStat [(disponibles acá)](https://meteostat.net/es/station/87582?t=2023-01-01/2023-03-31). En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582) y un conjunto reducido de variables para el período considerado.
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-clima <- read_csv("./fuente/02_regresion_multiple/registro_tiempo_aeroparque.csv") %>% 
+clima <- read_csv("./fuente/03_test_hipotesis/registro_tiempo_aeroparque_2023.csv") %>% 
   select(c(1:5,7:8,10))
 ```
 
-## Sobre el *dataset* de flujo vehocular
+## Sobre el *dataset* de flujo vehicular
 
-Los datos de este ejemplo corresponden a datos de uso del sistema Ecobici de la Ciudad de Buenos Aires [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas). En particular, se consideran los datos del año 2022 correspondientes a viajes de entre 5 minutos y 1 hora de duración.
+Los datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd). 
 
-Ecobici es el sistema de transporte público de bicicletas de la Ciudad de Buenos Aires, que tiene estaciones automáticas con bicicletas a disposición las 24 horas, todos los días del año. El sistema es gratuito para todas las personas residentes del país de lunes a viernes (días hábiles) con hasta cuatro viajes de 30 minutos cada uno. Sin embargo, si se utiliza por un tiempo mayor que el indicado o durante los fines de semana, existen diferentes pases con variados costos. A modo de referencia, el pase que habilita a hacer 6 viajes diarios de hasta 60 minutos cada uno cualquier día de la semana tiene un costo de \$1.785 (junio 2023).
+Algunas consideraciones, a la fecha, respecto de estos datos:
+- Los *datasets* se encuentran disponibles para los años 2019 a 2023.
+- No todos tienen el mismo formato para el tratamiento de la fecha.
+- Los datos de 2022 no están completos.
+- Los datos de 2023 se encuentran disponibles al primer trimestre.
+- Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-
-```
 
 ## *Dataset* pre-procesado: `clima-flujo.csv`
 
-Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `clima-flujo.csv`, a partir de los datos de clima y de XXX, en el que se dispone de las siguientes variables.
+Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `clima-flujo.csv`, a partir de los datos de flujo vehicular del primer trimestre de 2023 para el radar RD171 y de clima, en el que se dispone de las siguientes variables.
 
--   `fecha`: fecha, en el formato año-mes-día.
--   `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
--   `tmed`: temperatura media (°C) registrada en esa fecha.
--   `tmin`: temperatura mínima (°C) registrada en esa fecha.
--   `tmax`: temperatura máxima (°C) registrada en esa fecha.
+-   `fecha`: fecha, en el formato mes-día.
+-   `n`: flujo vehicular de la fecha indicada.
+-   `tavg`: temperatura media (°C) registrada en esa fecha.
 -   `prcp`: precipitaciones (mm) registrada en esa fecha.
 -   `dia`: día de la semana de la fecha indicada.
 -   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
--   `lluvia`: condición de lluvia (Llueve: `prcp`\>0, No llueve: `prcp`=0) de la fecha indicada.
 
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-
-```
 
 # Librerías
 
 Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+require(ggplot2)
 require(tidyverse)
 require(ggfortify)
 require(plotly)
-require(kableExtra)
-require(knitr)
+require(vroom)
+require(effsize)
+require(sf)
+require(osmdata)
+require(ggmap)
+require(leaflet)
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -341,6 +384,6 @@ sessionInfo()
 
 # Referencias
 
--   MeteoStat [(info disponible acá](https://meteostat.net) [y datos disponibles acá.)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31)
+-   Datos de flujo vehicular por radares AUSA [datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd)
 
--   Sistema Ecobici de la Ciudad Autónoma de Buenos Aires [(info disponible acá](https://baecobici.com.ar/#/es/inicio) [y datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas)
+-   MeteoStat [(info disponible acá](https://meteostat.net) [y datos disponibles acá.)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31)

@@ -241,9 +241,13 @@ ggplotly(ggplot(data = filter(flujoclima), aes(x=factor(dia, level=c("lunes","ma
 ```
 
 Algunas preguntas que pueden surgir a partir del gráfico son, por ejemplo:
+<<<<<<< HEAD
 
 - ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
 
+=======
+- ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
+>>>>>>> 401845d3b1cb727c0e86f76a78cac9288d54c392
 - ¿Hay diferencia en el flujo vehicular medio de los días miércoles respecto de los días viernes?
 
 Siempre, claro, recordando que estamos restringiendo el análisis al flujo vehicular detectado por el radar RD171, en la autopista Lugones, altura Esma.
@@ -344,6 +348,7 @@ clima <- read_csv("./fuente/03_test_hipotesis/registro_tiempo_aeroparque_2023.cs
 Los datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd). 
 
 Algunas consideraciones, a la fecha, respecto de estos datos:
+<<<<<<< HEAD
 
 - Los *datasets* se encuentran disponibles para los años 2019 a 2023.
 
@@ -355,6 +360,14 @@ Algunas consideraciones, a la fecha, respecto de estos datos:
 
 - Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
+=======
+- Los *datasets* se encuentran disponibles para los años 2019 a 2023.
+- No todos tienen el mismo formato para el tratamiento de la fecha.
+- Los datos de 2022 no están completos.
+- Los datos de 2023 se encuentran disponibles al primer trimestre.
+- Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
+
+>>>>>>> 401845d3b1cb727c0e86f76a78cac9288d54c392
 
 ## *Dataset* pre-procesado: `clima-flujo.csv`
 

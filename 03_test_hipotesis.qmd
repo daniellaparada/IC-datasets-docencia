@@ -22,6 +22,10 @@ require(leaflet)
 
 ## Exploración inicial
 
+Los datos de flujo vehicular de la Ciudad de Buenos Aires reportan, por hora, la cantidad de vehículos registrados por radares ubicados en diferentes puntos de algunas autopistas de la ciudad.
+
+En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019. 
+
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo el mapa de CABA
 barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
@@ -35,26 +39,75 @@ flujo19 <- vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.cs
             long = mean(long)) %>%
   drop_na() 
 
-paleta <- colorQuantile("YlOrRd", flujo19$n, n=6)
+paleta <- colorQuantile("Greys", flujo19$n, n=6)
 ```
 
 
 ```{r, message=FALSE, warning=FALSE}
-# Radares
-leaflet(flujo19) %>% 
-  addTiles() %>%
+# "CartoDB.VoyagerLabelsUnder"
+mapa19 <-flujo19 %>%
+  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
+  addProviderTiles("CartoDB.VoyagerLabelsUnder",
+                   options = providerTileOptions(opacity=0.8)) %>%
   addCircleMarkers(lng= ~long, 
                    lat= ~lat,
                    fillOpacity=0.9,
                    radius=~100*n/(sum(n)),
                    weight=1,
                    color = ~paleta(n),
-                   stroke = FALSE) 
+                   stroke = FALSE)
+mapa19
 ```
 
-En el dataset reducido `flujo-vehicular.csv` se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
+Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar. 
 
-El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación se muestran 10 datos de dicho conjunto.
+```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
+# importo el mapa de CABA
+barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
+  select(BARRIO, COMUNA)
+
+# importo datos de flujo vehicular 2019
+flujo23 <- vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv") 
+
+# La long y la lat está mal registrada
+corregir_lat <- which(flujo23$lat>-500000)
+flujo23$lat[corregir_lat] <- flujo23$lat[corregir_lat]/10000
+flujo23$lat[-corregir_lat] <- flujo23$lat[-corregir_lat]/100000
+
+corregir_long <- which(flujo23$long>-1000000)
+flujo23$long[corregir_long] <- flujo23$long[corregir_long]/10000
+flujo23$long[-corregir_long] <- flujo23$long[-corregir_long]/100000
+
+flujo23 <- flujo23 %>%
+  group_by(disp_ubicacion) %>% 
+  summarise(n = sum(cantidad),
+            lat = mean(lat),
+            long = mean(long)) %>%
+  drop_na() 
+
+paleta <- colorQuantile("Greys", flujo23$n, n=6)
+```
+
+```{r, message=FALSE, warning=FALSE}
+# Radares
+# "CartoDB.VoyagerLabelsUnder"
+mapa23 <-flujo23%>%
+  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
+  addProviderTiles("Stamen.Watercolor",
+                   options = providerTileOptions(opacity=0.8)) %>%
+  addCircleMarkers(lng= ~long, 
+                   lat= ~lat,
+                   fillOpacity=0.9,
+                   radius=~100*n/(sum(n)),
+                   weight=1,
+                   color = ~paleta(n),
+                   stroke = FALSE)
+mapa23
+```
+
+Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en el que se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
+
+El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
@@ -65,9 +118,11 @@ options(scipen=999)
 knitr::kable(datos[1:10,], caption = "Dataset reducido, primeras 10 observaciones.")
 ```
 
-Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023.
+Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023. La elección de los años responde a lo siguiente:
+- los datos de 2020 y 2021 van a encontrarse influenciados por las restricciones de circulación de la pandemia de COVID-19 y la paulatina vuelta a la presencialidad,
+- los datos de 2022 no se encuentran disponibles para el año completo, sino para algunos meses al inicio y al fin del año.
 
-Como puede verse en el siguiente gráfico XXX
+Como puede verse en el siguiente gráfico, existe una tendencia temporal que incide en el flujo vehicular del trimestre para ambos años. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplotly(ggplot(data = datos, aes(x=n19, y=n23, key=fecha)) + 
@@ -80,7 +135,7 @@ ggplotly(ggplot(data = datos, aes(x=n19, y=n23, key=fecha)) +
   source = "select", tooltip = c("key"))
 ```
 
-Los días 20 y 21 de febrero de 2023 corresponden a feriados de carnaval, mientras que los días 9 y 16 de enero de 2019 Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023.
+Las observaciones que se encuentran más alejadas de la recta identidad, corresponden a los días 20 y 21 de febrero de 2023, ambos feriados de carnaval, y a los días 9 y 16 de enero de 2019, ambos lunes, de posible retorno a la ciudad por recambio turístico. Removemos estas observaciones para lo que sigue.
 
 ```{r echo=FALSE}
 # Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023
@@ -98,6 +153,9 @@ ggplotly(ggplot(data = flujosout, aes(x=n19, y=n23, key=fecha)) +
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
+Los datos exhiben una estacionalidad que, naturalmente, afecta al usual supuesto de independencia: el flujo es creciente, para ambos años, a medida que transcurren los días durante el primer trimestre. Sumado a eso, el emparejamiento de los días por su simple correspondencia de fecha podría no ser comparable, salvo excepciones o hitos de cada año. 
+
+Por ejemplo, la observación del 24 de enero de 2019 podría no ser comparable con la equivalente de 2023, aunque sí, quizás, con el de alguna fecha próxima a ella. Por la limitación de los datos disponibles para 2023, no es posible considerar otro tipo de agrupamientos. Sin embargo y pese a esto, el flujo vehicular registrado por ese radar parecer ser sistemáticamente menor en 2023 en relación con 2019.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Gráfico
@@ -105,8 +163,6 @@ fl <- data.frame(flujo = c(flujosout$n19,flujosout$n23),
                  dia = c(flujosout$fecha,flujosout$fecha),
                  anio = as.factor(c(rep("2019", length(flujosout$n19)),
                                     rep("2023", length(flujosout$n23))))) 
-
-labs = fl$dia[c(1,8,16,24,32,40,48,56)]
 
 ggplotly(ggplot(data = fl, aes(x=dia, y=flujo, color=anio, key=dia)) + 
   labs(x = "Día (solo para lunes a viernes de ambos años)", y= "Flujo vehicular Lugones (Esma)", color = "Año") + 
@@ -116,7 +172,38 @@ ggplotly(ggplot(data = fl, aes(x=dia, y=flujo, color=anio, key=dia)) +
   source = "select", tooltip = c("key"))
 ```
 
-## Test para diferencia de medias (primer trimestre 2019 vs 2023)
+## Test para diferencia de medias (datos apareados: primer trimestre 2019 vs 2023)
+
+Bajo ciertos reparos, puede ponerse a prueba la hipótesis anterior, asumiendo que algo de la estacionalidad observada puede resolverse apareando los datos. Más precisamente, un gráfico de las diferencias entre el flujo de 2019 y el de 2023 para los días considerados parece dar cuenta de tal efecto.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+difs <- data.frame(dif = flujosout$n19-flujosout$n23,
+                   dia = flujosout$fecha)
+# Gráfico
+ggplotly(ggplot(data = difs, aes(x=dia, y=dif, colour="grey", key=dia)) + 
+  labs(x = "Día (solo para lunes a viernes de ambos años)", y= "Diferencia de flujo vehicular 2019 vs 2023") + 
+  geom_point() + 
+  geom_hline(yintercept = 0, color="springgreen4", linetype="dashed") + 
+  geom_hline(yintercept = mean(difs$dif), color="firebrick", linetype="dashed") +
+  scale_color_manual(name = "Medias", values = c("Esperada" = "springgreen4", "Observada" = "firebrick")) + 
+  scale_x_discrete(breaks=seq(1,8,1),labels=labs) +
+  theme_classic() + 
+  theme(legend.position="none"),
+  source = "select", tooltip = c("key"))
+```
+
+Parte de la estacionalidad parece haberse corregido y la media observada para las diferencias, que debería ser cercana a 0 en caso de no haber diferencias, se observa desplazada sugiriendo un flujo promedio mayor en 2019.
+
+Realizamos un test t para muestras apareadas a nivel $1\%$.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+par(mfrow=c(1,2))  
+qqnorm(flujosout$n19,col="firebrick", main="2019")
+qqline(flujosout$n19)
+qqnorm(flujosout$n23,col="springgreen4", main="2023")
+qqline(flujosout$n23)
+par(mfrow=c(1,1))
+```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Test para diferencia de medias
@@ -126,6 +213,8 @@ t.test(x = flujosout$n19, y = flujosout$n23, alternative = "two.sided",
 # Effectsize
 cohen.d(d = flujosout$n19, f = flujosout$n23, paired = TRUE)
 ```
+
+En efecto, el $p-valor$ es $0.0000323$, y a partir de esta muestra y bajo las consideraciones ya mencionadas, rechazaríamos el supuesto de igualdad de flujos medios para ambos años, durante días hábiles del primer trimestre en ese radar. El tamaño del efecto parece ser moderado.
 
 ## Incorporamos datos de clima
 

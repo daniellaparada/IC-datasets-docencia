@@ -4,7 +4,7 @@ project:
 lang: es
 
 book:
-  title: "datasets-docencia"
+  title: "IC-datasets-docencia"
   author: "Instituto de Cálculo"
   date: last-modified
   chapters:

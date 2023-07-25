@@ -2,11 +2,11 @@
 
 Ver si va (ejemplo dummy)
 
-| *Dataset* | Variables | Temas | Fuente |
-|-----------|-----------|-------|--------|
-|           |           |       |        |
-|           |           |       |        |
-|           |           |       |        |
+| *Dataset* | Descripción | Variables | Temas | Fuente |
+|-----------|-------------|-----------|-------|--------|
+| XXX       | XXX         | XXX       | XXX   | XXX    |
+|           |             |           |       |        |
+|           |             |           |       |        |
 
 ::: {#refs}
 :::

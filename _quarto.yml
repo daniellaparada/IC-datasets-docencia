@@ -12,6 +12,8 @@ book:
     - 01_regresion.qmd
     - 02_regresion_multiple.qmd
     - 03_test_hipotesis.qmd
+    - 04_visualizacion.qmd
+    - otros-datasets.qmd
     - references.qmd
 
 bibliography: references.bib

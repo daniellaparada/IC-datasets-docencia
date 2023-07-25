@@ -1,0 +1,73 @@
+Presentamos un ejemplo para XXX.
+
+![Cómo *MidJourney* imagina que se ilustra este problema bajo el *prompt*: */imagine a stunning illustration capturing seismic data visualization near the mountains in San Juan. Abstract seismic waves emanate from the mountains, indicating seismic energy, and seismograph traces overlay the landscape, displaying earthquake intensity. Data points scattered around signify seismic events of various magnitudes and depths.*](./fuente/04_visualizacion/apertura.png){fig-align="center"}
+
+# Visualización
+
+A continuación, se muestran algunos posibles análisis para datos de XXX.
+
+```{r, message=FALSE, warning=FALSE}
+# Librerías necesarias
+require(ggplot2)
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(vroom)
+require(effsize)
+require(sf)
+require(osmdata)
+require(ggmap)
+require(leaflet)
+```
+
+## Exploración inicial
+
+Los datos de XXX
+
+Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en el que se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
+
+El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/). A continuación, se muestran 10 datos de dicho conjunto.
+
+
+# Acerca de los datos
+
+A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
+
+También se incluye el enlace de descarga al dataset reducido, `XXX.csv`, con el que se desarrolló el ejemplo.
+
+## Sobre el *dataset* de clima
+
+Los datos de este ejemplo corresponden a XXX y se dispone de las siguientes variables.
+
+-   `fecha`: fecha, en el formato mes-día.
+-   `n`: flujo vehicular de la fecha indicada.
+-   `tavg`: temperatura media (°C) registrada en esa fecha.
+-   `prcp`: precipitaciones (mm) registrada en esa fecha.
+-   `dia`: día de la semana de la fecha indicada.
+-   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
+
+
+# Librerías
+
+Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+require(ggplot2)
+require(tidyverse)
+require(ggfortify)
+require(plotly)
+require(vroom)
+require(effsize)
+require(sf)
+require(osmdata)
+require(ggmap)
+require(leaflet)
+```
+
+```{r message=FALSE, warning=FALSE}
+sessionInfo()
+```
+
+# Referencias
+
+-   XXX

@@ -13,5 +13,11 @@
   },
   "references.qmd": {
     "references.html": "b8a9a2a7"
+  },
+  "04_visualizacion.qmd": {
+    "04_visualizacion.html": "0e8b4c0e"
+  },
+  "otros-datasets.qmd": {
+    "otros-datasets.html": "88b0f65b"
   }
 }

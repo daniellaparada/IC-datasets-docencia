@@ -29,7 +29,7 @@ sismos <- sismos %>%
 # Quitamos las unidades km. en intensidad
 sismos$Profundidad <- as.numeric(str_sub(sismos$Profundidad, 1, -4))
 
-# Sismos en Argentina Continental
+# Sismos en Argentina Continental (saco TdF porque se corre mucho el mapa)
 sismos_arg <- sismos %>%
   filter(Provincia != "OCEANO PACIFICO",
          Provincia != "CHILE",
@@ -54,10 +54,6 @@ sismos_arg <- sismos %>%
          Provincia != "ESTRECHO DE DRAKE",
          Provincia != "FILIPINAS",
          Provincia != "I.SANDWICH DEL SUR",
-         Provincia != "ISLAS SANDWICH",
-         Provincia != "ISLAS SHETLAND",
-         Provincia != "ISLAS SHETLAND DEL SUR",
-         Provincia != "ESTRECHO DE DRAKE",
          Provincia != "SECTOR ANTARTICO",
          Provincia != "IS. SHETLAND DEL SUR",
          Provincia != "ISLAS GEORGIA DEL SUR",
@@ -68,16 +64,102 @@ sismos_arg <- sismos %>%
          Provincia != "ISLAS ORCADAS DEL SUR",
          Provincia != "ATLANTICO SUR",
          Provincia != "BOLIVIA",
-         Provincia != "ISLAS GEORGIAS Y SANDWICH DEL SUR",
          Provincia != "PARAGUAY",
          Provincia != "LIM. ARG-CHILE",
          Provincia != "LIM.ARGENTINA-CHILE",
          Provincia != "LIM.CHILE-ARGENTINA",
          Provincia != "LIMITE ARGENTINA-CHILE",
          Provincia != "LIMITE ARGENTINA CHILE",
-         Provincia != "TIERRA DEL FUEGO")
+         Provincia != "TIERRA DEL FUEGO",
+         Provincia != "ISLAS GEORGIAS Y SANDWICH DEL SUR")
 
 table(sismos_arg$Provincia)
+
+# Recodifico provincias
+sismos_arg <- sismos_arg %>%
+  mutate(Provincia=recode(Provincia,
+                          "BUENOS AIRES"= "Buenos Aires",
+                          "CATAMARCA" = "Catamarca",
+                          "CATAMARCA}" = "Catamarca",
+                          "CATAMARCA LIM. TUCUMAN" = "Catamarca",
+                          "CATAMARCA(LIM.CON TUCUMAN)" = "Catamarca",
+                          "CATAMARCA(LIM.CON TUCUMÁN)" = "Catamarca",
+                          "CHACO" = "Chaco",
+                          "CHUBUT" = "Chubut",
+                          "CORDOBA" = "Córdoba",
+                          "CORDOBA(LIM.CON SAN LUIS)" = "Córdoba",
+                          "CORDOBA LIM. SAN LUIS" = "Córdoba",
+                          "CORRIENTES" = "Corrientes",
+                          "ENTRE RIOS" = "Entre Ríos",
+                          "FORMOSA" = "Formosa",
+                          "jujuy" = "Jujuy",
+                          "JUJUY" = "Jujuy",
+                          "JUJUY(LIM.CON SALTA)" = "Jujuy",
+                          "LA PAMPA" = "La Pampa",
+                          "LA RIOJA" = "La Rioja",
+                          "LA RIOJA LIM. SAN JUAN" = "La Rioja",
+                          "LA RIOJA(LIM.CON CATAMARCA)" = "La Rioja",
+                          "LA RIOJA(LIM.CON SAN JUAN)" = "La Rioja",
+                          "LIM. CATAMARCA-TUCUMAN" = "Catamarca",
+                          "LIM. LA RIOJA - SAN JUAN" = "La Rioja",
+                          "LIMITE CATAMARCA - TUCUMAN" = "Catamarca",
+                          "LIMITE CORDOBA - SAN LUIS" = "Córdoba",
+                          "LIMITE JUJUY-SALTA" = "Jujuy",
+                          "LIMITE JUJUY - SALTA" = "Jujuy",
+                          "LIMITE LA RIOJA-CATAMARCA" = "La Rioja",
+                          "LIMITE MENDOZA-SAN JUAN" = "Mendoza",
+                          "LIMITE MENDOZA - SAN JUAN" = "Mendoza",
+                          "LIMITE SALTA-JUJUY" = "Salta",
+                          "LIMITE SALTA - CATAMARCA" = "Salta",
+                          "LIMITE SALTA - JUJUY" = "Salta",
+                          "LIMITE SAN JUAN-MENDOZA" = "San Juan",
+                          "LIMITE SAN JUAN - LA RIOJA" = "San Juan",
+                          "LIMITE SAN JUAN - MENDOZA" = "San Juan",
+                          "LIMITE SAN JUAN SAN LUIS" = "San Juan",
+                          "LIMITE SAN LUIS-SAN JUAN" = "San Luis",
+                          "LIMITE TUCUMAN - CATAMARCA" = "Tucumán",
+                          "MENDOZa" = "Mendoza",
+                          "MENDOZA" = "Mendoza",
+                          "MENDOZA(LIM.CON SAN JUAN)" = "Mendoza",
+                          "MENDOZA}" = "Mendoza",
+                          "MMENDOZA" = "Mendoza",
+                          "NEUQUEN" = "Neuquén",
+                          "RIO NEGRO" = "Río Negro",
+                          "SALTA" = "Salta",
+                          "SALTA (limite con Jujuy)" = "Salta",
+                          "SALTA LIM. JUJUY" = "Salta",
+                          "SALTA(LIM.CON JUJUY)" = "Salta",
+                          "SALTA(LIM.CON TUCUMAN)" = "Salta",
+                          "SAN JUAN LIM. MENDOZA" = "San Juan",
+                          "SAN JUAN (LIM.CON SAN LUIS)" = "San Juan",
+                          "SAN JUAN LIM. LA RIOJA" = "San Juan",
+                          "SAN JUAN LIM.CON SAN LUIS" = "San Juan",
+                          "SAN JUAN LIM.CON MENDOZA" = "San Juan",
+                          "SAN JUAN LIM. MENDOZA" = "San Juan",
+                          "SAN JUAN(LIM.ARG-CHI)" = "San Juan",
+                          "SAN JUAN(LIM.CON LA RIOJA)" = "San Juan",
+                          "LIMITE SAN JUAN - SAN LUIS" = "San Juan",
+                          "LIMITE SAN JUAN LA RIOJA" = "San Juan",
+                          "SAN JUAN(LIM.CON MENDOZA)" = "San Juan",
+                          "SAN JUA" = "San Juan",
+                          "SAn JUAN" = "San Juan",
+                          "SAN JUAN" = "San Juan",
+                          "LIMITE SAN JUAN MENDOZA" = "San Juan",
+                          "SAN JUAN(LIM.CON SAN LUIS)" = "San Juan",
+                          "SAN LUIS" = "San Juan",
+                          "SANTA CRUZ" = "Santa Cruz",
+                          "SANTIAGO DEL ESTERO" = "Santiago del Estero",
+                          "SGO.DEL ESTERO LIM.CON CATAMARCA" = "Santiago del Estero",
+                          "TUCUMAN" = "Tucumán",
+                          "TUCUMÁN" = "Tucumán",
+                          "TUCUMAN LIM. SALTA" = "Tucumán",
+                          "TUCUMAN(LIM.CON CATAMARCA)" = "Tucumán"))
+
+table(sismos_arg$Provincia)
+
+# Elijo variables
+sismos_arg <- sismos_arg %>%
+  select(c(2,3,4,5,9,10,11,12))
 
 pal1 <- colorNumeric(palette = c("deeppink2", "deeppink4"), domain = sismos_arg$Profundidad)
 pal2 <- colorNumeric(palette = c("dodgerblue2", "dodgerblue4"), domain = sismos_arg$Profundidad)
@@ -88,7 +170,7 @@ mapa_arg <- sismos_arg %>%
   addProviderTiles("OpenTopoMap", group = "Topográfico",
                    options = providerTileOptions(opacity=0.5)) %>%
   addCircleMarkers(data=sismos_arg%>% 
-                     filter(is.na(Intensidad)),
+                     filter(Percibido==FALSE),
                    lng= ~Longitud, 
                    lat= ~Latitud,
                    fillOpacity=0.1,
@@ -97,7 +179,7 @@ mapa_arg <- sismos_arg %>%
                    stroke = FALSE, 
                    group = "Sismos no percibidos") %>% 
   addCircleMarkers(data=sismos_arg%>% 
-               filter(Intensidad != "NA"),
+               filter(Percibido==TRUE),
              lng= ~Longitud, 
              lat= ~Latitud,
              fillOpacity=0.1,

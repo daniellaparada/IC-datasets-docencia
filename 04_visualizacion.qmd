@@ -26,7 +26,7 @@ El dataset `XXX.csv` se encuentra [acá](https://www.dropbox.com/). A continuaci
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo datos de sismos
-sismos <- vroom("sismos_all.csv")
+sismos <- vroom("./fuente/04_visualizacion/sismos_all.csv")
 sismos$Fecha <- as.Date(sismos$Fecha,tryFormats = c("%d/%m/%Y"))
 
 # info de casi 10 años
@@ -126,7 +126,6 @@ mapa_arg <- sismos_arg %>%
 mapa_arg
 ```
 
-
 # Acerca de los datos
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
@@ -143,7 +142,6 @@ Los datos de este ejemplo corresponden a XXX y se dispone de las siguientes vari
 -   `prcp`: precipitaciones (mm) registrada en esa fecha.
 -   `dia`: día de la semana de la fecha indicada.
 -   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
-
 
 # Librerías
 

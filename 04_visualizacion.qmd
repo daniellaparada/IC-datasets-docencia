@@ -12,136 +12,322 @@ require(ggplot2)
 require(tidyverse)
 require(ggfortify)
 require(plotly)
+require(kableExtra)
 require(vroom)
 require(leaflet)
+library(lubridate)
 ```
 
 ## Exploración inicial
 
-Los datos de XXX
+Los datos de sismos XXX.
 
-Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en el que se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
+Para lo que sigue, trabajamos con el *dataset* reducido `sismos-arg.csv` en el que se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022.
 
-El dataset `XXX.csv` se encuentra [acá](https://www.dropbox.com/). A continuación, se muestran 10 datos de dicho conjunto.
+El dataset `sismos-arg.csv` se encuentra [acá](https://www.dropbox.com/). A continuación, se muestran 10 datos de dicho conjunto.
 
-```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
-# importo datos de sismos
-sismos <- vroom("./fuente/04_visualizacion/sismos_all.csv")
-sismos$Fecha <- as.Date(sismos$Fecha,tryFormats = c("%d/%m/%Y"))
-
-# info de casi 10 años
-min(sismos$Fecha)
-max(sismos$Fecha)
-
-# dummy para los percibidos
-sismos <- sismos %>% 
-  mutate(Percibido = !is.na(Intensidad),
-         Magnitud = Magn.,
-         Profundidad = Profund.) 
-
-# Quitamos las unidades km. en intensidad
-sismos$Profundidad <- as.numeric(str_sub(sismos$Profundidad, 1, -4))
-
-# Sismos en Argentina Continental
-sismos_arg <- sismos %>%
-  filter(Provincia != "OCEANO PACIFICO",
-         Provincia != "CHILE",
-         Provincia != "MAULE - CHILE",
-         Provincia != "REPÚBLICA DE CHILE",
-         Provincia != "REPUBLICA DE CHILE",
-         Provincia != "SUR DE CHILE",
-         Provincia != "TFAIAS",
-         Provincia != "NORTH ISLAND, NEW ZEALAND",
-         Provincia != "REGION NOT FOUND.",
-         Provincia != "PERU",
-         Provincia != "PENINSULA ANTARTICA",
-         Provincia != "PASAJE DE DRAKE",
-         Provincia != "NORTHWEST OF KURIL ISLANDS",
-         Provincia != "NTARTIDA",
-         Provincia != "MAR DE SCOTIA",
-         Provincia != "MAR ARGENTINO",
-         Provincia != "ISLAS SANDWICH DEL SUR",
-         Provincia != "ISLAS SANDWICH",
-         Provincia != "ISLAS SHETLAND",
-         Provincia != "ISLAS SHETLAND DEL SUR",
-         Provincia != "ESTRECHO DE DRAKE",
-         Provincia != "FILIPINAS",
-         Provincia != "I.SANDWICH DEL SUR",
-         Provincia != "ISLAS SANDWICH",
-         Provincia != "ISLAS SHETLAND",
-         Provincia != "ISLAS SHETLAND DEL SUR",
-         Provincia != "ESTRECHO DE DRAKE",
-         Provincia != "SECTOR ANTARTICO",
-         Provincia != "IS. SHETLAND DEL SUR",
-         Provincia != "ISLAS GEORGIA DEL SUR",
-         Provincia != "ISLAS GEORGIAS DEL SUR",
-         Provincia != "ISLAS GEORGIAS y SANDWICH DEL SUR",
-         Provincia != "ISLAS GIORGIA Y SANDWICH DEL SUR",
-         Provincia != "ISLAS ORCADAS",
-         Provincia != "ISLAS ORCADAS DEL SUR",
-         Provincia != "ATLANTICO SUR",
-         Provincia != "BOLIVIA",
-         Provincia != "ISLAS GEORGIAS Y SANDWICH DEL SUR",
-         Provincia != "PARAGUAY",
-         Provincia != "LIM. ARG-CHILE",
-         Provincia != "LIM.ARGENTINA-CHILE",
-         Provincia != "LIM.CHILE-ARGENTINA",
-         Provincia != "LIMITE ARGENTINA-CHILE",
-         Provincia != "LIMITE ARGENTINA CHILE",
-         Provincia != "TIERRA DEL FUEGO")
-
-table(sismos_arg$Provincia)
-
-pal1 <- colorNumeric(palette = c("deeppink2", "deeppink4"), domain = sismos_arg$Profundidad)
-pal2 <- colorNumeric(palette = c("dodgerblue2", "dodgerblue4"), domain = sismos_arg$Profundidad)
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+options(scipen=999)
+datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
 ```
+
+```{r}
+knitr::kable(datos[1:10,], caption = "Dataset reducido")
+```
+
+Visualización de sismos percibidos y no percibidos.
 
 ```{r, message=FALSE, warning=FALSE}
-mapa_arg <- sismos_arg %>% 
-  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
+sismos_arg <- datos
+pal1 <-
+  colorNumeric(palette = c("deeppink2", "deeppink4"),
+               domain = sismos_arg$Profundidad)
+pal2 <-
+  colorNumeric(palette = c("dodgerblue2", "dodgerblue4"),
+               domain = sismos_arg$Profundidad)
+
+mapa_arg <- sismos_arg %>%
+  leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
   addTiles(group = "OSM (default)") %>%
-  addProviderTiles("OpenTopoMap", group = "Topográfico",
-                   options = providerTileOptions(opacity=0.5)) %>%
-  addCircleMarkers(data=sismos_arg%>% 
-                     filter(is.na(Intensidad)),
-                   lng= ~Longitud, 
-                   lat= ~Latitud,
-                   fillOpacity=0.1,
-                   radius=~Magnitud,
-                   color = ~pal2(Profundidad),
-                   stroke = FALSE, 
-                   group = "Sismos no percibidos") %>% 
-  addCircleMarkers(data=sismos_arg%>% 
-               filter(Intensidad != "NA"),
-             lng= ~Longitud, 
-             lat= ~Latitud,
-             fillOpacity=0.1,
-             radius=~Magnitud,
-             color = ~pal1(Profundidad),
-             stroke = FALSE, 
-             group = "Sismos percibidos") %>% 
-  addLayersControl(baseGroups = c("OSM (default)", "Topográfico"),
-                   overlayGroups = c("Sismos no percibidos", "Sismos percibidos"),
-                   options = layersControlOptions(collapsed = TRUE))
+  addProviderTiles("OpenTopoMap",
+                   group = "Topográfico",
+                   options = providerTileOptions(opacity = 0.5)) %>%
+  addCircleMarkers(
+    data = sismos_arg %>%
+      filter(Percibido == FALSE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 0.1,
+    radius =  ~ Magnitud,
+    color = ~ pal2(Profundidad),
+    stroke = FALSE,
+    group = "Sismos no percibidos"
+  ) %>%
+  addCircleMarkers(
+    data = sismos_arg %>%
+      filter(Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 0.1,
+    radius =  ~ Magnitud,
+    color = ~ pal1(Profundidad),
+    stroke = FALSE,
+    group = "Sismos percibidos"
+  ) %>%
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Topográfico"),
+    overlayGroups = c("Sismos no percibidos", "Sismos percibidos"),
+    options = layersControlOptions(collapsed = TRUE)
+  )
+
 mapa_arg
 ```
+
+Visualización de sismos, según magnitud por top de provincias con sismos.
+
+```{r, message=FALSE, warning=FALSE}
+top <-
+  c("San Juan",
+    "Salta",
+    "Jujuy",
+    "La Rioja",
+    "Mendoza",
+    "Catamarca",
+    "Córdoba")
+pal3 <-
+  colorNumeric(
+    palette = c("gold", "sienna1", "firebrick", "darkred", "orangered4"),
+    domain = sismos_arg$Magnitud
+  )
+
+mapa_arg_top <- sismos_arg %>%
+  leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
+  addTiles(group = "OSM (default)") %>%
+  addProviderTiles("OpenTopoMap",
+                   group = "Topográfico",
+                   options = providerTileOptions(opacity = 0.5)) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[1]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[1]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[2]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[2]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[3]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[3]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[4]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[4]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[5]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[5]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[6]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[6]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[7]),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    radius =  ~ Magnitud * 1000,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[7]
+  ) %>%
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Topográfico"),
+    overlayGroups = top,
+    options = layersControlOptions(collapsed = TRUE)
+  )
+mapa_arg_top
+```
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Resúmenes por provincia
+prov <- group_by(sismos_arg, Provincia) %>%
+  count()
+
+df1 <- group_by(sismos_arg, Provincia) %>%
+  summarise(
+    nperc = sum(Percibido == TRUE),
+    Magmed = median(Magnitud),
+    Profmed = median(Profundidad)
+  )
+
+df2 <- group_by(sismos_arg, Provincia) %>%
+  count()
+
+sismos_prov <-
+  left_join(df2, df1, by = c("Provincia" = "Provincia"))
+
+sismos_prov_porc <- sismos_prov %>%
+  filter(n > 1000) %>%
+  group_by(Provincia) %>%
+  summarise(pperc = nperc / n * 100)
+```
+
+```{r}
+knitr::kable(sismos_prov, caption = "Resumen por provincias")
+```
+
+```{r}
+knitr::kable(sismos_prov_porc, caption = "Porcentaje de sismos percibidos para casos de más de 1000 eventos")
+```
+
+## Análisis para el caso de San Juan
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sismos_arg <- sismos_arg %>%
+  mutate(FechaHora = paste(Fecha, Hora, sep = " "))
+sismos_arg$FechaHora <- ymd_hms(sismos_arg$FechaHora)
+
+sismos_SJ <- sismos_arg %>%
+  filter(Provincia == "San Juan") %>%
+  arrange(FechaHora)
+
+sismos_SJ_dia <- sismos_SJ %>%
+  group_by(Fecha) %>%
+  count()
+
+# mejorar
+hist(
+  sismos_SJ_dia$n,
+  xlim = c(0, 30),
+  breaks = 118,
+  probability = TRUE,
+  xlab ="Días transcurridos entre un sismo y otro",
+  ylab = "Density",
+  main = "",
+  col = "dodgerblue"
+)
+
+ggplotly(ggplot(data = sismos_SJ_dia, aes(x=n, key=n)) + 
+  labs(x = "Días transcurridos entre un sismo y otro", 
+       y= "Cantidad") + 
+  geom_histogram(fill="dodgerblue", alpha=0.9) + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(ggplot(data = sismos_SJ_dia, aes(x=Fecha, y=n, key=Fecha)) + 
+  labs(x = "Fecha (días)", y= "Cantidad de sismos (día)") + 
+  geom_point(colour="deeppink3") + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sismos_SJ <- sismos_SJ %>%
+  mutate(Año = format(Fecha, format = "%Y"))
+
+df <- sismos_SJ %>%
+  group_by(Magnitud, Año) %>%
+  count()
+
+ajuste <- lm(log(n, 10) ~ Magnitud, data = df)
+a <- ajuste$coefficients[1]
+b <- ajuste$coefficients[2]
+
+ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) + 
+  labs(x = "Magnitud", y= "(Log 10) Cantidad de sismos") + 
+  geom_point(colour="deeppink3") + 
+  geom_abline(intercept = a, slope = b,
+              colour="dodgerblue") + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+Percibidos
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+df <- sismos_SJ %>%
+  filter(Percibido == TRUE)
+
+# Tiempo transcurrido entre dos percibidos (días)
+tiempo <- c()
+for (i in 1:(nrow(df) - 1))
+  tiempo[i] <-
+  difftime(df$FechaHora[i + 1], df$FechaHora[i], units = "days")
+
+datos <- data.frame(tiempo)
+ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) + 
+  labs(x = "Días transcurridos entre un sismo percibido y otro", 
+       y= "Cantidad") + 
+  geom_histogram(fill="dodgerblue", alpha=0.9) + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
 
 # Acerca de los datos
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
 
-También se incluye el enlace de descarga al dataset reducido, `XXX.csv`, con el que se desarrolló el ejemplo.
+También se incluye el enlace de descarga al dataset reducido, `sismos-arg.csv`, con el que se desarrolló el ejemplo.
 
-## Sobre el *dataset* de clima
+## Sobre el *dataset* de sismos
 
 Los datos de este ejemplo corresponden a XXX y se dispone de las siguientes variables.
 
--   `fecha`: fecha, en el formato mes-día.
--   `n`: flujo vehicular de la fecha indicada.
--   `tavg`: temperatura media (°C) registrada en esa fecha.
--   `prcp`: precipitaciones (mm) registrada en esa fecha.
--   `dia`: día de la semana de la fecha indicada.
--   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
+-   `Fecha`: fecha, en el formato año-mes-día.
+-   `Hora`: hora, en el formato hora-minuto-segundo.
+-   `Latitud`: latitud del evento registrado.
+-   `Longitud`: latitud del evento registrado.
+-   `Provincia`: nombre de la provincia del evento registrado.
+-   `Percibido`: `TRUE` si la magnitud fue percibida, `FALSE` si no lo fue.
+-   `Magnitud`: magnitud del sismo en la escala de Richter.
+-   `Profundidad`: profundidad (km) registrada del sismo.
 
 # Librerías
 
@@ -152,12 +338,10 @@ require(ggplot2)
 require(tidyverse)
 require(ggfortify)
 require(plotly)
+require(kableExtra)
 require(vroom)
-require(effsize)
-require(sf)
-require(osmdata)
-require(ggmap)
 require(leaflet)
+library(lubridate)
 ```
 
 ```{r message=FALSE, warning=FALSE}

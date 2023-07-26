@@ -24,7 +24,7 @@ require(leaflet)
 
 Los datos de flujo vehicular de la Ciudad de Buenos Aires reportan, por hora, la cantidad de vehículos registrados por radares ubicados en diferentes puntos de algunas autopistas de la ciudad.
 
-En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019. 
+En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019.
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo el mapa de CABA
@@ -43,7 +43,6 @@ flujo19 <-
 
 paleta <- colorQuantile("Greys", flujo19$n, n = 6)
 ```
-
 
 ```{r, message=FALSE, warning=FALSE}
 # "CartoDB.VoyagerLabelsUnder"
@@ -126,11 +125,9 @@ options(scipen = 999)
 knitr::kable(datos[1:10, ], caption = "Dataset reducido, primeras 10 observaciones.")
 ```
 
-Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023. La elección de los años responde a lo siguiente:
-- los datos de 2020 y 2021 van a encontrarse influenciados por las restricciones de circulación de la pandemia de COVID-19 y la paulatina vuelta a la presencialidad,
-- los datos de 2022 no se encuentran disponibles para el año completo, sino para algunos meses al inicio y al fin del año.
+Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023. La elección de los años responde a lo siguiente: - los datos de 2020 y 2021 van a encontrarse influenciados por las restricciones de circulación de la pandemia de COVID-19 y la paulatina vuelta a la presencialidad, - los datos de 2022 no se encuentran disponibles para el año completo, sino para algunos meses al inicio y al fin del año.
 
-Como puede verse en el siguiente gráfico, existe una tendencia temporal que incide en el flujo vehicular del trimestre para ambos años. 
+Como puede verse en el siguiente gráfico, existe una tendencia temporal que incide en el flujo vehicular del trimestre para ambos años.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplotly(
@@ -181,7 +178,8 @@ ggplotly(
   tooltip = c("key")
 )
 ```
-Los datos exhiben una estacionalidad que, naturalmente, afecta al usual supuesto de independencia: el flujo es creciente, para ambos años, a medida que transcurren los días durante el primer trimestre. Sumado a eso, el emparejamiento de los días por su simple correspondencia de fecha podría no ser comparable, salvo excepciones o hitos de cada año. 
+
+Los datos exhiben una estacionalidad que, naturalmente, afecta al usual supuesto de independencia: el flujo es creciente, para ambos años, a medida que transcurren los días durante el primer trimestre. Sumado a eso, el emparejamiento de los días por su simple correspondencia de fecha podría no ser comparable, salvo excepciones o hitos de cada año.
 
 Por ejemplo, la observación del 24 de enero de 2019 podría no ser comparable con la equivalente de 2023, aunque sí, quizás, con el de alguna fecha próxima a ella. Por la limitación de los datos disponibles para 2023, no es posible considerar otro tipo de agrupamientos. Sin embargo y pese a esto, el flujo vehicular registrado por ese radar parecer ser sistemáticamente menor en 2023 en relación con 2019.
 
@@ -292,7 +290,6 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujo-clima.csv` en el 
 
 El dataset `flujo-clima.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
-
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
 ```
@@ -336,14 +333,10 @@ ggplotly(
 ```
 
 Algunas preguntas que pueden surgir a partir del gráfico son, por ejemplo:
-<<<<<<< HEAD
 
-- ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
-
-=======
-- ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
->>>>>>> 401845d3b1cb727c0e86f76a78cac9288d54c392
-- ¿Hay diferencia en el flujo vehicular medio de los días miércoles respecto de los días viernes?
+-   ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
+-   ¿Hay diferencia en el flujo vehicular medio de los días de semana cuando llueve?
+-   ¿Hay diferencia en el flujo vehicular medio de los días miércoles respecto de los días viernes?
 
 Siempre, claro, recordando que estamos restringiendo el análisis al flujo vehicular detectado por el radar RD171, en la autopista Lugones, altura Esma.
 
@@ -354,6 +347,7 @@ Como hicimos antes, para lo que sigue, descartamos las observaciones correspondi
 feriados <- c(51, 52, 83)
 flujoclima <- flujoclima[-feriados, ]
 ```
+
 Del total de días hábiles, entonces, tenemos $19$ observaciones que resultan de días de semana con lluvia, y $43$ observaciones para días de semana sin lluvia.
 
 ```{r message=FALSE, warning=FALSE}
@@ -389,6 +383,7 @@ t.test(
 )
 cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
+
 Con un $p-$valor de $0.6953$, no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios. Es decir, a partir de la evidencia provista por la muestra, no es posible descartar que el flujo vehicular medio en días sin lluvia difiera del flujo medio cuando llueve.
 
 Podemos hacer otro test para ver si hay diferencia significativa para suponer que el flujo medio de los miércoles difiere del de los lunes. Las observaciones son menos, ya que en el primer trimestre solo se registran $13$ miércoles y $12$ viernes, considerando que se removió el 24 de marzo.
@@ -421,7 +416,8 @@ t.test(
 )
 cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
-Nuevamente, y con un $p-$valor de $0.5629$, concluimos que no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre esos días, algo que al "ojo desnudo" podría parecer significativo. Ocurre, sin embargo, que la variabilidad exhibida en los flujos de los días viernes, parece ser mayor, como se observa en ambos gráficos previos. Una comparación que sí esperaría conducir a un rechazo de la igualdad de flujos medios podría ser la de miércoles y sábados. 
+
+Nuevamente, y con un $p-$valor de $0.5629$, concluimos que no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre esos días, algo que al "ojo desnudo" podría parecer significativo. Ocurre, sin embargo, que la variabilidad exhibida en los flujos de los días viernes, parece ser mayor, como se observa en ambos gráficos previos. Una comparación que sí esperaría conducir a un rechazo de la igualdad de flujos medios podría ser la de miércoles y sábados.
 
 ```{r message=FALSE, warning=FALSE}
 # Días de semana con lluvia: 13 datos
@@ -454,7 +450,6 @@ cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 
 El test arroja un $p-$valor prácticamente nulo: podemos concluir que hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre los días miércoles y los días sábados. Además, el tamaño del efecto es grande.
 
-
 # Acerca de los datos
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
@@ -473,29 +468,21 @@ clima <-
 
 ## Sobre el *dataset* de flujo vehicular
 
-Los datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd). 
+Los datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 [(disponibles acá)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd).
 
 Algunas consideraciones, a la fecha, respecto de estos datos:
-<<<<<<< HEAD
 
-- Los *datasets* se encuentran disponibles para los años 2019 a 2023.
+-   Los *datasets* se encuentran disponibles para los años 2019 a 2023.
 
-- No todos tienen el mismo formato para el tratamiento de la fecha.
+-   No todos tienen el mismo formato para el tratamiento de la fecha.
 
-- Los datos de 2022 no están completos.
+-   Los datos de 2022 no están completos.
 
-- Los datos de 2023 se encuentran disponibles al primer trimestre.
+-   Los datos de 2023 se encuentran disponibles al primer trimestre.
 
-- Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
+-   Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
-=======
-- Los *datasets* se encuentran disponibles para los años 2019 a 2023.
-- No todos tienen el mismo formato para el tratamiento de la fecha.
-- Los datos de 2022 no están completos.
-- Los datos de 2023 se encuentran disponibles al primer trimestre.
-- Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
-
->>>>>>> 401845d3b1cb727c0e86f76a78cac9288d54c392
+======= - Los *datasets* se encuentran disponibles para los años 2019 a 2023. - No todos tienen el mismo formato para el tratamiento de la fecha. - Los datos de 2022 no están completos. - Los datos de 2023 se encuentran disponibles al primer trimestre. - Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
 ## *Dataset* pre-procesado: `clima-flujo.csv`
 
@@ -507,7 +494,6 @@ Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `c
 -   `prcp`: precipitaciones (mm) registrada en esa fecha.
 -   `dia`: día de la semana de la fecha indicada.
 -   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
-
 
 # Librerías
 

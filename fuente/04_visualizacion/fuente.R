@@ -20,7 +20,6 @@ sismos$Fecha <- as.Date(sismos$Fecha, tryFormats = c("%d/%m/%Y"))
 min(sismos$Fecha)
 max(sismos$Fecha)
 
-
 # dummy para los percibidos
 sismos <- sismos %>%
   mutate(
@@ -29,10 +28,10 @@ sismos <- sismos %>%
     Profundidad = Profund.
   )
 
-# Quitamos las unidades km. en intensidad
+# quitamos las unidades km. en intensidad
 sismos$Profundidad <- as.numeric(str_sub(sismos$Profundidad, 1,-4))
 
-# Sismos en Argentina Continental (saco TdF porque se corre mucho el mapa)
+# sismos en Argentina Continental (saco TdF porque se corre mucho el mapa)
 sismos_arg <- sismos %>%
   filter(
     Provincia != "OCEANO PACIFICO",
@@ -80,7 +79,7 @@ sismos_arg <- sismos %>%
 
 table(sismos_arg$Provincia)
 
-# Recodifico provincias
+# recodifico provincias
 sismos_arg <- sismos_arg %>%
   mutate(
     Provincia = recode(

@@ -28,34 +28,38 @@ En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo el mapa de CABA
-barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
+barrios_caba <-
+  st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
   select(BARRIO, COMUNA)
 
 # importo datos de flujo vehicular 2019
-flujo19 <- vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv") %>%
-  group_by(disp_ubicacion) %>% 
+flujo19 <-
+  vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv") %>%
+  group_by(disp_ubicacion) %>%
   summarise(n = sum(cantidad),
             lat = mean(lat),
             long = mean(long)) %>%
-  drop_na() 
+  drop_na()
 
-paleta <- colorQuantile("Greys", flujo19$n, n=6)
+paleta <- colorQuantile("Greys", flujo19$n, n = 6)
 ```
 
 
 ```{r, message=FALSE, warning=FALSE}
 # "CartoDB.VoyagerLabelsUnder"
-mapa19 <-flujo19 %>%
-  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
+mapa19 <- flujo19 %>%
+  leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
   addProviderTiles("CartoDB.VoyagerLabelsUnder",
-                   options = providerTileOptions(opacity=0.8)) %>%
-  addCircleMarkers(lng= ~long, 
-                   lat= ~lat,
-                   fillOpacity=0.9,
-                   radius=~100*n/(sum(n)),
-                   weight=1,
-                   color = ~paleta(n),
-                   stroke = FALSE)
+                   options = providerTileOptions(opacity = 0.8)) %>%
+  addCircleMarkers(
+    lng = ~ long,
+    lat = ~ lat,
+    fillOpacity = 0.9,
+    radius =  ~ 100 * n / (sum(n)),
+    weight = 1,
+    color = ~ paleta(n),
+    stroke = FALSE
+  )
 mapa19
 ```
 
@@ -63,45 +67,49 @@ Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altur
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 # importo el mapa de CABA
-barrios_caba <- st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
+barrios_caba <-
+  st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
   select(BARRIO, COMUNA)
 
 # importo datos de flujo vehicular 2019
-flujo23 <- vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv") 
+flujo23 <-
+  vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv")
 
 # La long y la lat está mal registrada
-corregir_lat <- which(flujo23$lat>-500000)
-flujo23$lat[corregir_lat] <- flujo23$lat[corregir_lat]/10000
-flujo23$lat[-corregir_lat] <- flujo23$lat[-corregir_lat]/100000
+corregir_lat <- which(flujo23$lat > -500000)
+flujo23$lat[corregir_lat] <- flujo23$lat[corregir_lat] / 10000
+flujo23$lat[-corregir_lat] <- flujo23$lat[-corregir_lat] / 100000
 
-corregir_long <- which(flujo23$long>-1000000)
-flujo23$long[corregir_long] <- flujo23$long[corregir_long]/10000
-flujo23$long[-corregir_long] <- flujo23$long[-corregir_long]/100000
+corregir_long <- which(flujo23$long > -1000000)
+flujo23$long[corregir_long] <- flujo23$long[corregir_long] / 10000
+flujo23$long[-corregir_long] <- flujo23$long[-corregir_long] / 100000
 
 flujo23 <- flujo23 %>%
-  group_by(disp_ubicacion) %>% 
+  group_by(disp_ubicacion) %>%
   summarise(n = sum(cantidad),
             lat = mean(lat),
             long = mean(long)) %>%
-  drop_na() 
+  drop_na()
 
-paleta <- colorQuantile("Greys", flujo23$n, n=6)
+paleta <- colorQuantile("Greys", flujo23$n, n = 6)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 # Radares
 # "CartoDB.VoyagerLabelsUnder"
-mapa23 <-flujo23%>%
-  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
+mapa23 <- flujo23 %>%
+  leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
   addProviderTiles("Stamen.Watercolor",
-                   options = providerTileOptions(opacity=0.8)) %>%
-  addCircleMarkers(lng= ~long, 
-                   lat= ~lat,
-                   fillOpacity=0.9,
-                   radius=~100*n/(sum(n)),
-                   weight=1,
-                   color = ~paleta(n),
-                   stroke = FALSE)
+                   options = providerTileOptions(opacity = 0.8)) %>%
+  addCircleMarkers(
+    lng = ~ long,
+    lat = ~ lat,
+    fillOpacity = 0.9,
+    radius =  ~ 100 * n / (sum(n)),
+    weight = 1,
+    color = ~ paleta(n),
+    stroke = FALSE
+  )
 mapa23
 ```
 
@@ -111,11 +119,11 @@ El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
-options(scipen=999)
+options(scipen = 999)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-knitr::kable(datos[1:10,], caption = "Dataset reducido, primeras 10 observaciones.")
+knitr::kable(datos[1:10, ], caption = "Dataset reducido, primeras 10 observaciones.")
 ```
 
 Cada observación corresponde al flujo total detectado por ese radar de un día que resultó hábil tanto en 2019 como en 2023. La elección de los años responde a lo siguiente:
@@ -125,33 +133,53 @@ Cada observación corresponde al flujo total detectado por ese radar de un día 
 Como puede verse en el siguiente gráfico, existe una tendencia temporal que incide en el flujo vehicular del trimestre para ambos años. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-ggplotly(ggplot(data = datos, aes(x=n19, y=n23, key=fecha)) + 
-  labs(x = "Flujo vehicular Lugones (Esma) 2019", y= "Flujo vehicular Lugones (Esma) 2023") +
-  xlim(0, 140000) +
-  ylim(0, 140000) +
-  geom_point(colour = "firebrick") + 
-  geom_abline(slope=1,intercept=0,show.legend = F,linetype="dashed") +
-  theme_classic(),
-  source = "select", tooltip = c("key"))
+ggplotly(
+  ggplot(data = datos, aes(
+    x = n19, y = n23, key = fecha
+  )) +
+    labs(x = "Flujo vehicular Lugones (Esma) 2019", y = "Flujo vehicular Lugones (Esma) 2023") +
+    xlim(0, 140000) +
+    ylim(0, 140000) +
+    geom_point(colour = "firebrick") +
+    geom_abline(
+      slope = 1,
+      intercept = 0,
+      show.legend = F,
+      linetype = "dashed"
+    ) +
+    theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 
 Las observaciones que se encuentran más alejadas de la recta identidad, corresponden a los días 20 y 21 de febrero de 2023, ambos feriados de carnaval, y a los días 9 y 16 de enero de 2019, ambos lunes, de posible retorno a la ciudad por recambio turístico. Removemos estas observaciones para lo que sigue.
 
 ```{r echo=FALSE}
 # Removemos posibles atípicos: 9 y 16 ene 2019; 20 y 21 feb 2023
-recambios <- c(4,7,20,21)
-flujosout <- datos[-recambios,]
+recambios <- c(4, 7, 20, 21)
+flujosout <- datos[-recambios, ]
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplotly(ggplot(data = flujosout, aes(x=n19, y=n23, key=fecha)) +
-  labs(x = "Flujo vehicular Lugones (Esma) 2019", y= "Flujo vehicular Lugones (Esma) 2023") +
-  xlim(100000, 140000) +
-  ylim(100000, 140000) +
-  geom_point(colour = "firebrick") + 
-  geom_abline(slope=1,intercept=0,show.legend = F,linetype="dashed") +
-  theme_classic(),
-  source = "select", tooltip = c("key"))
+ggplotly(
+  ggplot(data = flujosout, aes(
+    x = n19, y = n23, key = fecha
+  )) +
+    labs(x = "Flujo vehicular Lugones (Esma) 2019", y = "Flujo vehicular Lugones (Esma) 2023") +
+    xlim(100000, 140000) +
+    ylim(100000, 140000) +
+    geom_point(colour = "firebrick") +
+    geom_abline(
+      slope = 1,
+      intercept = 0,
+      show.legend = F,
+      linetype = "dashed"
+    ) +
+    theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 Los datos exhiben una estacionalidad que, naturalmente, afecta al usual supuesto de independencia: el flujo es creciente, para ambos años, a medida que transcurren los días durante el primer trimestre. Sumado a eso, el emparejamiento de los días por su simple correspondencia de fecha podría no ser comparable, salvo excepciones o hitos de cada año. 
 
@@ -159,17 +187,29 @@ Por ejemplo, la observación del 24 de enero de 2019 podría no ser comparable c
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Gráfico
-fl <- data.frame(flujo = c(flujosout$n19,flujosout$n23),
-                 dia = c(flujosout$fecha,flujosout$fecha),
-                 anio = as.factor(c(rep("2019", length(flujosout$n19)),
-                                    rep("2023", length(flujosout$n23))))) 
+fl <- data.frame(
+  flujo = c(flujosout$n19, flujosout$n23),
+  dia = c(flujosout$fecha, flujosout$fecha),
+  anio = as.factor(c(
+    rep("2019", length(flujosout$n19)),
+    rep("2023", length(flujosout$n23))
+  ))
+)
 
-ggplotly(ggplot(data = fl, aes(x=dia, y=flujo, color=anio, key=dia)) + 
-  labs(x = "Día (solo para lunes a viernes de ambos años)", y= "Flujo vehicular Lugones (Esma)", color = "Año") + 
-  geom_point() + 
-  scale_x_discrete(breaks=seq(1,8,1),labels=labs) +
-  theme_classic(),
-  source = "select", tooltip = c("key"))
+ggplotly(
+  ggplot(data = fl, aes(
+    x = dia,
+    y = flujo,
+    color = anio,
+    key = dia
+  )) +
+    labs(x = "Día (solo para lunes a viernes de ambos años)", y = "Flujo vehicular Lugones (Esma)", color = "Año") +
+    geom_point() +
+    scale_x_discrete(breaks = seq(1, 8, 1), labels = labs) +
+    theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 
 ## Test para diferencia de medias (datos apareados: primer trimestre 2019 vs 2023)
@@ -177,19 +217,41 @@ ggplotly(ggplot(data = fl, aes(x=dia, y=flujo, color=anio, key=dia)) +
 Bajo ciertos reparos, puede ponerse a prueba la hipótesis anterior, asumiendo que algo de la estacionalidad observada puede resolverse apareando los datos. Más precisamente, un gráfico de las diferencias entre el flujo de 2019 y el de 2023 para los días considerados parece dar cuenta de tal efecto.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-difs <- data.frame(dif = flujosout$n19-flujosout$n23,
+difs <- data.frame(dif = flujosout$n19 - flujosout$n23,
                    dia = flujosout$fecha)
 # Gráfico
-ggplotly(ggplot(data = difs, aes(x=dia, y=dif, colour="grey", key=dia)) + 
-  labs(x = "Día (solo para lunes a viernes de ambos años)", y= "Diferencia de flujo vehicular 2019 vs 2023") + 
-  geom_point() + 
-  geom_hline(yintercept = 0, color="springgreen4", linetype="dashed") + 
-  geom_hline(yintercept = mean(difs$dif), color="firebrick", linetype="dashed") +
-  scale_color_manual(name = "Medias", values = c("Esperada" = "springgreen4", "Observada" = "firebrick")) + 
-  scale_x_discrete(breaks=seq(1,8,1),labels=labs) +
-  theme_classic() + 
-  theme(legend.position="none"),
-  source = "select", tooltip = c("key"))
+ggplotly(
+  ggplot(data = difs, aes(
+    x = dia,
+    y = dif,
+    colour = "grey",
+    key = dia
+  )) +
+    labs(x = "Día (solo para lunes a viernes de ambos años)", y = "Diferencia de flujo vehicular 2019 vs 2023") +
+    geom_point() +
+    geom_hline(
+      yintercept = 0,
+      color = "springgreen4",
+      linetype = "dashed"
+    ) +
+    geom_hline(
+      yintercept = mean(difs$dif),
+      color = "firebrick",
+      linetype = "dashed"
+    ) +
+    scale_color_manual(
+      name = "Medias",
+      values = c(
+        "Esperada" = "springgreen4",
+        "Observada" = "firebrick"
+      )
+    ) +
+    scale_x_discrete(breaks = seq(1, 8, 1), labels = labs) +
+    theme_classic() +
+    theme(legend.position = "none"),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 
 Parte de la estacionalidad parece haberse corregido y la media observada para las diferencias, que debería ser cercana a 0 en caso de no haber diferencias, se observa desplazada sugiriendo un flujo promedio mayor en 2019.
@@ -197,21 +259,29 @@ Parte de la estacionalidad parece haberse corregido y la media observada para la
 Realizamos un test t para muestras apareadas a nivel $1\%$.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-par(mfrow=c(1,2))  
-qqnorm(flujosout$n19,col="firebrick", main="2019")
+par(mfrow = c(1, 2))
+qqnorm(flujosout$n19, col = "firebrick", main = "2019")
 qqline(flujosout$n19)
-qqnorm(flujosout$n23,col="springgreen4", main="2023")
+qqnorm(flujosout$n23, col = "springgreen4", main = "2023")
 qqline(flujosout$n23)
-par(mfrow=c(1,1))
+par(mfrow = c(1, 1))
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Test para diferencia de medias
-t.test(x = flujosout$n19, y = flujosout$n23, alternative = "two.sided",
-       mu = 0, paired = TRUE, conf.level = 0.99)
+t.test(
+  x = flujosout$n19,
+  y = flujosout$n23,
+  alternative = "two.sided",
+  mu = 0,
+  paired = TRUE,
+  conf.level = 0.99
+)
 
 # Effectsize
-cohen.d(d = flujosout$n19, f = flujosout$n23, paired = TRUE)
+cohen.d(d = flujosout$n19,
+        f = flujosout$n23,
+        paired = TRUE)
 ```
 
 En efecto, el $p-$valor es $0.0000323$, y a partir de esta muestra y bajo las consideraciones ya mencionadas, rechazaríamos el supuesto de igualdad de flujos medios para ambos años, durante días hábiles del primer trimestre en ese radar. El tamaño del efecto parece ser moderado.
@@ -231,13 +301,38 @@ Un gráfico del flujo vehicular por tipo de día y según nivel de precipitacion
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 flujoclima <- datos
-ggplotly(ggplot(data = filter(flujoclima), aes(x=factor(dia, level=c("lunes","martes","miércoles","jueves","viernes","sábado","domingo")), 
-                                      y=n, color=tipo_dia, key=prcp)) + 
-  geom_point(aes(size=prcp)) +
-  labs(x = "Días de la semana", y= "Flujo vehicular Lugones (Esma)", 
-       color = "Tipo de día", size = "Precipitaciones") + 
-  theme_classic(),
-  source = "select", tooltip = c("key"))
+ggplotly(
+  ggplot(
+    data = filter(flujoclima),
+    aes(
+      x = factor(
+        dia,
+        level = c(
+          "lunes",
+          "martes",
+          "miércoles",
+          "jueves",
+          "viernes",
+          "sábado",
+          "domingo"
+        )
+      ),
+      y = n,
+      color = tipo_dia,
+      key = prcp
+    )
+  ) +
+    geom_point(aes(size = prcp)) +
+    labs(
+      x = "Días de la semana",
+      y = "Flujo vehicular Lugones (Esma)",
+      color = "Tipo de día",
+      size = "Precipitaciones"
+    ) +
+    theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 
 Algunas preguntas que pueden surgir a partir del gráfico son, por ejemplo:
@@ -256,32 +351,42 @@ Como hicimos antes, para lo que sigue, descartamos las observaciones correspondi
 
 ```{r echo=FALSE}
 # Removemos feriados
-feriados <- c(51,52,83)
-flujoclima <- flujoclima[-feriados,]
+feriados <- c(51, 52, 83)
+flujoclima <- flujoclima[-feriados, ]
 ```
 Del total de días hábiles, entonces, tenemos $19$ observaciones que resultan de días de semana con lluvia, y $43$ observaciones para días de semana sin lluvia.
 
 ```{r message=FALSE, warning=FALSE}
 # Días de semana con lluvia: 19 datos
 datos1 <- flujoclima %>%
-  filter(prcp>0, 
+  filter(prcp > 0,
          tipo_dia == "Lunes a viernes")
 
 # Días de semana sin lluvia: 43 datos
 datos2 <- flujoclima %>%
-  filter(prcp==0, 
+  filter(prcp == 0,
          tipo_dia == "Lunes a viernes")
 
-boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
-        names=c("Lluvia", "Sin lluvia"))
+boxplot(
+  datos1$n,
+  datos2$n,
+  col = c("firebrick", "springgreen4"),
+  names = c("Lluvia", "Sin lluvia")
+)
 ```
 
 Realizamos un test t para diferencia de medias.
 
 ```{r message=FALSE, warning=FALSE}
 # Test para diferencia de medias
-t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
-       mu = 0, paired = FALSE, conf.level = 0.95)
+t.test(
+  x = datos1$n,
+  y = datos2$n,
+  alternative = "two.sided",
+  mu = 0,
+  paired = FALSE,
+  conf.level = 0.95
+)
 cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
 Con un $p-$valor de $0.6953$, no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios. Es decir, a partir de la evidencia provista por la muestra, no es posible descartar que el flujo vehicular medio en días sin lluvia difiera del flujo medio cuando llueve.
@@ -297,13 +402,23 @@ datos1 <- flujoclima %>%
 datos2 <- flujoclima %>%
   filter(dia == "viernes")
 
-boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
-        names=c("Miércoles", "Viernes"))
+boxplot(
+  datos1$n,
+  datos2$n,
+  col = c("firebrick", "springgreen4"),
+  names = c("Miércoles", "Viernes")
+)
 ```
 
 ```{r message=FALSE, warning=FALSE}
-t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
-       mu = 0, paired = FALSE, conf.level = 0.95)
+t.test(
+  x = datos1$n,
+  y = datos2$n,
+  alternative = "two.sided",
+  mu = 0,
+  paired = FALSE,
+  conf.level = 0.95
+)
 cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
 Nuevamente, y con un $p-$valor de $0.5629$, concluimos que no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre esos días, algo que al "ojo desnudo" podría parecer significativo. Ocurre, sin embargo, que la variabilidad exhibida en los flujos de los días viernes, parece ser mayor, como se observa en ambos gráficos previos. Una comparación que sí esperaría conducir a un rechazo de la igualdad de flujos medios podría ser la de miércoles y sábados. 
@@ -317,14 +432,26 @@ datos1 <- flujoclima %>%
 datos2 <- flujoclima %>%
   filter(dia == "sábado")
 
-boxplot(datos1$n,datos2$n, col=c("firebrick","springgreen4"),
-        names=c("Miércoles", "Sábado"))
+boxplot(
+  datos1$n,
+  datos2$n,
+  col = c("firebrick", "springgreen4"),
+  names = c("Miércoles", "Sábado")
+)
 ```
+
 ```{r message=FALSE, warning=FALSE}
-t.test(x = datos1$n, y = datos2$n, alternative = "two.sided",
-       mu = 0, paired = FALSE, conf.level = 0.95)
+t.test(
+  x = datos1$n,
+  y = datos2$n,
+  alternative = "two.sided",
+  mu = 0,
+  paired = FALSE,
+  conf.level = 0.95
+)
 cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 ```
+
 El test arroja un $p-$valor prácticamente nulo: podemos concluir que hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre los días miércoles y los días sábados. Además, el tamaño del efecto es grande.
 
 
@@ -339,8 +466,9 @@ También se incluye el enlace de descarga al dataset reducido, `clima-flujo.csv`
 Los datos de este ejemplo corresponden a datos de clima del año 2023 tomados de la base de datos meteorológicos y climáticos de MeteoStat [(disponibles acá)](https://meteostat.net/es/station/87582?t=2023-01-01/2023-03-31). En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582) y un conjunto reducido de variables para el período considerado.
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-clima <- read_csv("./fuente/03_test_hipotesis/registro_tiempo_aeroparque_2023.csv") %>% 
-  select(c(1:5,7:8,10))
+clima <-
+  read_csv("./fuente/03_test_hipotesis/registro_tiempo_aeroparque_2023.csv") %>%
+  select(c(1:5, 7:8, 10))
 ```
 
 ## Sobre el *dataset* de flujo vehicular

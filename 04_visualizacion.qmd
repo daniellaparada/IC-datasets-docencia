@@ -6,13 +6,13 @@ Presentamos un ejemplo para visualización de datos de sismos de Argentina de lo
 
 Se llama **sismo** al proceso físico de liberación instantánea de energía acumulada en el interior de las rocas de la litósfera. La energía acumulada es producto de los esfuerzos tectónicos generados en las partes rígidas de la Tierra. Los sismos ocurren y han ocurrido históricamente, sin embargo, en la actualidad hay más registro de eventos sísmicos a causa de los avances tecnológicos que han permitido localizarlos y caracterizarlos con mayor exactitud.
 
-El riesgo sísmico de una región es la probabilidad de consecuencias adversas ante un evento sísmico y resulta de la combinación entre la peligrosidad sísmica propia del lugar y de la vulnerabilidad de las construcciones. 
+El riesgo sísmico de una región es la probabilidad de consecuencias adversas ante un evento sísmico y resulta de la combinación entre la peligrosidad sísmica propia del lugar y de la vulnerabilidad de las construcciones.
 
 ![Mapa de peligrosidad sísmica del INPRES.](./fuente/04_visualizacion/peligrosidad-sismica.jpg){fig-align="center"}
 
-El INPRES (Instituto Nacional para la Prevención Sísmica) afirma que **no es posible, en el sentido amplio de la palarba, predecir un sismo** (o terremoto, que en la jerga local alude a un sismo que ocasiona víctimas y daños severos). Se considera una predicción sísmica formal a aquella en la que se indica la fecha de ocurrencia, el lugar (coordenadas) de ocurrencia (con la profundidad) y el tamaño (magnitud), del evento por ocurrir. La sismología ha permitido conocer e identificar todas las regiones en el mundo que son potencialmente sísmicas, es decir, regiones donde siempre han ocurrido, ocurren y ocurrirán terremotos mientras la Tierra tenga vida. Aunque el tamaño de los terremotos que ocurrirán en alguna de estas regiones puede ser estimado de manera aproximada en función de datos históricos, sin embargo, la fecha del terremoto no puede ser determinada con exactitud. 
+El INPRES (Instituto Nacional para la Prevención Sísmica) afirma que **no es posible, en el sentido amplio de la palarba, predecir un sismo** (o terremoto, que en la jerga local alude a un sismo que ocasiona víctimas y daños severos). Se considera una predicción sísmica formal a aquella en la que se indica la fecha de ocurrencia, el lugar (coordenadas) de ocurrencia (con la profundidad) y el tamaño (magnitud), del evento por ocurrir. La sismología ha permitido conocer e identificar todas las regiones en el mundo que son potencialmente sísmicas, es decir, regiones donde siempre han ocurrido, ocurren y ocurrirán terremotos mientras la Tierra tenga vida. Aunque el tamaño de los terremotos que ocurrirán en alguna de estas regiones puede ser estimado de manera aproximada en función de datos históricos, sin embargo, la fecha del terremoto no puede ser determinada con exactitud.
 
-Si bien hay estudios científicos sobre predicción sísmica que realizan países como China, Estados Unidos y Japón; la comunidad sismológica mundial en la actualidad, no ha logrado obtener, con rigor científico estricto, predicciones de terremotos. 
+Si bien hay estudios científicos sobre predicción sísmica que realizan países como China, Estados Unidos y Japón; la comunidad sismológica mundial en la actualidad, no ha logrado obtener, con rigor científico estricto, predicciones de terremotos.
 
 A continuación, se muestran algunos posibles análisis para datos de sismos de Argentina durante los años 2012 a 2022, fuertemente relacionados con herramientas de **visualización y descriptivas**.
 
@@ -45,7 +45,7 @@ datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
 knitr::kable(datos[1:10,], caption = "Dataset reducido")
 ```
 
-La variable ´Percibido´ es la que registra si la intensidad del sismo fue percibida, o no, por la población del territorio afectado. Los sismos son más frecuentes de lo que, quizás, supongamos. El siguiente mapa ofrece una posible visualización para los sismos percibidos y no percibidos de los últimos 10 años. Dentro del mapa, es posible activar la capa topográfica para relacionar, por ejemplo, los sismos con el relieve del territorio. 
+La variable ´Percibido´ es la que registra si la intensidad del sismo fue percibida, o no, por la población del territorio afectado. Los sismos son más frecuentes de lo que, quizás, supongamos. El siguiente mapa ofrece una posible visualización para los sismos percibidos y no percibidos de los últimos 10 años. Dentro del mapa, es posible activar la capa topográfica para relacionar, por ejemplo, los sismos con el relieve del territorio.
 
 ```{r, message=FALSE, warning=FALSE}
 sismos_arg <- datos
@@ -196,7 +196,7 @@ mapa_arg_top <- sismos_arg %>%
 mapa_arg_top
 ```
 
-La percepción del sismo está asociada a la magnitud, pero puede ocurrir que ligeramente si, para el mismo mapa, solo se representan l
+La percepción del sismo por parte de la población no está únicamente asociada a la magnitud y/o profundidad. Por ejemplo, un sismo de magnitud 2.6 y profundidad de 7 km en Córdoba es percibido, mientras que otro, de magnitud 2.7 y profundidad de 12 km en Catamarca no es percibido. Lo mismo ocurre para magnitudes y/o profundidades mayores. El siguiente mapa ofrece una visualización similar al anterior, pero restringido únicamente a los sismos percibidos del conjunto de datos.
 
 ```{r, message=FALSE, warning=FALSE}
 mapa_arg_top_perc <- sismos_arg %>%
@@ -289,6 +289,9 @@ mapa_arg_top_perc <- sismos_arg %>%
   )
 mapa_arg_top_perc
 ```
+Allí puede verse que, mientras que en San Juan los sismos percibidos parecen ser de magnitudes altas, en Córdoba ocurre lo contrario.
+
+La tabla que sigue resume, por provincia, la cantidad de sismos registrados, los percibidos, así como la magnitud y profundidad mediana. De las provincias con mayor cantidad de eventos registrados, Jujuy y Salta registran los sismos más profundos, mientras que Córdoba registra sismos superficiales, con una intensidad mediana de 2.8, y es de las provincias con mayor tasa de sismos percibidos de entre las de mayor cantidad de eventos registrados. San Juan registra muchos sismos, más de la mitad de ellos de profundidad media a profunda, pero con una tasa de percepción relativamente baja, como Salta y Jujuy.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Resúmenes por provincia
@@ -324,6 +327,8 @@ knitr::kable(sismos_prov_porc, caption = "Porcentaje de sismos percibidos para c
 
 ## Análisis para el caso de San Juan
 
+San Juan registra casi 30.000 eventos para el período considerado de poco más de 10 años, con una mediana de 8 sismos diarios. Un histograma para la cantidad diaria de sismos se observa a continuación.
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 sismos_arg <- sismos_arg %>%
   mutate(FechaHora = paste(Fecha, Hora, sep = " "))
@@ -337,26 +342,16 @@ sismos_SJ_dia <- sismos_SJ %>%
   group_by(Fecha) %>%
   count()
 
-# mejorar
-hist(
-  sismos_SJ_dia$n,
-  xlim = c(0, 30),
-  breaks = 118,
-  probability = TRUE,
-  xlab ="Días transcurridos entre un sismo y otro",
-  ylab = "Density",
-  main = "",
-  col = "dodgerblue"
-)
-
 ggplotly(ggplot(data = sismos_SJ_dia, aes(x=n, key=n)) + 
-  labs(x = "Días transcurridos entre un sismo y otro", 
-       y= "Cantidad") + 
+  labs(x = "Cantidad de sismos por día", 
+       y= "") + 
   geom_histogram(fill="dodgerblue", alpha=0.9) + 
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
+En el histograma puede verse que hay por lo menos una observación que supera los 100 sismos diarios. En efecto, se trata del terremoto del 18 de enero de 2021 en La Rinconada, San Juan, en el que se reportaron colapsos de viviendas de adobe, grietas distensivas a lo largo del eje de la Ruta Nacional 40, derrumbes parciales, y otros daños serios principalmente en los Departamentos de Pocito y Sarmiento. Durante las 72 hs posteriores al terremoto de magnitud 6.4, se registraron más de 150 réplicas de magnitudes entre 2.5 y 5.3. Más información [acá](https://sismo.conicet.gov.ar/el-terremoto-mas-destructivo-de-san-juan-desde-hace-44-anos/).
 
+El siguiente gráfico muestra la cantidad de sismos diarios. Puede apreciarse las réplicas de tal terremoto en las observaciones que corresponden a los días entre el 19 y el 23 de enero de 2021.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplotly(ggplot(data = sismos_SJ_dia, aes(x=Fecha, y=n, key=Fecha)) + 
@@ -365,6 +360,75 @@ ggplotly(ggplot(data = sismos_SJ_dia, aes(x=Fecha, y=n, key=Fecha)) +
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
+
+Como vimos, San Juan registra más de 600 sismos percibidos durante el período, algo más que el 2% del total de sismos registrados. La frecuencia con la que se perciben tales sismos es alta. Eso puede observarse en el histograma para la cantidad de días transcurridos entre un sismo percibido y otro.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+df <- sismos_SJ %>%
+  filter(Percibido == TRUE)
+
+# Tiempo transcurrido entre dos percibidos (días)
+tiempo <- c()
+for (i in 1:(nrow(df) - 1))
+  tiempo[i] <-
+  difftime(df$FechaHora[i + 1], df$FechaHora[i], units = "days")
+
+datos <- data.frame(tiempo)
+ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) + 
+  labs(x = "Días transcurridos entre un sismo percibido y otro", 
+       y= "Cantidad") + 
+  geom_histogram(fill="dodgerblue", alpha=0.9) + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+Córdoba y Mendoza, registrando cerca del 27% y 7% de sismos percibidos respecto del total, respectivamente, tienen una frecuencia ligeramente más espaciada que la de San Juan.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sismos_COR <- sismos_arg %>%
+  filter(Provincia == "Córdoba") %>%
+  arrange(FechaHora)
+
+df <- sismos_COR %>%
+  filter(Percibido == TRUE)
+
+# Tiempo transcurrido entre dos percibidos (días)
+tiempo <- c()
+for (i in 1:(nrow(df) - 1))
+  tiempo[i] <-
+  difftime(df$FechaHora[i + 1], df$FechaHora[i], units = "days")
+
+datos <- data.frame(tiempo)
+ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) + 
+  labs(x = "Días transcurridos entre un sismo percibido y otro (Córdoba, n=313)", 
+       y= "Cantidad") + 
+  geom_histogram(fill="dodgerblue3", alpha=0.9) + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+
+sismos_MZ <- sismos_arg %>%
+  filter(Provincia == "Mendoza") %>%
+  arrange(FechaHora)
+
+df <- sismos_MZ %>%
+  filter(Percibido == TRUE)
+
+# Tiempo transcurrido entre dos percibidos (días)
+tiempo <- c()
+for (i in 1:(nrow(df) - 1))
+  tiempo[i] <-
+  difftime(df$FechaHora[i + 1], df$FechaHora[i], units = "days")
+
+datos <- data.frame(tiempo)
+ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) + 
+  labs(x = "Días transcurridos entre un sismo percibido y otro (Mendoza, n=303)", 
+       y= "Cantidad") + 
+  geom_histogram(fill="dodgerblue4", alpha=0.9) + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
+
+## Gutenber-Richter 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 sismos_SJ <- sismos_SJ %>%
@@ -387,26 +451,6 @@ ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) +
   source = "select", tooltip = c("key"))
 ```
 
-Percibidos
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-df <- sismos_SJ %>%
-  filter(Percibido == TRUE)
-
-# Tiempo transcurrido entre dos percibidos (días)
-tiempo <- c()
-for (i in 1:(nrow(df) - 1))
-  tiempo[i] <-
-  difftime(df$FechaHora[i + 1], df$FechaHora[i], units = "days")
-
-datos <- data.frame(tiempo)
-ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) + 
-  labs(x = "Días transcurridos entre un sismo percibido y otro", 
-       y= "Cantidad") + 
-  geom_histogram(fill="dodgerblue", alpha=0.9) + 
-  theme_classic(),
-  source = "select", tooltip = c("key"))
-```
 
 
 # Acerca de los datos

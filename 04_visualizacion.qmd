@@ -1,10 +1,20 @@
-Presentamos un ejemplo para XXX.
+Presentamos un ejemplo para visualización de datos de sismos de Argentina de los últimos 10 años.
 
 ![Cómo *MidJourney* imagina que se ilustra este problema bajo el *prompt*: */imagine a stunning illustration capturing seismic data visualization near the mountains in San Juan. Abstract seismic waves emanate from the mountains, indicating seismic energy, and seismograph traces overlay the landscape, displaying earthquake intensity. Data points scattered around signify seismic events of various magnitudes and depths.*](./fuente/04_visualizacion/apertura.png){fig-align="center"}
 
 # Visualización
 
-A continuación, se muestran algunos posibles análisis para datos de XXX.
+Se llama **sismo** al proceso físico de liberación instantánea de energía acumulada en el interior de las rocas de la litósfera. La energía acumulada es producto de los esfuerzos tectónicos generados en las partes rígidas de la Tierra. Los sismos ocurren y han ocurrido históricamente, sin embargo, en la actualidad hay más registro de eventos sísmicos a causa de los avances tecnológicos que han permitido localizarlos y caracterizarlos con mayor exactitud.
+
+El riesgo sísmico de una región es la probabilidad de consecuencias adversas ante un evento sísmico y resulta de la combinación entre la peligrosidad sísmica propia del lugar y de la vulnerabilidad de las construcciones. 
+
+![Mapa de peligrosidad sísmica del INPRES.](./fuente/04_visualizacion/peligrosidad-sismica.jpg){fig-align="center"}
+
+El INPRES (Instituto Nacional para la Prevención Sísmica) afirma que **no es posible, en el sentido amplio de la palarba, predecir un sismo** (o terremoto, que en la jerga local alude a un sismo que ocasiona víctimas y daños severos). Se considera una predicción sísmica formal a aquella en la que se indica la fecha de ocurrencia, el lugar (coordenadas) de ocurrencia (con la profundidad) y el tamaño (magnitud), del evento por ocurrir. La sismología ha permitido conocer e identificar todas las regiones en el mundo que son potencialmente sísmicas, es decir, regiones donde siempre han ocurrido, ocurren y ocurrirán terremotos mientras la Tierra tenga vida. Aunque el tamaño de los terremotos que ocurrirán en alguna de estas regiones puede ser estimado de manera aproximada en función de datos históricos, sin embargo, la fecha del terremoto no puede ser determinada con exactitud. 
+
+Si bien hay estudios científicos sobre predicción sísmica que realizan países como China, Estados Unidos y Japón; la comunidad sismológica mundial en la actualidad, no ha logrado obtener, con rigor científico estricto, predicciones de terremotos. 
+
+A continuación, se muestran algunos posibles análisis para datos de sismos de Argentina durante los años 2012 a 2022, fuertemente relacionados con herramientas de **visualización y descriptivas**.
 
 ```{r, message=FALSE, warning=FALSE}
 # Librerías necesarias
@@ -20,11 +30,11 @@ library(lubridate)
 
 ## Exploración inicial
 
-Los datos de sismos XXX.
+Los datos de sismos pueden obtenerse del buscador disponible en el INPRES, [acá](http://contenidos.inpres.gob.ar/buscar_sismo), en el que se registran eventos sísmicos en territorio argentino y diferentes variables asociadas a estos, en particular, si se trata de un sismo que se haya sentido o no.
 
 Para lo que sigue, trabajamos con el *dataset* reducido `sismos-arg.csv` en el que se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022.
 
-El dataset `sismos-arg.csv` se encuentra [acá](https://www.dropbox.com/). A continuación, se muestran 10 datos de dicho conjunto.
+El dataset `sismos-arg.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos-arg.csv) y ha sido transformado a partir de datos *scrappeados* del buscador de sismos del INPRES. A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 options(scipen=999)
@@ -35,7 +45,7 @@ datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
 knitr::kable(datos[1:10,], caption = "Dataset reducido")
 ```
 
-Visualización de sismos percibidos y no percibidos.
+La variable ´Percibido´ es la que registra si la intensidad del sismo fue percibida, o no, por la población del territorio afectado. Los sismos son más frecuentes de lo que, quizás, supongamos. El siguiente mapa ofrece una posible visualización para los sismos percibidos y no percibidos de los últimos 10 años. Dentro del mapa, es posible activar la capa topográfica para relacionar, por ejemplo, los sismos con el relieve del territorio. 
 
 ```{r, message=FALSE, warning=FALSE}
 sismos_arg <- datos
@@ -57,7 +67,7 @@ mapa_arg <- sismos_arg %>%
       filter(Percibido == FALSE),
     lng = ~ Longitud,
     lat = ~ Latitud,
-    fillOpacity = 0.1,
+    fillOpacity = 0.15,
     radius =  ~ Magnitud,
     color = ~ pal2(Profundidad),
     stroke = FALSE,
@@ -68,7 +78,7 @@ mapa_arg <- sismos_arg %>%
       filter(Percibido == TRUE),
     lng = ~ Longitud,
     lat = ~ Latitud,
-    fillOpacity = 0.1,
+    fillOpacity = 0.15,
     radius =  ~ Magnitud,
     color = ~ pal1(Profundidad),
     stroke = FALSE,
@@ -83,7 +93,9 @@ mapa_arg <- sismos_arg %>%
 mapa_arg
 ```
 
-Visualización de sismos, según magnitud por top de provincias con sismos.
+El radio de cada punto indica la magnitud del sismo, mientras que la intensidad del color, su profundidad. Los sismos también se clasifican de acuerdo con la profundidad de su foco: desde la corteza terreste y hasta 70 km de profundidad, son superficiales; entre los 70 y los 450 km de profundidad, son intermedios; y para más de 450 km profundidad, profundos. Los más profundos, en el mapa, se ubican en la capa de sismos no percibidos (azul) sobre la falla que recorre en línea más o menos vertical las provincias de Salta y Santiago del Estero. Profundidades intermedias se encuentran, mayoritariamente, en el oeste de Jujuy. El resto, en general, corresponde a profundidades superficiales.
+
+Las provincias de San Juan, Salta, Jujuy, La Rioja, Mendoza, Catamarca, y Córdoba son aquellas que registran más de 1000 eventos durante el período observado. El siguiente mapa ofrece una visualización de sismos para dichas provincias, indicando con color su magnitud.
 
 ```{r, message=FALSE, warning=FALSE}
 top <-
@@ -112,7 +124,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[1]
@@ -123,7 +134,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[2]
@@ -134,7 +144,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[3]
@@ -145,7 +154,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[4]
@@ -156,7 +164,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[5]
@@ -167,7 +174,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[6]
@@ -178,7 +184,6 @@ mapa_arg_top <- sismos_arg %>%
     lng = ~ Longitud,
     lat = ~ Latitud,
     fillOpacity = 1,
-    radius =  ~ Magnitud * 1000,
     color =  ~ pal3(Magnitud),
     stroke = FALSE,
     group = top[7]
@@ -189,6 +194,100 @@ mapa_arg_top <- sismos_arg %>%
     options = layersControlOptions(collapsed = TRUE)
   )
 mapa_arg_top
+```
+
+La percepción del sismo está asociada a la magnitud, pero puede ocurrir que ligeramente si, para el mismo mapa, solo se representan l
+
+```{r, message=FALSE, warning=FALSE}
+mapa_arg_top_perc <- sismos_arg %>%
+  leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
+  addTiles(group = "OSM (default)") %>%
+  addProviderTiles("OpenTopoMap",
+                   group = "Topográfico",
+                   options = providerTileOptions(opacity = 0.5)) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[1],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[1]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[2],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[2]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[3],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[3]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[4],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[4]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[5],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[5]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[6],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[6]
+  ) %>%
+  addCircles(
+    data = sismos_arg %>%
+      filter(Provincia == top[7],
+             Percibido == TRUE),
+    lng = ~ Longitud,
+    lat = ~ Latitud,
+    fillOpacity = 1,
+    color =  ~ pal3(Magnitud),
+    stroke = FALSE,
+    group = top[7]
+  ) %>%
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Topográfico"),
+    overlayGroups = top,
+    options = layersControlOptions(collapsed = TRUE)
+  )
+mapa_arg_top_perc
 ```
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}

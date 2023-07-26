@@ -482,7 +482,6 @@ Algunas consideraciones, a la fecha, respecto de estos datos:
 
 -   Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
-======= - Los *datasets* se encuentran disponibles para los años 2019 a 2023. - No todos tienen el mismo formato para el tratamiento de la fecha. - Los datos de 2022 no están completos. - Los datos de 2023 se encuentran disponibles al primer trimestre. - Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
 ## *Dataset* pre-procesado: `clima-flujo.csv`
 

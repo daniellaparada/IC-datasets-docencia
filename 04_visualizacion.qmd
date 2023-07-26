@@ -289,6 +289,7 @@ mapa_arg_top_perc <- sismos_arg %>%
   )
 mapa_arg_top_perc
 ```
+
 Allí puede verse que, mientras que en San Juan los sismos percibidos parecen ser de magnitudes altas, en Córdoba ocurre lo contrario.
 
 La tabla que sigue resume, por provincia, la cantidad de sismos registrados, los percibidos, así como la magnitud y profundidad mediana. De las provincias con mayor cantidad de eventos registrados, Jujuy y Salta registran los sismos más profundos, mientras que Córdoba registra sismos superficiales, con una intensidad mediana de 2.8, y es de las provincias con mayor tasa de sismos percibidos de entre las de mayor cantidad de eventos registrados. San Juan registra muchos sismos, más de la mitad de ellos de profundidad media a profunda, pero con una tasa de percepción relativamente baja, como Salta y Jujuy.
@@ -349,6 +350,7 @@ ggplotly(ggplot(data = sismos_SJ_dia, aes(x=n, key=n)) +
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
+
 En el histograma puede verse que hay por lo menos una observación que supera los 100 sismos diarios. En efecto, se trata del terremoto del 18 de enero de 2021 en La Rinconada, San Juan, en el que se reportaron colapsos de viviendas de adobe, grietas distensivas a lo largo del eje de la Ruta Nacional 40, derrumbes parciales, y otros daños serios principalmente en los Departamentos de Pocito y Sarmiento. Durante las 72 hs posteriores al terremoto de magnitud 6.4, se registraron más de 150 réplicas de magnitudes entre 2.5 y 5.3. Más información [acá](https://sismo.conicet.gov.ar/el-terremoto-mas-destructivo-de-san-juan-desde-hace-44-anos/).
 
 El siguiente gráfico muestra la cantidad de sismos diarios. Puede apreciarse las réplicas de tal terremoto en las observaciones que corresponden a los días entre el 19 y el 23 de enero de 2021.
@@ -381,8 +383,8 @@ ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) +
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
-Córdoba y Mendoza, registrando cerca del 27% y 7% de sismos percibidos respecto del total, respectivamente, tienen una frecuencia ligeramente más espaciada que la de San Juan.
 
+Córdoba y Mendoza, registrando cerca del 27% y 7% de sismos percibidos respecto del total, respectivamente, tienen una frecuencia ligeramente más espaciada que la de San Juan.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 sismos_COR <- sismos_arg %>%
@@ -428,7 +430,17 @@ ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) +
   source = "select", tooltip = c("key"))
 ```
 
-## Gutenber-Richter 
+## Gutenberg-Richter
+
+La ley de Gutenberg-Richter (1958) es una fórmula que permite cuantificar la relación entre la frecuencia y la magnitud de la actividad sísmica de una región. La relación fue inicialmente propuesta por Charles Francis Richter y Beno Gutenberg en 1958 y es aun objeto de caracterización de sismos, pues se ha mostrado relativamente invariante por región y en el tiempo.
+
+La ley establece que la recurrencia sísmica anual de magnitud mayor o igual a $M$ en una región se relaciona con la magnitud $N$ a través de
+
+$$
+\log _{10} N=a-b M,
+$$ donde $a$ y $b$ son constantes determinadas por la naturaleza sísmica de la región, en general, a partir de datos históricos.
+
+Ajustamos los datos de San Juan al modelo de Gutenberg-Richter para estimar las constantes $a$ y $b$. En el siguiente gráfico puede verse la cantidad de sismos anuales $N$ (escala logarítmica en base 10) en función de la magnitud $M$.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 sismos_SJ <- sismos_SJ %>%
@@ -438,10 +450,32 @@ df <- sismos_SJ %>%
   group_by(Magnitud, Año) %>%
   count()
 
-ajuste <- lm(log(n, 10) ~ Magnitud, data = df)
-a <- ajuste$coefficients[1]
-b <- ajuste$coefficients[2]
+ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) + 
+  labs(x = "Magnitud", y= "(Log 10) Cantidad de sismos") + 
+  geom_point(colour="deeppink3") + 
+  theme_classic(),
+  source = "select", tooltip = c("key"))
+```
 
+La estimación por mínimos cuadrados de $a$ y de $b$ puede verse a continuación.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ajuste <- lm(log(n, 10) ~ Magnitud, data = df)
+a <- round(ajuste$coefficients[1],4)
+b <- -round(ajuste$coefficients[2],4)
+```
+
+Los coeficientes estimados son $`r a`$ para $a$, y $`r b`$ para $b$. El coeficiente $b$ suele ser aproximadamente igual a $1$ para sismos tectónicos. Como los datos con los que se estimó son de frecuencia anual, la cantidad $a/b$ puede interpretarse como, en promedio y una vez al año, la ocurrencia de un terremoto de magnitud $a/b$ o superior. En este caso, $a/b=`r round(a/b,4)`$, lo que sugiere que, en promedio, una vez al año se registra en San Juan un terremoto de magnitud aproximada `r round(a/b,1)` o superior.
+
+En el siguiente gráfico se superpone, en azul, la curva estimada de Gutenberg-Richter
+
+$$
+\log _{10} N=`r a`-`r b` M,
+$$
+
+a partir de los datos de San Juan.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) + 
   labs(x = "Magnitud", y= "(Log 10) Cantidad de sismos") + 
   geom_point(colour="deeppink3") + 
@@ -450,8 +484,6 @@ ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) +
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
-
-
 
 # Acerca de los datos
 

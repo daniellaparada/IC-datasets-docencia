@@ -144,7 +144,7 @@
     "href": "03_test_hipotesis.html#sobre-el-dataset-de-flujo-vehicular",
     "title": "3  Test de hipótesis",
     "section": "4.2 Sobre el dataset de flujo vehicular",
-    "text": "4.2 Sobre el dataset de flujo vehicular\nLos datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 (disponibles acá).\nAlgunas consideraciones, a la fecha, respecto de estos datos:\n\nLos datasets se encuentran disponibles para los años 2019 a 2023.\nNo todos tienen el mismo formato para el tratamiento de la fecha.\nLos datos de 2022 no están completos.\nLos datos de 2023 se encuentran disponibles al primer trimestre.\nLas coordenadas que georeferencian cada uno de los radares se encuentran “sucias” en los datos de 2023. En este capítulo se propuso una posible limpieza.\n\n======= - Los datasets se encuentran disponibles para los años 2019 a 2023. - No todos tienen el mismo formato para el tratamiento de la fecha. - Los datos de 2022 no están completos. - Los datos de 2023 se encuentran disponibles al primer trimestre. - Las coordenadas que georeferencian cada uno de los radares se encuentran “sucias” en los datos de 2023. En este capítulo se propuso una posible limpieza."
+    "text": "4.2 Sobre el dataset de flujo vehicular\nLos datos de este ejemplo corresponden a datos de flujo vehicular registrado en ciertos radares de AUSA, por hora, en la Ciudad de Buenos Aires para los años 2019 y 2023 (disponibles acá).\nAlgunas consideraciones, a la fecha, respecto de estos datos:\n\nLos datasets se encuentran disponibles para los años 2019 a 2023.\nNo todos tienen el mismo formato para el tratamiento de la fecha.\nLos datos de 2022 no están completos.\nLos datos de 2023 se encuentran disponibles al primer trimestre.\nLas coordenadas que georeferencian cada uno de los radares se encuentran “sucias” en los datos de 2023. En este capítulo se propuso una posible limpieza."
   },
   {
     "objectID": "03_test_hipotesis.html#dataset-pre-procesado-clima-flujo.csv",
@@ -201,5 +201,12 @@
     "title": "4  Visualización",
     "section": "4.3 Gutenber-Richter",
     "text": "4.3 Gutenber-Richter"
+  },
+  {
+    "objectID": "04_visualizacion.html#gutenberg-richter",
+    "href": "04_visualizacion.html#gutenberg-richter",
+    "title": "4  Visualización",
+    "section": "4.3 Gutenberg-Richter",
+    "text": "4.3 Gutenberg-Richter\nLa ley de Gutenberg-Richter (1958) es una fórmula que permite cuantificar la relación entre la frecuencia y la magnitud de la actividad sísmica de una región. La relación fue inicialmente propuesta por Charles Francis Richter y Beno Gutenberg en 1958 y es aun objeto de caracterización de sismos, pues se ha mostrado relativamente invariante por región y en el tiempo.\nLa ley establece que la recurrencia sísmica anual de magnitud mayor o igual a \\(M\\) en una región se relaciona con la magnitud \\(N\\) a través de\n\\[\n\\log _{10} N=a-b M,\n\\] donde \\(a\\) y \\(b\\) son constantes determinadas por la naturaleza sísmica de la región, en general, a partir de datos históricos.\nAjustamos los datos de San Juan al modelo de Gutenberg-Richter para estimar las constantes \\(a\\) y \\(b\\). En el siguiente gráfico puede verse la cantidad de sismos anuales \\(N\\) (escala logarítmica en base 10) en función de la magnitud \\(M\\).\n\n\n\n\n\n\nLa estimación por mínimos cuadrados de \\(a\\) y de \\(b\\) puede verse a continuación.\nLos coeficientes estimados son \\(5.3029\\) para \\(a\\), y \\(1.0656\\) para \\(b\\). El coeficiente \\(b\\) suele ser aproximadamente igual a \\(1\\) para sismos tectónicos. Como los datos con los que se estimó son de frecuencia anual, la cantidad \\(a/b\\) puede interpretarse como, en promedio y una vez al año, la ocurrencia de un terremoto de magnitud \\(a/b\\) o superior. En este caso, \\(a/b=4.9764\\), lo que sugiere que, en promedio, una vez al año se registra en San Juan un terremoto de magnitud aproximada 5 o superior.\nEn el siguiente gráfico se superpone, en azul, la curva estimada de Gutenberg-Richter\n\\[\n\\log _{10} N=5.3029-1.0656 M,\n\\]\na partir de los datos de San Juan."
   }
 ]

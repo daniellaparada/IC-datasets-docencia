@@ -146,7 +146,7 @@ sismos_arg <- sismos_arg %>%
                           "SAN JUAN" = "San Juan",
                           "LIMITE SAN JUAN MENDOZA" = "San Juan",
                           "SAN JUAN(LIM.CON SAN LUIS)" = "San Juan",
-                          "SAN LUIS" = "San Juan",
+                          "SAN LUIS" = "San Luis",
                           "SANTA CRUZ" = "Santa Cruz",
                           "SANTIAGO DEL ESTERO" = "Santiago del Estero",
                           "SGO.DEL ESTERO LIM.CON CATAMARCA" = "Santiago del Estero",
@@ -155,12 +155,13 @@ sismos_arg <- sismos_arg %>%
                           "TUCUMAN LIM. SALTA" = "Tucumán",
                           "TUCUMAN(LIM.CON CATAMARCA)" = "Tucumán"))
 
-table(sismos_arg$Provincia)
+sort(-table(sismos_arg$Provincia))
 
 # Elijo variables
 sismos_arg <- sismos_arg %>%
   select(c(2,3,4,5,9,10,11,12))
 
+# Plot
 pal1 <- colorNumeric(palette = c("deeppink2", "deeppink4"), domain = sismos_arg$Profundidad)
 pal2 <- colorNumeric(palette = c("dodgerblue2", "dodgerblue4"), domain = sismos_arg$Profundidad)
 
@@ -192,33 +193,150 @@ mapa_arg <- sismos_arg %>%
                    options = layersControlOptions(collapsed = TRUE))
 mapa_arg
 
-mapa_arg_perc <- sismos_arg_perc %>% 
+                       
+# Plot del top 7 de provincias, intensidad por color
+top <- c("San Juan", "Salta", "Jujuy", "La Rioja", "Mendoza", "Catamarca", "Córdoba")
+pal3 <- colorNumeric(palette = c("gold", "sienna1","firebrick", "darkred", "orangered4"), domain = sismos_arg$Magnitud)
+
+mapa_arg_top <- sismos_arg %>% 
   leaflet(options = leafletOptions(attributionControl=FALSE))%>%
-  addProviderTiles("OpenStreetMap",
-                   options = providerTileOptions(opacity=1)) %>%
-  addCircleMarkers(lng= ~Longitud, 
+  addTiles(group = "OSM (default)") %>%
+  addProviderTiles("OpenTopoMap", group = "Topográfico",
+                   options = providerTileOptions(opacity=0.5)) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[1]),
+                     lng= ~Longitud, 
+                     lat= ~Latitud,
+                     fillOpacity=1,
+                     radius=~Magnitud*1000,
+                     color=~pal3(Magnitud),
+                     stroke = FALSE, 
+                     group = top[1]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[2]),
+                   lng= ~Longitud, 
                    lat= ~Latitud,
-                   fillOpacity=0.15,
-                   radius=~Magnitud,
-                   color = ~pal(Profundidad),
-                   stroke = FALSE) 
-mapa_arg_perc
-
-# Sismos percibidos en San Juan
-sismos_SJ_perc <- sismos_arg_perc %>%
-  filter(Provincia == "SAN JUAN")
-
-mapa_SJ_perc <- sismos_SJ_perc %>% 
-  leaflet(options = leafletOptions(attributionControl=FALSE))%>%
-  addProviderTiles("OpenStreetMap",
-                   options = providerTileOptions(opacity=1)) %>%
-  addCircleMarkers(lng= ~Longitud, 
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[2]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[3]),
+                   lng= ~Longitud, 
                    lat= ~Latitud,
-                   fillOpacity=0.25,
-                   radius=~Magnitud,
-                   color = ~pal(Profundidad),
-                   stroke = FALSE) 
-mapa_SJ_perc
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[3]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[4]),
+                   lng= ~Longitud, 
+                   lat= ~Latitud,
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[4]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[5]),
+                   lng= ~Longitud, 
+                   lat= ~Latitud,
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[5]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[6]),
+                   lng= ~Longitud, 
+                   lat= ~Latitud,
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[6]) %>%
+  addCircles(data=sismos_arg%>% 
+                     filter(Provincia==top[7]),
+                   lng= ~Longitud, 
+                   lat= ~Latitud,
+                   fillOpacity=1,
+                   radius=~Magnitud*1000,
+             color=~pal3(Magnitud),
+                   stroke = FALSE, 
+                   group = top[7]) %>%
+  addLayersControl(baseGroups = c("OSM (default)", "Topográfico"),
+                   overlayGroups = top,
+                   options = layersControlOptions(collapsed = TRUE))
+mapa_arg_top
 
-# Sismos en San Juan
+# Guardo datos de sismos de Arg
+# guardo el dataset
+write.csv(sismos_arg,
+          "~\\GitHub\\datasets-docencia\\fuente\\04_visualizacion\\sismos-arg.csv", 
+          row.names=FALSE, fileEncoding = "UTF-8")
+
+# Resúmenes por provincia
+prov <- group_by(sismos_arg, Provincia) %>% 
+  count()
+
+df1 <- group_by(sismos_arg, Provincia) %>% 
+  summarise(nperc = sum(Percibido==TRUE),
+            Magmed = median(Magnitud),
+            Profmed = median(Profundidad))
+
+df2 <- group_by(sismos_arg, Provincia) %>% 
+  count() 
+
+sismos_prov <- left_join(df2, df1, by = c("Provincia" = "Provincia"))
+
+sismos_prov_porc <- sismos_prov %>%
+  filter(n>1000) %>%
+  group_by(Provincia) %>% 
+  summarise(pperc = nperc/n*100)
+
+# Miramos San Juan
+library(lubridate)
+sismos_arg <- sismos_arg %>%
+  mutate(FechaHora = paste(Fecha,Hora,sep=" "))
+sismos_arg$FechaHora <- ymd_hms(sismos_arg$FechaHora)
+
+sismos_SJ <- sismos_arg %>%
+  filter(Provincia == "San Juan") %>%
+  arrange(FechaHora) 
+
+sismos_SJ_dia <- sismos_SJ %>%
+  group_by(Fecha) %>%
+  count()
+
+# mejorar
+hist(sismos_SJ_dia$n, xlim=c(0,40), 
+     breaks=118, probability=TRUE)
+plot(sismos_SJ_dia$Fecha, sismos_SJ_dia$n)
+
+sismos_SJ <- sismos_SJ %>%
+  mutate(Año = format(Fecha, format="%Y"))
+
+df <- sismos_SJ %>%
+  group_by(Magnitud, Año) %>%
+  count()
+
+# mejorar G-R estimación
+plot(df$Magnitud, log(df$n, 10))
+ajuste <- lm(log(n,10)~Magnitud, data=df)
+a <- ajuste$coefficients[1]
+b <- ajuste$coefficients[2]
+lines(df$Magnitud, b*df$Magnitud+a, col="red")
+
+# Miro los percibidos
+df <- sismos_SJ %>%
+  filter(Percibido==TRUE)
+
+# Tiempo transcurrido entre dos percibidos (días)
+tiempo <- c()
+for(i in 1:(nrow(df)-1))
+tiempo[i] <- difftime(df$FechaHora[i+1],df$FechaHora[i], units = "days")
+hist(tiempo, probability = TRUE, xlim=c(0,50))
+curve(dexp(x, rate = 1/mean(tiempo)), xlim = c(0,50),add=TRUE, col="red")
 

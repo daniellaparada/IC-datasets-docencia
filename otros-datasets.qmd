@@ -2,11 +2,37 @@
 
 Ver si va (ejemplo dummy)
 
-| *Dataset* | Descripción | Variables | Temas | Fuente |
-|-----------|-------------|-----------|-------|--------|
-| XXX       | XXX         | XXX       | XXX   | XXX    |
-|           |             |           |       |        |
-|           |             |           |       |        |
+| *Dataset*                             | Temas |
+|---------------------------------------|-------|
+| [`bateria.csv`](#sec-bateria)         | XXX   |
+| [`nombres-arg.csv`](#sec-nombres-arg) | XXX   |
 
-::: {#refs}
-:::
+
+
+## Descripción, variables y fuente
+
+------------------------------------------------------------------------
+
+### `bateria.csv`{#sec-bateria}
+
+-   **Descripción**: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.
+
+-   **Variables**:
+
+    -   `fecha_desde`: fecha de inicio del período.
+    -   `fecha_hasta`: fecha de finalización del período.
+    -   `carga`: carga máxima alcanzada (mWh) durante el período.
+
+-   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11.
+
+------------------------------------------------------------------------
+
+### `nombres-arg.csv`{#sec-nombres-arg}
+
+-   **Descripción**: Datos de.
+
+-   **Variables**:
+
+    -   `XXX`:
+
+-   **Fuente**: XXX

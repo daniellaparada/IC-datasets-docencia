@@ -497,7 +497,7 @@ ggplotly(
 
 ### Gutenberg-Richter
 
-La ley de Gutenberg-Richter (1958) es una fórmula que permite cuantificar la relación entre la frecuencia y la magnitud de la actividad sísmica de una región. La relación fue inicialmente propuesta por Charles Francis Richter y Beno Gutenberg en 1954 y es aun objeto de caracterización de sismos, pues se ha mostrado relativamente invariante por región y en el tiempo.
+La ley de Gutenberg-Richter es una fórmula que permite cuantificar la relación entre la frecuencia y la magnitud de la actividad sísmica de una región. La relación fue inicialmente propuesta por Charles Francis Richter y Beno Gutenberg hace más de 70 años y es aun objeto de caracterización de sismos, pues se ha mostrado relativamente invariante por región y en el tiempo.
 
 N es un número de sismos de magnitud mayor que M durante un período de tiempo "t", logN es un logaritmo del número de sismos con magnitud M La ley establece que la recurrencia sísmica de magnitud mayor o igual a $M$ durante un período de tiempo $t$, en una región, se relaciona con la cantidad de sismos, $N$, de magnitud mayor que $M$ durante el período, a través de
 

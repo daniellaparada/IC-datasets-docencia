@@ -288,7 +288,7 @@ En efecto, el $p-$valor es $0.0000323$, y a partir de esta muestra y bajo las co
 
 Para lo que sigue, trabajamos con el *dataset* reducido `flujo-clima.csv` en el que se incluyen datos del flujo vehicular del primer trimestre de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A, junto con datos de temperatura promedio y precipitaciones.
 
-El dataset `flujo-clima.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
+El dataset `flujo-clima.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/03_test_hipotesis/flujo-clima.csv). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
@@ -450,6 +450,8 @@ cohen.d(d = datos1$n, f = datos2$n, paired = FALSE)
 
 El test arroja un $p-$valor prácticamente nulo: podemos concluir que hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre los días miércoles y los días sábados. Además, el tamaño del efecto es grande.
 
+------------------------------------------------------------------------
+
 # Acerca de los datos
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
@@ -481,7 +483,6 @@ Algunas consideraciones, a la fecha, respecto de estos datos:
 -   Los datos de 2023 se encuentran disponibles al primer trimestre.
 
 -   Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
-
 
 ## *Dataset* pre-procesado: `clima-flujo.csv`
 
@@ -517,6 +518,8 @@ sessionInfo()
 
 # Referencias
 
--   Datos de flujo vehicular por radares AUSA [datos disponibles acá.)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd)
+-  Datos de flujo vehicular por radares AUSA [(datos disponibles acá)](https://data.buenosaires.gob.ar/dataset/flujo-vehicular-por-radares-ausa/resource/c2782157-33be-4119-b8a0-04fdef2668bd).
 
--   MeteoStat [(info disponible acá](https://meteostat.net) [y datos disponibles acá.)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31)
+-  MeteoStat [(info disponible acá](https://meteostat.net) y [datos disponibles acá)](https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31).
+
+-  Mapa de CABA [datos disponibles acá](http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson).

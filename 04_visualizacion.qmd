@@ -430,7 +430,7 @@ ggplotly(ggplot(data = datos, aes(x=tiempo, key=tiempo)) +
   source = "select", tooltip = c("key"))
 ```
 
-## Gutenberg-Richter
+### Gutenberg-Richter
 
 La ley de Gutenberg-Richter (1958) es una fórmula que permite cuantificar la relación entre la frecuencia y la magnitud de la actividad sísmica de una región. La relación fue inicialmente propuesta por Charles Francis Richter y Beno Gutenberg en 1958 y es aun objeto de caracterización de sismos, pues se ha mostrado relativamente invariante por región y en el tiempo.
 
@@ -465,7 +465,7 @@ a <- round(ajuste$coefficients[1],4)
 b <- -round(ajuste$coefficients[2],4)
 ```
 
-Los coeficientes estimados son $`r a`$ para $a$, y $`r b`$ para $b$. El coeficiente $b$ suele ser aproximadamente igual a $1$ para sismos tectónicos. Como los datos con los que se estimó son de frecuencia anual, la cantidad $a/b$ puede interpretarse como, en promedio y una vez al año, la ocurrencia de un terremoto de magnitud $a/b$ o superior. En este caso, $a/b=`r round(a/b,4)`$, lo que sugiere que, en promedio, una vez al año se registra en San Juan un terremoto de magnitud aproximada `r round(a/b,1)` o superior.
+Los coeficientes estimados son $`r a`$ para $a$, y $`r b`$ para $b$. El coeficiente $b$ suele ser aproximadamente igual a $1$ para sismos tectónicos. Como los datos con los que se estimó son de frecuencia anual, la cantidad $a/b$ puede interpretarse como, en promedio y una vez al año, la ocurrencia de un terremoto de magnitud $a/b$ o superior. En este caso, $a/b=`r round(a/b,4)`$, lo que sugiere que, en promedio, una vez al año se registra en San Juan un terremoto de magnitud aproximada $`r round(a/b,1)`$ o superior.
 
 En el siguiente gráfico se superpone, en azul, la curva estimada de Gutenberg-Richter
 
@@ -479,11 +479,13 @@ a partir de los datos de San Juan.
 ggplotly(ggplot(data = df, aes(x=Magnitud, y=log(n,10), key=Año)) + 
   labs(x = "Magnitud", y= "(Log 10) Cantidad de sismos") + 
   geom_point(colour="deeppink3") + 
-  geom_abline(intercept = a, slope = b,
+  geom_abline(intercept = a, slope = -b,
               colour="dodgerblue") + 
   theme_classic(),
   source = "select", tooltip = c("key"))
 ```
+
+------------------------------------------------------------------------
 
 # Acerca de los datos
 
@@ -493,7 +495,15 @@ También se incluye el enlace de descarga al dataset reducido, `sismos-arg.csv`,
 
 ## Sobre el *dataset* de sismos
 
-Los datos de este ejemplo corresponden a XXX.
+Los datos de este ejemplo corresponden a datos *scrappeados* del buscador de sismos del INPRES, cuyo buscador está disponible [acá](http://contenidos.inpres.gob.ar/buscar_sismo). En el *dataset* `sismos_all.csv`, disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos_all.csv), en el que se registran eventos sísmicos en territorio argentino y diferentes variables asociadas a estos, en particular, si se trata de un sismo que se haya sentido o no.
+
+Los sismos registrados en INPRES pueden estar revisados por un sismólogo y, posiblemente a razón de ello, algunas inconsistencias en la nomenclatura de las provincias es hallada. El siguiente toma el *dataset* de `sismos_all.csv` y:
+
+-   convierte en variable la percepción del sismo teniendo en cuenta que la intensidad solo se registra para sismos percibidos,
+-   limpia y unifica el formato de fecha de los eventos,
+-   extrae la información de profundidad, eliminando las unidades que forman parte del dato,
+-   filtra los datos para obtener los datos del territorio continental argentino (excluyendo a Tierra del Fuego),
+-   y recodifica los nombres de las provincias para unificar su identificación.
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
 # importo datos de sismos
@@ -512,7 +522,7 @@ sismos <- sismos %>%
     Profundidad = Profund.
   )
 
-# quitamos las unidades km. en intensidad
+# quito las unidades km. en intensidad
 sismos$Profundidad <- as.numeric(str_sub(sismos$Profundidad, 1,-4))
 
 # sismos en Argentina Continental (saco TdF porque se corre mucho el mapa)
@@ -656,12 +666,12 @@ sismos_arg <- sismos_arg %>%
 
 ### *Dataset* pre-procesado: `sismos-arg.csv`
 
-Para reducir los datos al estudio de interés, se crea un *dataset* reducido, `sismos-arg.csv`, a partir de los datos de *scrappeados*, en el que se dispone de las siguientes variables.
+Para limpiar y reducir los datos al estudio de interés, se crea un *dataset* reducido, `sismos-arg.csv`, disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos-arg.csv), a partir de los datos *scrappeados* del buscador del INPRES. Se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022, y se dispone de las siguientes variables.
 
--   `Fecha`: fecha, en el formato año-mes-día.
--   `Hora`: hora, en el formato hora-minuto-segundo.
+-   `Fecha`: fecha del evento sísmico, en el formato año-mes-día.
+-   `Hora`: hora del evento sísmico, en el formato hora-minuto-segundo.
 -   `Latitud`: latitud del evento registrado.
--   `Longitud`: latitud del evento registrado.
+-   `Longitud`: longitud del evento registrado.
 -   `Provincia`: nombre de la provincia del evento registrado.
 -   `Percibido`: `TRUE` si la magnitud fue percibida, `FALSE` si no lo fue.
 -   `Magnitud`: magnitud del sismo en la escala de Richter.
@@ -688,4 +698,4 @@ sessionInfo()
 
 # Referencias
 
--   XXX
+-   INPRES [(info disponible acá](https://www.inpres.gob.ar/desktop/) y [buscador de datos disponibles acá.)](http://contenidos.inpres.gob.ar/buscar_sismo)

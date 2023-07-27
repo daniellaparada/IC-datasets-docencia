@@ -16,7 +16,7 @@ require(kableExtra)
 
 ## Exploración inicial
 
-En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://www.dropbox.com/scl/fi/t7ugylb5berc8qnvr4gl9/clima-bici.csv?rlkey=a8vtm7882evbrm4q3ysplqvc1&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
+En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/02_regresion_multiple/clima-bici.csv). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 require(knitr)
@@ -310,6 +310,8 @@ knitr::kable(data.frame(rbind(predichos, predicho_nuevo)), caption = "Prediccion
 Mientras todas las demás predicciones rondan valores entre $8000$ y $10000$, el modelo completo predice alrededor de $4300$ usos, dando lugar, además, al intervalo de menor longitud observada. Es decir, el modelo de regresión múltiple que parece más adecuado para el problema es:
 
 > **`n ~ tavg + tavg^2 + prcp + finde`.**
+
+------------------------------------------------------------------------
 
 # Acerca de los datos
 

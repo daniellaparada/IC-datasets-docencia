@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -166,7 +147,17 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#descripción-variables-y-fuente" id="toc-descripción-variables-y-fuente" class="nav-link active" data-scroll-target="#descripción-variables-y-fuente">Descripción, variables y fuente</a>
+  <ul class="collapse">
+  <li><a href="#bateria.csv" id="toc-bateria.csv" class="nav-link" data-scroll-target="#bateria.csv"><code id="sec-bateria">bateria.csv</code></a></li>
+  <li><a href="#nombres-arg.csv" id="toc-nombres-arg.csv" class="nav-link" data-scroll-target="#nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -193,41 +184,51 @@ div.csl-indent {
 <thead>
 <tr class="header">
 <th><em>Dataset</em></th>
-<th>Descripción</th>
-<th>Variables</th>
 <th>Temas</th>
-<th>Fuente</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>XXX</td>
-<td>XXX</td>
-<td>XXX</td>
-<td>XXX</td>
+<td><a href="#sec-bateria"><code>bateria.csv</code></a></td>
 <td>XXX</td>
 </tr>
 <tr class="even">
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td><a href="#sec-nombres-arg"><code>nombres-arg.csv</code></a></td>
+<td>XXX</td>
 </tr>
 </tbody>
 </table>
-<div id="refs" role="list" style="display: none">
+<section id="descripción-variables-y-fuente" class="level2">
+<h2 class="anchored" data-anchor-id="descripción-variables-y-fuente">Descripción, variables y fuente</h2>
+<hr>
+<section id="bateria.csv" class="level3">
+<h3 class="anchored" data-anchor-id="bateria.csv"><code id="sec-bateria">bateria.csv</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>fecha_desde</code>: fecha de inicio del período.</li>
+<li><code>fecha_hasta</code>: fecha de finalización del período.</li>
+<li><code>carga</code>: carga máxima alcanzada (mWh) durante el período.</li>
+</ul></li>
+<li><p><strong>Fuente</strong>: Reporte generado a partir de la instrucción <code>powercfg /batteryreport</code> en Windows 11.</p></li>
+</ul>
+<hr>
+</section>
+<section id="nombres-arg.csv" class="level3">
+<h3 class="anchored" data-anchor-id="nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>XXX</code>:</li>
+</ul></li>
+<li><p><strong>Fuente</strong>: XXX</p></li>
+</ul>
 
-</div>
 
-
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

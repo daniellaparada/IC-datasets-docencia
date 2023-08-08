@@ -2,7 +2,7 @@
 
 # Introducción {#introduccion .unnumbered}
 
-En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un **repositorio curado** de *datasets* para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC una fuente centralizada de datos que cubra una amplia variedad de temas y áreas de aplicación.
+En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un **repositorio curado** de *datasets* para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universiatrios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.
 
 Los *datasets* fueron revisados para asegurar que sean apropiados para su uso en cursos que dicta el IC, y en los capítulos que siguen se proporcionan descripciones detalladas para cada uno, así como breves sugerencias de **uso reproducible**. En ese sentido, los ejemplos allí desarrollados son simples vehículos para poner a disposición los datos e ilustrar algunas de sus características.
 

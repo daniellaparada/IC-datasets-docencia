@@ -17,7 +17,7 @@ require(knitr)
 
 ## Exploración inicial
 
-En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 3 de junio de 2023.
+En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 3 de julio de 2023.
 
 El *dataset* `temp-bici.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/01_regresion/temp-bici.csv). A continuación se muestran 10 datos de dicho conjunto.
 

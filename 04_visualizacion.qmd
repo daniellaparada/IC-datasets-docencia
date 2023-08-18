@@ -28,7 +28,7 @@ require(leaflet)
 require(lubridate)
 require(devtools)
 options(scipen=999)
-session_info()
+sessionInfo()
 ```
 
 ## Exploración inicial
@@ -872,6 +872,7 @@ require(kableExtra)
 require(vroom)
 require(leaflet)
 require(lubridate)
+require(devtools)
 ```
 
 ```{r message=FALSE, warning=FALSE}

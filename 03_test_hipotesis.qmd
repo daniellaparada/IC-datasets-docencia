@@ -14,10 +14,10 @@ require(ggfortify)
 require(plotly)
 require(vroom)
 require(effsize)
-require(sf)
-require(osmdata)
 require(ggmap)
 require(leaflet)
+options(scipen = 999)
+sessionInfo()
 ```
 
 ## Exploración inicial
@@ -27,11 +27,6 @@ Los datos de flujo vehicular de la Ciudad de Buenos Aires reportan, por hora, la
 En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019.
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
-# importo el mapa de CABA
-barrios_caba <-
-  st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
-  select(BARRIO, COMUNA)
-
 # importo datos de flujo vehicular 2019
 flujo19 <-
   vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv") %>%
@@ -65,11 +60,6 @@ mapa19
 Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar (a efectos creativos, se representan sobre un mapa en formato acuarelas: [conocer más acá](http://maps.stamen.com/)).
 
 ```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
-# importo el mapa de CABA
-barrios_caba <-
-  st_read("http://cdn.buenosaires.gob.ar/datosabiertos/datasets/barrios/barrios.geojson") %>%
-  select(BARRIO, COMUNA)
-
 # importo datos de flujo vehicular 2019
 flujo23 <-
   vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv")
@@ -116,12 +106,11 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en
 
 El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
-options(scipen = 999)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(datos[1:10, ], caption = "Dataset reducido, primeras 10 observaciones.")
 ```
 
@@ -506,8 +495,6 @@ require(ggfortify)
 require(plotly)
 require(vroom)
 require(effsize)
-require(sf)
-require(osmdata)
 require(ggmap)
 require(leaflet)
 ```

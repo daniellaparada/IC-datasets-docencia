@@ -12,15 +12,16 @@ require(tidyverse)
 require(ggfortify)
 require(plotly)
 require(kableExtra)
+require(knitr)
+options(scipen = 999)
+sessionInfo()
 ```
 
 ## Exploración inicial
 
 En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/02_regresion_multiple/clima-bici.csv). A continuación, se muestran 10 datos de dicho conjunto.
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-require(knitr)
-options(scipen = 999)
+```{r, message=FALSE, warning=FALSE}
 datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
 ```
 

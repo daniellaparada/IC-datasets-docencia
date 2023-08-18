@@ -25,7 +25,9 @@ require(plotly)
 require(kableExtra)
 require(vroom)
 require(leaflet)
-library(lubridate)
+require(lubridate)
+require(devtools)
+options(scipen=999)
 ```
 
 ## Exploración inicial
@@ -36,9 +38,14 @@ Para lo que sigue, trabajamos con el *dataset* reducido `sismos-arg.csv` en el q
 
 El dataset `sismos-arg.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos-arg.csv) y ha sido transformado a partir de datos *scrappeados* del buscador de sismos del INPRES. A continuación, se muestran 10 datos de dicho conjunto.
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-options(scipen=999)
-datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
+```{r, message=FALSE, warning=FALSE}
+#datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
+
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(sismos)
+
+datos <- sismos
 ```
 
 ```{r}
@@ -839,6 +846,18 @@ Para limpiar y reducir los datos al estudio de interés, se crea un *dataset* re
 -   `Magnitud`: magnitud del sismo en la escala de Richter.
 -   `Profundidad`: profundidad (km) registrada del sismo.
 
+El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `sismos`.
+
+```{r, message=FALSE, warning=FALSE}
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(sismos)
+```
+
+```{r}
+knitr::kable(sismos[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
+```
+
 # Librerías
 
 Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
@@ -851,7 +870,7 @@ require(plotly)
 require(kableExtra)
 require(vroom)
 require(leaflet)
-library(lubridate)
+require(lubridate)
 ```
 
 ```{r message=FALSE, warning=FALSE}

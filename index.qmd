@@ -9,3 +9,11 @@ Los *datasets* fueron revisados para asegurar que sean apropiados para su uso en
 -   En las secciones numeradas, cada *dataset* está preparado para su uso en `R` y se acompaña con una documentación clara y concisa que incluye un diccionario de variables, la fuente de los datos y un código de muestra para su preparación.
 
 -   En el Anexo, se incluyen *datasets* documentados sin ejemplos desarrollados, pero con una grilla que sugiere posibles temas afines.
+
+Los *datasets* también se encuentran disponibles en la librería `datosIC`.
+
+```{r, message=FALSE, warning=FALSE}
+require(devtools)
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+```

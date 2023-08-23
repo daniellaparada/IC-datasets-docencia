@@ -13,6 +13,7 @@ require(ggfortify)
 require(plotly)
 require(kableExtra)
 require(knitr)
+require(devtools)
 options(scipen = 999)
 sessionInfo()
 ```
@@ -22,7 +23,13 @@ sessionInfo()
 En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/02_regresion_multiple/clima-bici.csv). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, message=FALSE, warning=FALSE}
-datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
+#datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
+
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(climabici)
+
+datos <- climabici
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -377,6 +384,18 @@ datos <- left_join(trips, clima, by = c("fecha" = "date")) %>%
   ) 
 ```
 
+El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `climabici`.
+
+```{r, message=FALSE, warning=FALSE}
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(climabici)
+```
+
+```{r}
+knitr::kable(climabici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
+```
+
 # Librerías
 
 Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
@@ -387,6 +406,7 @@ require(ggfortify)
 require(plotly)
 require(kableExtra)
 require(knitr)
+require(devtools)
 ```
 
 ```{r message=FALSE, warning=FALSE}

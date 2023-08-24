@@ -11,6 +11,13 @@ Ver si va (ejemplo dummy)
 
 ## Descripción, variables y fuente
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+require(devtools)
+require(knitr)
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+```
+
 ------------------------------------------------------------------------
 
 ### `bateria.csv`{#sec-bateria}
@@ -19,11 +26,19 @@ Ver si va (ejemplo dummy)
 
 -   **Variables**:
 
-    -   `fecha_desde`: fecha de inicio del período.
-    -   `fecha_hasta`: fecha de finalización del período.
+    -   `desde`: fecha de inicio del período, en el formato año-mes-día.
+    -   `hasta`: fecha de finalización del período, en el formato año-mes-día.
     -   `carga`: carga máxima alcanzada (mWh) durante el período.
 
--   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11.
+-   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11. 
+
+Disponible en la librería `datosIC` bajo el nombre de `bateria`.
+
+```{r, message=FALSE, warning=FALSE}
+data(bateria)
+knitr::kable(bateria[1:10,], caption = "Dataset 'bateria' disponible en la librería 'datosIC'.")
+```
+
 
 ------------------------------------------------------------------------
 

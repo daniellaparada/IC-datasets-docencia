@@ -1,0 +1,14 @@
+{
+  "hash": "aa595ded9c09e6f89a295b2e5ff3f780",
+  "result": {
+    "markdown": "# Anexo: otros *datasets* {.unnumbered}\n\nVer si va (ejemplo dummy)\n\n| *Dataset*                             | Temas |\n|---------------------------------------|-------|\n| [`bateria.csv`](#sec-bateria)         | XXX   |\n| [`nombres-arg.csv`](#sec-nombres-arg) | XXX   |\n\n\n\n## Descripción, variables y fuente\n\n\n::: {.cell}\n\n:::\n\n\n------------------------------------------------------------------------\n\n### `bateria.csv`{#sec-bateria}\n\n-   **Descripción**: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.\n\n-   **Variables**:\n\n    -   `desde`: fecha de inicio del período, en el formato año-mes-día.\n    -   `hasta`: fecha de finalización del período, en el formato año-mes-día.\n    -   `carga`: carga máxima alcanzada (mWh) durante el período.\n\n-   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11. \n\nDisponible en la librería `datosIC` bajo el nombre de `bateria`.\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata(bateria)\nknitr::kable(bateria[1:10,], caption = \"Dataset 'bateria' disponible en la librería 'datosIC'.\")\n```\n\n::: {.cell-output-display}\nTable: Dataset 'bateria' disponible en la librería 'datosIC'.\n\n|desde      |hasta      | carga|\n|:----------|:----------|-----:|\n|2021-04-05 |2021-04-12 | 84380|\n|2021-04-12 |2021-04-19 | 84161|\n|2021-04-19 |2021-04-26 | 83950|\n|2021-04-26 |2021-05-02 | 84340|\n|2021-05-02 |2021-05-10 | 84340|\n|2021-05-10 |2021-05-16 | 83002|\n|2021-05-16 |2021-05-23 | 82206|\n|2021-05-23 |2021-05-31 | 83694|\n|2021-05-31 |2021-06-06 | 80030|\n|2021-06-06 |2021-06-13 | 80622|\n:::\n:::\n\n\n\n------------------------------------------------------------------------\n\n### `nombres-arg.csv`{#sec-nombres-arg}\n\n-   **Descripción**: Datos de.\n\n-   **Variables**:\n\n    -   `XXX`:\n\n-   **Fuente**: XXX\n\n------------------------------------------------------------------------",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

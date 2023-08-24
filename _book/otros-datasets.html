@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Instituto de Cálculo">
 
-<title>IC-datasets-docencia</title>
+<title>IC-datasets-docencia - Anexo: otros datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -65,7 +30,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_regresion.html" rel="next">
+<link href="./references.html" rel="next">
+<link href="./04_visualizacion.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -108,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introducción</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./otros-datasets.html">Anexo: otros <em>datasets</em></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -135,7 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introducción</span></a>
   </div>
 </li>
@@ -165,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./otros-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="./otros-datasets.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Anexo: otros <em>datasets</em></span></a>
   </div>
 </li>
@@ -185,7 +151,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#introduccion" id="toc-introduccion" class="nav-link active" data-scroll-target="#introduccion">Introducción</a></li>
+  <li><a href="#descripción-variables-y-fuente" id="toc-descripción-variables-y-fuente" class="nav-link active" data-scroll-target="#descripción-variables-y-fuente">Descripción, variables y fuente</a>
+  <ul class="collapse">
+  <li><a href="#bateria.csv" id="toc-bateria.csv" class="nav-link" data-scroll-target="#bateria.csv"><code id="sec-bateria">bateria.csv</code></a></li>
+  <li><a href="#nombres-arg.csv" id="toc-nombres-arg.csv" class="nav-link" data-scroll-target="#nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -194,26 +164,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">IC-datasets-docencia</h1>
+<h1 class="title">Anexo: otros <em>datasets</em></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor/a</div>
-    <div class="quarto-title-meta-contents">
-             <p>Instituto de Cálculo </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Fecha de publicación</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">24 de agosto de 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -221,26 +179,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><img src="cover.png" class="img-fluid" width="126"></p>
-<section id="introduccion" class="level1 unnumbered">
-<h1 class="unnumbered">Introducción</h1>
-<p>En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un <strong>repositorio curado</strong> de <em>datasets</em> para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universiatrios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.</p>
-<p>Los <em>datasets</em> fueron revisados para asegurar que sean apropiados para su uso en cursos que dicta el IC, y en los capítulos que siguen se proporcionan descripciones detalladas para cada uno, así como breves sugerencias de <strong>uso reproducible</strong>. En ese sentido, los ejemplos allí desarrollados son simples vehículos para poner a disposición los datos e ilustrar algunas de sus características.</p>
+<p>Ver si va (ejemplo dummy)</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><em>Dataset</em></th>
+<th>Temas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#sec-bateria"><code>bateria.csv</code></a></td>
+<td>XXX</td>
+</tr>
+<tr class="even">
+<td><a href="#sec-nombres-arg"><code>nombres-arg.csv</code></a></td>
+<td>XXX</td>
+</tr>
+</tbody>
+</table>
+<section id="descripción-variables-y-fuente" class="level2">
+<h2 class="anchored" data-anchor-id="descripción-variables-y-fuente">Descripción, variables y fuente</h2>
+<hr>
+<section id="bateria.csv" class="level3">
+<h3 class="anchored" data-anchor-id="bateria.csv"><code id="sec-bateria">bateria.csv</code></h3>
 <ul>
-<li><p>En las secciones numeradas, cada <em>dataset</em> está preparado para su uso en <code>R</code> y se acompaña con una documentación clara y concisa que incluye un diccionario de variables, la fuente de los datos y un código de muestra para su preparación.</p></li>
-<li><p>En el Anexo, se incluyen <em>datasets</em> documentados sin ejemplos desarrollados, pero con una grilla que sugiere posibles temas afines.</p></li>
+<li><p><strong>Descripción</strong>: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>fecha_desde</code>: fecha de inicio del período.</li>
+<li><code>fecha_hasta</code>: fecha de finalización del período.</li>
+<li><code>carga</code>: carga máxima alcanzada (mWh) durante el período.</li>
+</ul></li>
+<li><p><strong>Fuente</strong>: Reporte generado a partir de la instrucción <code>powercfg /batteryreport</code> en Windows 11.</p></li>
 </ul>
-<p>Los <em>datasets</em> también se encuentran disponibles en la librería <code>datosIC</code>.</p>
-<div class="cell">
-<details>
-<summary>Código</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(devtools)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daniellaparada/datosIC"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<hr>
+</section>
+<section id="nombres-arg.csv" class="level3">
+<h3 class="anchored" data-anchor-id="nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>XXX</code>:</li>
+</ul></li>
+<li><p><strong>Fuente</strong>: XXX</p></li>
+</ul>
+<hr>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -479,10 +467,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./04_visualizacion.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Visualización</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_regresion.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">Bibliografía</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

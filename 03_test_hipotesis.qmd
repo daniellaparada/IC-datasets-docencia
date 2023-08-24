@@ -108,13 +108,7 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en
 El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, message=FALSE, warning=FALSE}
-#datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
-
-devtools::install_github("daniellaparada/datosIC")
-library(datosIC)
-data(flujoclima)
-
-datos <- flujoclima
+datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -287,7 +281,13 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujo-clima.csv` en el 
 El dataset `flujo-clima.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/03_test_hipotesis/flujo-clima.csv). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
+#datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
+
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(flujoclima)
+
+datos <- flujoclima
 ```
 
 Un gráfico del flujo vehicular por tipo de día y según nivel de precipitaciones, parece mostrar lo esperado: el el flujo vehicular en ese punto de la ciudad es mayor los días de semana que los fines de semana. Sin embargo, no parece haber una tendencia notable que impacte en el flujo vehicular a partir de las precipitaciones. Dicha tendencia podría ser creciente, asumiendo que los días en que se registran mayores niveles de precipitaciones más personas utilizan el auto; o bien decreciente, sugiriendo que hay menor tránsito vehicular porque las personas prefieren suspender aquellas actividades fuera de sus hogares que no sean esenciales.

@@ -13,18 +13,25 @@ require(ggfortify)
 require(plotly)
 require(kableExtra)
 require(knitr)
+require(devtools)
 options(scipen=999)
 sessionInfo()
 ```
 
 ## Exploración inicial
 
-En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 3 de julio de 2023.
+En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 1ro de mayo de 2023.
 
 El *dataset* `temp-bici.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/01_regresion/temp-bici.csv). A continuación se muestran 10 datos de dicho conjunto.
 
 ```{r, message=FALSE, warning=FALSE}
-datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
+#datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
+
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(tempbici)
+
+datos <- tempbici
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -117,7 +124,7 @@ autoplot(lm(n ~ tmax,
          label.size = 3)
 ```
 
-Las observaciones 122, 135 y 236 corresponden a los siguientes casos (todos feriados nacionales).
+Las observaciones 121, 135 y 236 corresponden a los siguientes casos (todos feriados nacionales).
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 a <- datos[datos$tipo_dia == "Lunes a viernes", ]
@@ -344,6 +351,18 @@ datos <-
   select(c(1, 2, 6:10)) 
 ```
 
+El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `tempbici`.
+
+```{r, message=FALSE, warning=FALSE}
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(tempbbici)
+```
+
+```{r}
+knitr::kable(tempbici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
+```
+
 # Librerías
 
 Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
@@ -354,6 +373,7 @@ require(ggfortify)
 require(plotly)
 require(kableExtra)
 require(knitr)
+require(devtools)
 ```
 
 ```{r message=FALSE, warning=FALSE}

@@ -16,6 +16,7 @@ require(vroom)
 require(effsize)
 require(ggmap)
 require(leaflet)
+require(devtools)
 options(scipen = 999)
 sessionInfo()
 ```
@@ -107,7 +108,13 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en
 El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, message=FALSE, warning=FALSE}
-datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
+#datos <- read_csv("./fuente/03_test_hipotesis/flujo-vehicular.csv")
+
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(flujoclima)
+
+datos <- flujoclima
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -484,6 +491,19 @@ Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `c
 -   `dia`: día de la semana de la fecha indicada.
 -   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
 
+El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `flujoclima`.
+
+```{r, message=FALSE, warning=FALSE}
+devtools::install_github("daniellaparada/datosIC")
+library(datosIC)
+data(flujoclima)
+```
+
+```{r}
+knitr::kable(flujoclima[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
+```
+
+
 # Librerías
 
 Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
@@ -497,6 +517,7 @@ require(vroom)
 require(effsize)
 require(ggmap)
 require(leaflet)
+require(devtools)
 ```
 
 ```{r message=FALSE, warning=FALSE}

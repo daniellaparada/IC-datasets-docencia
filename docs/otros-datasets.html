@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -207,12 +241,84 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>Descripción</strong>: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.</p></li>
 <li><p><strong>Variables</strong>:</p>
 <ul>
-<li><code>fecha_desde</code>: fecha de inicio del período.</li>
-<li><code>fecha_hasta</code>: fecha de finalización del período.</li>
+<li><code>desde</code>: fecha de inicio del período, en el formato año-mes-día.</li>
+<li><code>hasta</code>: fecha de finalización del período, en el formato año-mes-día.</li>
 <li><code>carga</code>: carga máxima alcanzada (mWh) durante el período.</li>
 </ul></li>
 <li><p><strong>Fuente</strong>: Reporte generado a partir de la instrucción <code>powercfg /batteryreport</code> en Windows 11.</p></li>
 </ul>
+<p>Disponible en la librería <code>datosIC</code> bajo el nombre de <code>bateria</code>.</p>
+<div class="cell">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(bateria)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(bateria[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,], <span class="at">caption =</span> <span class="st">"Dataset 'bateria' disponible en la librería 'datosIC'."</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Dataset ‘bateria’ disponible en la librería ‘datosIC’.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">desde</th>
+<th style="text-align: left;">hasta</th>
+<th style="text-align: right;">carga</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2021-04-05</td>
+<td style="text-align: left;">2021-04-12</td>
+<td style="text-align: right;">84380</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021-04-12</td>
+<td style="text-align: left;">2021-04-19</td>
+<td style="text-align: right;">84161</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2021-04-19</td>
+<td style="text-align: left;">2021-04-26</td>
+<td style="text-align: right;">83950</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021-04-26</td>
+<td style="text-align: left;">2021-05-02</td>
+<td style="text-align: right;">84340</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2021-05-02</td>
+<td style="text-align: left;">2021-05-10</td>
+<td style="text-align: right;">84340</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021-05-10</td>
+<td style="text-align: left;">2021-05-16</td>
+<td style="text-align: right;">83002</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2021-05-16</td>
+<td style="text-align: left;">2021-05-23</td>
+<td style="text-align: right;">82206</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021-05-23</td>
+<td style="text-align: left;">2021-05-31</td>
+<td style="text-align: right;">83694</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2021-05-31</td>
+<td style="text-align: left;">2021-06-06</td>
+<td style="text-align: right;">80030</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2021-06-06</td>
+<td style="text-align: left;">2021-06-13</td>
+<td style="text-align: right;">80622</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <hr>
 </section>
 <section id="nombres-arg.csv" class="level3">

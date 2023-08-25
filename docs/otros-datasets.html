@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -187,8 +153,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#descripción-variables-y-fuente" id="toc-descripción-variables-y-fuente" class="nav-link active" data-scroll-target="#descripción-variables-y-fuente">Descripción, variables y fuente</a>
   <ul class="collapse">
-  <li><a href="#bateria.csv" id="toc-bateria.csv" class="nav-link" data-scroll-target="#bateria.csv"><code id="sec-bateria">bateria.csv</code></a></li>
-  <li><a href="#nombres-arg.csv" id="toc-nombres-arg.csv" class="nav-link" data-scroll-target="#nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></a></li>
+  <li><a href="#bateria" id="toc-bateria" class="nav-link" data-scroll-target="#bateria"><code id="sec-bateria">bateria</code></a></li>
+  <li><a href="#nombrarg" id="toc-nombrarg" class="nav-link" data-scroll-target="#nombrarg"><code id="sec-nombres-arg">nombrarg</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -213,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Ver si va (ejemplo dummy)</p>
+<p>A continuación se referencian otros <strong>dataset</strong> incluidos en la librería <code>datosIC</code>, con su descripción, variables y fuente; y un detalle de posibles temas que podrían cubrir en aspectos de docencia.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -223,20 +189,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="#sec-bateria"><code>bateria.csv</code></a></td>
-<td>XXX</td>
+<td><a href="#sec-bateria"><code>bateria</code></a></td>
+<td>Regresión</td>
 </tr>
 <tr class="even">
-<td><a href="#sec-nombres-arg"><code>nombres-arg.csv</code></a></td>
-<td>XXX</td>
+<td><a href="#sec-nombres-arg"><code>nombrarg</code></a></td>
+<td>Estadística descriptiva</td>
 </tr>
 </tbody>
 </table>
 <section id="descripción-variables-y-fuente" class="level2">
 <h2 class="anchored" data-anchor-id="descripción-variables-y-fuente">Descripción, variables y fuente</h2>
 <hr>
-<section id="bateria.csv" class="level3">
-<h3 class="anchored" data-anchor-id="bateria.csv"><code id="sec-bateria">bateria.csv</code></h3>
+<section id="bateria" class="level3">
+<h3 class="anchored" data-anchor-id="bateria"><code id="sec-bateria">bateria</code></h3>
 <ul>
 <li><p><strong>Descripción</strong>: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.</p></li>
 <li><p><strong>Variables</strong>:</p>
@@ -249,14 +215,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Disponible en la librería <code>datosIC</code> bajo el nombre de <code>bateria</code>.</p>
 <div class="cell">
-<details>
-<summary>Código</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(bateria)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(bateria[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,], <span class="at">caption =</span> <span class="st">"Dataset 'bateria' disponible en la librería 'datosIC'."</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
-<caption>Dataset ‘bateria’ disponible en la librería ‘datosIC’.</caption>
+<caption>Primeros 10 datos de ‘bateria’.</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">desde</th>
@@ -321,16 +282,86 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <hr>
 </section>
-<section id="nombres-arg.csv" class="level3">
-<h3 class="anchored" data-anchor-id="nombres-arg.csv"><code id="sec-nombres-arg">nombres-arg.csv</code></h3>
+<section id="nombrarg" class="level3">
+<h3 class="anchored" data-anchor-id="nombrarg"><code id="sec-nombres-arg">nombrarg</code></h3>
+<p>[FALTA PREPROCESAR ESTE DATASET Y RESUBIR A LA LIBRERÍA]</p>
 <ul>
-<li><p><strong>Descripción</strong>: Datos de.</p></li>
+<li><p><strong>Descripción</strong>: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año.</p></li>
 <li><p><strong>Variables</strong>:</p>
 <ul>
-<li><code>XXX</code>:</li>
+<li><code>nombre</code>: nombre registrado.</li>
+<li><code>cantidad</code>: cantidad de nombres registrados en el año.</li>
+<li><code>anio</code>: año de registro.</li>
 </ul></li>
-<li><p><strong>Fuente</strong>: XXX</p></li>
+<li><p><strong>Fuente</strong>: <a href="https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1">datos.gob.ar</a></p></li>
 </ul>
+<p>Disponible en la librería <code>datosIC</code> bajo el nombre de <code>nombrarg</code>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Primeros 10 datos de ‘nombrarg’.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">nombre</th>
+<th style="text-align: right;">cantidad</th>
+<th style="text-align: right;">anio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Maria</td>
+<td style="text-align: right;">314</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rosa</td>
+<td style="text-align: right;">203</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Jose</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maria Luisa</td>
+<td style="text-align: right;">127</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carmen</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ana</td>
+<td style="text-align: right;">113</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maria Elena</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Juana</td>
+<td style="text-align: right;">111</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maria Esther</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">1922</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Antonio</td>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">1922</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <hr>
 
 

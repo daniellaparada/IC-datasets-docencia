@@ -1,13 +1,11 @@
 # Anexo: otros *datasets* {.unnumbered}
 
-Ver si va (ejemplo dummy)
+A continuación se referencian otros **dataset** incluidos en la librería `datosIC`, con su descripción, variables y fuente; y un detalle de posibles temas que podrían cubrir en aspectos de docencia.
 
-| *Dataset*                             | Temas |
-|---------------------------------------|-------|
-| [`bateria.csv`](#sec-bateria)         | XXX   |
-| [`nombres-arg.csv`](#sec-nombres-arg) | XXX   |
-
-
+| *Dataset*                      | Temas                   |
+|--------------------------------|-------------------------|
+| [`bateria`](#sec-bateria)      | Regresión               |
+| [`nombrarg`](#sec-nombres-arg) | Estadística descriptiva |
 
 ## Descripción, variables y fuente
 
@@ -20,7 +18,7 @@ library(datosIC)
 
 ------------------------------------------------------------------------
 
-### `bateria.csv`{#sec-bateria}
+### `bateria`{#sec-bateria}
 
 -   **Descripción**: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.
 
@@ -30,26 +28,34 @@ library(datosIC)
     -   `hasta`: fecha de finalización del período, en el formato año-mes-día.
     -   `carga`: carga máxima alcanzada (mWh) durante el período.
 
--   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11. 
+-   **Fuente**: Reporte generado a partir de la instrucción `powercfg /batteryreport` en Windows 11.
 
 Disponible en la librería `datosIC` bajo el nombre de `bateria`.
 
-```{r, message=FALSE, warning=FALSE}
-data(bateria)
-knitr::kable(bateria[1:10,], caption = "Dataset 'bateria' disponible en la librería 'datosIC'.")
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(bateria[1:10,], caption = "Primeros 10 datos de 'bateria'.")
 ```
-
 
 ------------------------------------------------------------------------
 
-### `nombres-arg.csv`{#sec-nombres-arg}
+### `nombrarg`{#sec-nombres-arg}
 
--   **Descripción**: Datos de.
+[FALTA PREPROCESAR ESTE DATASET Y RESUBIR A LA LIBRERÍA]
+
+-   **Descripción**: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año.
 
 -   **Variables**:
 
-    -   `XXX`:
+    -   `nombre`: nombre registrado.
+    -   `cantidad`: cantidad de nombres registrados en el año.
+    -   `anio`: año de registro.
 
--   **Fuente**: XXX
+-   **Fuente**: [datos.gob.ar](https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1)
+
+Disponible en la librería `datosIC` bajo el nombre de `nombrarg`.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(nombrarg[1:10,], caption = "Primeros 10 datos de 'nombrarg'.")
+```
 
 ------------------------------------------------------------------------

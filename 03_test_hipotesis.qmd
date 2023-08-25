@@ -7,6 +7,7 @@ Presentamos un ejemplo para test de hipótesis a partir de datos reales de clima
 A continuación, se muestran algunos posibles análisis para datos de flujo vehicular en CABA incorporando, en algunos casos, variables climáticas.
 
 ```{r, message=FALSE, warning=FALSE}
+rm(list=ls())
 # Librerías necesarias
 require(ggplot2)
 require(tidyverse)
@@ -27,7 +28,7 @@ Los datos de flujo vehicular de la Ciudad de Buenos Aires reportan, por hora, la
 
 En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019.
 
-```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 # importo datos de flujo vehicular 2019
 flujo19 <-
   vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv") %>%
@@ -38,10 +39,8 @@ flujo19 <-
   drop_na()
 
 paleta <- colorQuantile("Greys", flujo19$n, n = 6)
-```
 
-```{r, message=FALSE, warning=FALSE}
-# "CartoDB.VoyagerLabelsUnder"
+# Mapa
 mapa19 <- flujo19 %>%
   leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
   addProviderTiles("CartoDB.VoyagerLabelsUnder",
@@ -58,10 +57,11 @@ mapa19 <- flujo19 %>%
 mapa19
 ```
 
+
 Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar (a efectos creativos, se representan sobre un mapa en formato acuarelas: [conocer más acá](http://maps.stamen.com/)).
 
-```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
-# importo datos de flujo vehicular 2019
+```{r, message=FALSE, warning=FALSE}
+# importo datos de flujo vehicular 2023
 flujo23 <-
   vroom("./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv")
 
@@ -82,11 +82,8 @@ flujo23 <- flujo23 %>%
   drop_na()
 
 paleta <- colorQuantile("Greys", flujo23$n, n = 6)
-```
 
-```{r, message=FALSE, warning=FALSE}
-# Radares
-# "CartoDB.VoyagerLabelsUnder"
+# Mapa
 mapa23 <- flujo23 %>%
   leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
   addProviderTiles("Stamen.Watercolor",
@@ -103,7 +100,7 @@ mapa23 <- flujo23 %>%
 mapa23
 ```
 
-Para lo que sigue, trabajamos con el *dataset* reducido `flujo-vehicular.csv` en el que se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
+Para lo que sigue, trabajamos con el *dataset* reducido `flujovehicular.csv` en el que se incluyen datos del flujo vehicular de los días hábiles del primer trimestre de 2019 y de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A.
 
 El dataset `flujo-vehicular.csv` se encuentra [acá](https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&dl=0). A continuación, se muestran 10 datos de dicho conjunto.
 
@@ -193,6 +190,7 @@ ggplotly(
   )) +
     labs(x = "Día (solo para lunes a viernes de ambos años)", y = "Flujo vehicular Lugones (Esma)", color = "Año") +
     geom_point() +
+    scale_color_manual(values = c("2019" = "deeppink2", "2023" = "dodgerblue2")) +
     scale_x_discrete(breaks = seq(1, 8, 1), labels = labs) +
     theme_classic(),
   source = "select",
@@ -276,23 +274,22 @@ En efecto, el $p-$valor es $0.0000323$, y a partir de esta muestra y bajo las co
 
 ## Incorporamos datos de clima
 
-Para lo que sigue, trabajamos con el *dataset* reducido `flujo-clima.csv` en el que se incluyen datos del flujo vehicular del primer trimestre de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A, junto con datos de temperatura promedio y precipitaciones.
-
-El dataset `flujo-clima.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/03_test_hipotesis/flujo-clima.csv). A continuación, se muestran 10 datos de dicho conjunto.
+Para lo que sigue, trabajamos con el *dataset* reducido `flujoclima` de la librería `datosIC` en el que se incluyen datos del flujo vehicular del primer trimestre de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A, junto con datos de temperatura promedio y precipitaciones. A continuación, se muestran 10 datos de dicho conjunto.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 #datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
+```
 
+
+```{r, message=FALSE, warning=FALSE}
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
-data(flujoclima)
-
 datos <- flujoclima
 ```
 
 Un gráfico del flujo vehicular por tipo de día y según nivel de precipitaciones, parece mostrar lo esperado: el el flujo vehicular en ese punto de la ciudad es mayor los días de semana que los fines de semana. Sin embargo, no parece haber una tendencia notable que impacte en el flujo vehicular a partir de las precipitaciones. Dicha tendencia podría ser creciente, asumiendo que los días en que se registran mayores niveles de precipitaciones más personas utilizan el auto; o bien decreciente, sugiriendo que hay menor tránsito vehicular porque las personas prefieren suspender aquellas actividades fuera de sus hogares que no sean esenciales.
 
-```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 flujoclima <- datos
 ggplotly(
   ggplot(
@@ -322,6 +319,7 @@ ggplotly(
       color = "Tipo de día",
       size = "Precipitaciones"
     ) +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     theme_classic(),
   source = "select",
   tooltip = c("key")
@@ -452,7 +450,7 @@ El test arroja un $p-$valor prácticamente nulo: podemos concluir que hay eviden
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
 
-También se incluye el enlace de descarga al dataset reducido, `clima-flujo.csv`, con el que se desarrolló el ejemplo.
+El dataset reducido con el que se desarrolló el ejemplo y que surge de tal pre-procesamiento, es `flujoclima` de la librería `datosIC`.
 
 ## Sobre el *dataset* de clima
 
@@ -480,9 +478,9 @@ Algunas consideraciones, a la fecha, respecto de estos datos:
 
 -   Las coordenadas que georeferencian cada uno de los radares se encuentran "sucias" en los datos de 2023. En este capítulo se propuso una posible limpieza.
 
-## *Dataset* pre-procesado: `clima-flujo.csv`
+## *Dataset* pre-procesado: `flujoclima`
 
-Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `clima-flujo.csv`, a partir de los datos de flujo vehicular del primer trimestre de 2023 para el radar RD171 y de clima, en el que se dispone de las siguientes variables.
+Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `flujoclima`, a partir de los datos de flujo vehicular del primer trimestre de 2023 para el radar RD171 y de clima, en el que se dispone de las siguientes variables.
 
 -   `fecha`: fecha, en el formato mes-día.
 -   `n`: flujo vehicular de la fecha indicada.
@@ -491,38 +489,17 @@ Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `c
 -   `dia`: día de la semana de la fecha indicada.
 -   `tipo_dia`: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.
 
-El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `flujoclima`.
+El *dataset* `flujoclima` está disponible en la librería `datosIC`.
 
-```{r, message=FALSE, warning=FALSE}
-devtools::install_github("daniellaparada/datosIC")
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
 library(datosIC)
-data(flujoclima)
+flujoclima
 ```
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(flujoclima[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
-
-# Librerías
-
-Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
-
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-require(ggplot2)
-require(tidyverse)
-require(ggfortify)
-require(plotly)
-require(vroom)
-require(effsize)
-require(ggmap)
-require(leaflet)
-require(devtools)
-```
-
-```{r message=FALSE, warning=FALSE}
-sessionInfo()
-```
 
 # Referencias
 

@@ -17,6 +17,7 @@ Si bien hay estudios científicos sobre predicción sísmica que realizan paíse
 A continuación, se muestran algunos posibles análisis para datos de sismos de Argentina durante los años 2012 a 2022, fuertemente relacionados con herramientas de **visualización y descriptivas**.
 
 ```{r, message=FALSE, warning=FALSE}
+rm(list=ls())
 # Librerías necesarias
 require(ggplot2)
 require(tidyverse)
@@ -35,17 +36,16 @@ sessionInfo()
 
 Los datos de sismos pueden obtenerse del buscador disponible en el INPRES, [acá](http://contenidos.inpres.gob.ar/buscar_sismo), en el que se registran eventos sísmicos en territorio argentino y diferentes variables asociadas a estos, en particular, si se trata de un sismo que se haya sentido o no.
 
-Para lo que sigue, trabajamos con el *dataset* reducido `sismos-arg.csv` en el que se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022.
+Para lo que sigue, trabajamos con el *dataset* reducido `sismos` de la librería `datosIC` en el que se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022. El dataset ha sido transformado a partir de datos *scrappeados* del buscador de sismos del INPRES, cortesía de Gustavo Juantorena. A continuación, se muestran 10 datos de dicho conjunto.
 
-El dataset `sismos-arg.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos-arg.csv) y ha sido transformado a partir de datos *scrappeados* del buscador de sismos del INPRES, cortesía de Gustavo Juantorena. A continuación, se muestran 10 datos de dicho conjunto.
+```{r, eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+#datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
+```
+
 
 ```{r, message=FALSE, warning=FALSE}
-#datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
-
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
-data(sismos)
-
 datos <- sismos
 ```
 
@@ -302,7 +302,7 @@ Allí puede verse que, mientras que en San Juan los sismos percibidos parecen se
 
 Por otro lado, la profundidad de los sismos guarda estrecha relación con la configuración geológica y tecnótica de su ubicación geográfica. El gráfico que sigue toma los eventos de las provincias con más registros y exhibe la relación entre la profundidad del sismo y los paralelos de su ubicación de registro. Llamativo resulta ver que la actividad sísmica disminuye en las profundidades que separan los sismos superficiales de los intermedios. Como veíamos, las mayores profundidades se detectan en las provincias de Salta y Jujuy, con la excepción de una pequeña región entre paralelos en San Juan.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ggplotly(
   ggplot(
     data = sismos_arg %>%
@@ -326,7 +326,7 @@ Conocimiento sobre la configuración tectónica permite interpretaciones más pr
 
 El siguiente gráfico muestra la profundidad en relación con la longitud de la ubicación del foco para la zona norte de Mendoza ubicada entre los paralelos -32.5° y -33.5°, zona de subducción entre la placa de Nazca y la Sudamericana (zona de Benioff). Un análisis experto puede halar en el gráfico evidencia de la placa de Nazca subducida y moviéndose en dirección Este respecto a la placa Sudamericana (más detalle sobre esto puede consultarse [acá](https://www.editoresasagai.org.ar/ojs/index.php/rgaia/article/view/83/70)).
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ggplotly(
   ggplot(
     data = sismos_arg %>%
@@ -374,11 +374,11 @@ sismos_prov_porc <- sismos_prov %>%
   summarise(pperc = nperc / n * 100)
 ```
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(sismos_prov, caption = "Resumen por provincias")
 ```
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(sismos_prov_porc, caption = "Porcentaje de sismos percibidos para casos de más de 1000 eventos")
 ```
 
@@ -386,7 +386,7 @@ knitr::kable(sismos_prov_porc, caption = "Porcentaje de sismos percibidos para c
 
 San Juan registra casi 30.000 eventos para el período considerado de poco más de 10 años, con una mediana de 8 sismos diarios. Un histograma para la cantidad diaria de sismos se observa a continuación.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 sismos_arg <- sismos_arg %>%
   mutate(FechaHora = paste(Fecha, Hora, sep = " "))
 sismos_arg$FechaHora <- ymd_hms(sismos_arg$FechaHora)
@@ -414,7 +414,7 @@ En el histograma puede verse que hay por lo menos una observación que supera lo
 
 El siguiente gráfico muestra la cantidad de sismos diarios. Puede apreciarse las réplicas de tal terremoto en las observaciones que corresponden a los días entre el 19 y el 23 de enero de 2021.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ggplotly(
   ggplot(data = sismos_SJ_dia, aes(
     x = Fecha, y = n, key = Fecha
@@ -429,7 +429,7 @@ ggplotly(
 
 Como vimos, San Juan registra más de 600 sismos percibidos durante el período, algo más que el 2% del total de sismos registrados. La frecuencia con la que se perciben tales sismos es alta. Eso puede observarse en el histograma para la cantidad de días transcurridos entre un sismo percibido y otro.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 df <- sismos_SJ %>%
   filter(Percibido == TRUE)
 
@@ -453,7 +453,7 @@ ggplotly(
 
 Córdoba y Mendoza, registrando cerca del 27% y 7% de sismos percibidos respecto del total, respectivamente, tienen una frecuencia ligeramente más espaciada que la de San Juan.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 sismos_COR <- sismos_arg %>%
   filter(Provincia == "Córdoba") %>%
   arrange(FechaHora)
@@ -517,7 +517,7 @@ donde $a$ y $b$ son constantes determinadas por la naturaleza sísmica de la reg
 
 Ajustamos los datos de San Juan al modelo de Gutenberg-Richter para estimar las constantes $a$ y $b$. En el siguiente gráfico puede verse la cantidad $N$ de sismos de magnitud mayor que $M$ por año (escala logarítmica en base 10). Como los años 2012 y 2022 no están completos para el año calendario, reducimos los datos al período 2013-2021.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 sismos_SJ <- sismos_SJ %>%
   mutate(Año = format(Fecha, format = "%Y"))
 
@@ -548,7 +548,7 @@ ggplotly(
 
 La estimación por mínimos cuadrados de $a$ y de $b$ puede verse a continuación.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ajuste <- lm(log(nacum, 10) ~ Magnitud, data = df2)
 a <- round(ajuste$coefficients[1], 4)
 b <- -round(ajuste$coefficients[2], 4)
@@ -564,7 +564,7 @@ $$
 
 a partir de los datos de San Juan.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ggplotly(
   ggplot(data = df2, aes(
     x = Magnitud,
@@ -598,7 +598,7 @@ $$ donde $N_1(M)=10^{(a-b M \log t)}$. Luego, el número promedio de años para 
 T_R=\frac{1}{N_1(M)}.
 $$ Tomando como referencia la estimación de $a$ y $b$ obtenida para San Juan, la estimación de la probabilidad de ocurrencia de al menos un sismo de magnitud mayor que $M$ en San Juan en los próximos $t$ años, para $t\in\{1,5,10,20\}$, se observa en el siguiente gráfico.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 magnitudes <- seq(3, 6.5, by = 0.01)
 tiempos <- c(1, 5, 10, 20)
 
@@ -650,7 +650,7 @@ ggplotly(
 
 Así, por ejemplo, la probabilidad estimada de que un sismo de magnitud superior a 6 ocurra en San Juan ocurra en los próximos 5 años es de casi $0.65$, aumenta a $0.88$ para los próximos 10 años y es de casi $1$ para los próximos 20. En efecto, los únicos sismos registrados en los datos de tal magnitud son los de noviembre de 2016 y enero de 2021. Sismos de magnitud superior a 4.5 en San Juan son casi seguros para los próximos años, en todos los casos.
 
-```{r}
+```{r, , echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(sismos_SJ %>%
   filter(Magnitud > 6), caption = "Sismos de magnitud superior a 6 en San Juan, desde 2013 a 2021")
 ```
@@ -661,13 +661,13 @@ knitr::kable(sismos_SJ %>%
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
 
-También se incluye el enlace de descarga al dataset reducido, `sismos-arg.csv`, con el que se desarrolló el ejemplo.
+El dataset reducido con el que se desarrolló el ejemplo y que surge de tal pre-procesamiento, es `sismos` de la librería `datosIC`.
 
-## Sobre el *dataset* de sismos
+## Sobre el *dataset* completo de sismos
 
 Los datos de este ejemplo corresponden a datos *scrappeados* del buscador de sismos del INPRES, cuyo buscador está disponible [acá](http://contenidos.inpres.gob.ar/buscar_sismo). En el *dataset* `sismos_all.csv`, disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos_all.csv), en el que se registran eventos sísmicos en territorio argentino y diferentes variables asociadas a estos, en particular, si se trata de un sismo que se haya sentido o no.
 
-Los sismos registrados en INPRES pueden estar revisados por un sismólogo y, posiblemente a razón de ello, algunas inconsistencias en la nomenclatura de las provincias es hallada. El siguiente toma el *dataset* de `sismos_all.csv` y:
+Los sismos registrados en INPRES pueden estar revisados por un sismólogo y, posiblemente a razón de ello, algunas inconsistencias en la nomenclatura de las provincias es hallada. El siguiente código toma el *dataset* completo `sismos_all.csv` y:
 
 -   convierte en variable la percepción del sismo teniendo en cuenta que la intensidad solo se registra para sismos percibidos,
 -   limpia y unifica el formato de fecha de los eventos,
@@ -834,9 +834,9 @@ sismos_arg <- sismos_arg %>%
   select(c(2, 3, 4, 5, 9, 10, 11, 12))
 ```
 
-### *Dataset* pre-procesado: `sismos-arg.csv`
+### *Dataset* pre-procesado: `sismos`
 
-Para limpiar y reducir los datos al estudio de interés, se crea un *dataset* reducido, `sismos-arg.csv`, disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/04_visualizacion/sismos-arg.csv), a partir de los datos *scrappeados* del buscador del INPRES. Se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022, y se dispone de las siguientes variables.
+Para limpiar y reducir los datos al estudio de interés, se crea un *dataset* reducido, `sismos`, a partir de los datos *scrappeados* del buscador del INPRES. Se incluyen datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022, y se dispone de las siguientes variables.
 
 -   `Fecha`: fecha del evento sísmico, en el formato año-mes-día.
 -   `Hora`: hora del evento sísmico, en el formato hora-minuto-segundo.
@@ -847,37 +847,17 @@ Para limpiar y reducir los datos al estudio de interés, se crea un *dataset* re
 -   `Magnitud`: magnitud del sismo en la escala de Richter.
 -   `Profundidad`: profundidad (km) registrada del sismo.
 
-El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `sismos`.
+El *dataset* `sismos` está disponible en la librería `datosIC`.
 
-```{r, message=FALSE, warning=FALSE}
-devtools::install_github("daniellaparada/datosIC")
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
 library(datosIC)
 data(sismos)
 ```
 
-```{r}
+```{r, echo= FALSE, message=FALSE, warning=FALSE}
 knitr::kable(sismos[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
-# Librerías
-
-Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
-
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-require(ggplot2)
-require(tidyverse)
-require(ggfortify)
-require(plotly)
-require(kableExtra)
-require(vroom)
-require(leaflet)
-require(lubridate)
-require(devtools)
-```
-
-```{r message=FALSE, warning=FALSE}
-sessionInfo()
-```
 
 # Referencias
 

@@ -7,6 +7,7 @@ Presentamos un ejemplo de modelos de regresión a partir de datos reales de temp
 A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de la temperatura, distinguiendo por usos en días de semana o fin de semana.
 
 ```{r, message=FALSE, warning=FALSE}
+rm(list=ls())
 # Librerías necesarias
 require(tidyverse)
 require(ggfortify)
@@ -20,17 +21,16 @@ sessionInfo()
 
 ## Exploración inicial
 
-En el *dataset* reducido `temp-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 1ro de mayo de 2023.
+En el *dataset* `tempbici` de la librería `datosIC` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 1ro de mayo de 2023. A continuación se muestran 10 datos de dicho conjunto.
 
-El *dataset* `temp-bici.csv` se encuentra [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/01_regresion/temp-bici.csv). A continuación se muestran 10 datos de dicho conjunto.
+```{r, echo= FALSE, message=FALSE, warning=FALSE}
+#datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
+```
+
 
 ```{r, message=FALSE, warning=FALSE}
-#datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
-
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
-data(tempbici)
-
 datos <- tempbici
 ```
 
@@ -50,6 +50,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura máxima", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     theme_classic(),
   source = "select",
   tooltip = c("key")
@@ -72,6 +73,7 @@ ggplotly(
   )) +
     labs(x = "Fecha", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     theme_classic(),
   source = "select",
   tooltip = c("key")
@@ -80,9 +82,9 @@ ggplotly(
 
 ```{r, message=FALSE, warning=FALSE}
 ggplotly(
-  ggplot(data = filter(datos), aes(x = fecha, y = tmax)) +
+  ggplot(data = filter(datos), aes(x = fecha, y = tmax, key=fecha)) +
     labs(x = "Fecha", y = "Temperatura máxima") +
-    geom_point() +
+    geom_point(colour = "deeppink4") +
     theme_classic(),
   source = "select",
   tooltip = c("key")
@@ -105,6 +107,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura máxima", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm") +
     theme_classic(),
   source = "select",
@@ -160,6 +163,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura máxima", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm",
                 formula = y ~ poly(x, 2)) +
     theme_classic(),
@@ -219,6 +223,7 @@ ggplotly(
   ) +
     labs(x = "Temperatura máxima (menor que 25°C)", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm") +
     theme_classic(),
   source = "select",
@@ -268,9 +273,9 @@ knitr::kable(a[c(42, 46, 48), ])
 
 # Acerca de los datos
 
-A continuación, se detallan aspectos de los conjuntos de datos que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
+A continuación, se detallan aspectos de los conjuntos de datos que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea. 
 
-También se incluye el enlace de descarga al dataset reducido, `temp-bici.csv`, con el que se desarrolló el ejemplo.
+El dataset reducido con el que se desarrolló el ejemplo y que surge de tal pre-procesamiento, es `tempbici` de la librería `datosIC`.
 
 ## Sobre el *dataset* de temperatura
 
@@ -324,9 +329,9 @@ trips_2023 <- read_csv(
 trips <- rbind(trips_2022, trips_2023)
 ```
 
-## *Dataset* pre-procesado: `temp-bici.csv`
+## *Dataset* pre-procesado: `tempbici`
 
-Para reducir los datos al estudio de interés, se crea un dataset conjunto, `temp-bici.csv`, a partir de los datos de temperatura y de uso del sistema Ecobici en el que se dispone de las siguientes variables.
+Para reducir los datos al estudio de interés, se crea un dataset conjunto, `tempbici`, a partir de los datos de temperatura y de uso del sistema Ecobici en el que se dispone de las siguientes variables.
 
 -   `fecha`: fecha, en el formato año-mes-día.
 -   `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
@@ -351,33 +356,15 @@ datos <-
   select(c(1, 2, 6:10)) 
 ```
 
-El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `tempbici`.
+El *dataset* `tempbici` está disponible en la librería `datosIC`.
 
-```{r, message=FALSE, warning=FALSE}
-devtools::install_github("daniellaparada/datosIC")
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
 library(datosIC)
-data(tempbbici)
+tempbici
 ```
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(tempbici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
-```
-
-# Librerías
-
-Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
-
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-require(tidyverse)
-require(ggfortify)
-require(plotly)
-require(kableExtra)
-require(knitr)
-require(devtools)
-```
-
-```{r message=FALSE, warning=FALSE}
-sessionInfo()
 ```
 
 # Referencias

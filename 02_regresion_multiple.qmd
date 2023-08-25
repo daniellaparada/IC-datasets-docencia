@@ -7,6 +7,7 @@ Presentamos un ejemplo de modelos de regresión a partir de datos reales de clim
 A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de ciertas variables climáticas.
 
 ```{r, message=FALSE, warning=FALSE}
+rm(list=ls())
 # Librerías necesarias
 require(tidyverse)
 require(ggfortify)
@@ -20,15 +21,15 @@ sessionInfo()
 
 ## Exploración inicial
 
-En el *dataset* reducido `clima-bici.csv` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022 y se encuentra disponible [acá](https://github.com/daniellaparada/IC-datasets-docencia/blob/main/fuente/02_regresion_multiple/clima-bici.csv). A continuación, se muestran 10 datos de dicho conjunto.
+En el *dataset* `climabici` de la librería `datosIC` se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022. A continuación, se muestran 10 datos de dicho conjunto.
+
+```{r, echo= FALSE, message=FALSE, warning=FALSE}
+#datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
+```
 
 ```{r, message=FALSE, warning=FALSE}
-#datos <- read_csv("./fuente/02_regresion_multiple/clima-bici.csv")
-
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
-data(climabici)
-
 datos <- climabici
 ```
 
@@ -49,6 +50,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura media", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm",
                 formula = y ~ poly(x, 2)) +
     theme_classic(),
@@ -67,7 +69,7 @@ knitr::kable(datos[58, ], caption = "Datos del 27 de febrero.")
 
 Para lo que sigue, removemos esa observación.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 datos <- datos[-58, ]
 ggplotly(
   ggplot(data = datos, aes(
@@ -79,6 +81,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura media", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm",
                 formula = y ~ poly(x, 2)) +
     theme_classic(),
@@ -89,7 +92,7 @@ ggplotly(
 
 En efecto, los puntos más grandes de cada "nube" de color se encuentran ubicados por debajo de la tendencia general del resto de los puntos de su clase. Es decir, los días con mayor nivel de precipitación, la cantidad de usos del sistema de Ecobici se reduce notablemente, tanto para días hábiles como fines de semana. En particular, las tendencias por tipo de día se observan más "limpias" cuando se filtra por días en los que no se registran precipitaciones, como se observa a continuación.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ggplotly(
   ggplot(
     data = filter(datos, lluvia == "No llueve"),
@@ -102,6 +105,7 @@ ggplotly(
   ) +
     labs(x = "Temperatura media", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm",
                 formula = y ~ poly(x, 2)) +
     theme_classic(),
@@ -144,6 +148,7 @@ ggplotly(
   )) +
     labs(x = "Temperatura media", y = "Cantidad de usos de Ecobici") +
     geom_point() +
+    scale_color_manual(values = c("Fin de semana" = "deeppink2", "Lunes a viernes" = "dodgerblue2")) +
     geom_smooth(method = "lm",
                 formula = y ~ x) +
     theme_classic(),
@@ -325,7 +330,7 @@ Mientras todas las demás predicciones rondan valores entre $8000$ y $10000$, el
 
 A continuación, se detallan aspectos de los datasets que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
 
-También se incluye el enlace de descarga al dataset reducido, `clima-bici.csv`, con el que se desarrolló el ejemplo.
+El dataset reducido con el que se desarrolló el ejemplo y que surge de tal pre-procesamiento, es `climabici` de la librería `datosIC`.
 
 ## Sobre el *dataset* de clima
 
@@ -357,9 +362,9 @@ trips <- read_csv(
   mutate(fecha = as_date(fecha))
 ```
 
-## *Dataset* pre-procesado: `clima-bici.csv`
+## *Dataset* pre-procesado: `climabici`
 
-Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `clima-bici.csv`, a partir de los datos de clima y de uso del sistema Ecobici, en el que se dispone de las siguientes variables.
+Para reducir los datos al estudio de interés, se crea un *dataset* conjunto, `climabici`, a partir de los datos de clima y de uso del sistema Ecobici, en el que se dispone de las siguientes variables.
 
 -   `fecha`: fecha, en el formato año-mes-día.
 -   `n`: cantidad de registros de uso del sistema EcoBici en la fecha indicada.
@@ -384,34 +389,17 @@ datos <- left_join(trips, clima, by = c("fecha" = "date")) %>%
   ) 
 ```
 
-El *dataset* también está disponible en la librería `datosIC` bajo el nombre de `climabici`.
+El *dataset* `climabici` está disponible en la librería `datosIC`.
 
-```{r, message=FALSE, warning=FALSE}
-devtools::install_github("daniellaparada/datosIC")
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
 library(datosIC)
-data(climabici)
+climabici
 ```
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(climabici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
-# Librerías
-
-Las librerías usadas para el desarrollo de este ejemplo, así como la información de la sesión de `R`, se muestran en el código que sigue.
-
-```{r, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
-require(tidyverse)
-require(ggfortify)
-require(plotly)
-require(kableExtra)
-require(knitr)
-require(devtools)
-```
-
-```{r message=FALSE, warning=FALSE}
-sessionInfo()
-```
 
 # Referencias
 

@@ -29,7 +29,6 @@ require(leaflet)
 require(lubridate)
 require(devtools)
 options(scipen=999)
-sessionInfo()
 ```
 
 ## Exploración inicial

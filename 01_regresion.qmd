@@ -16,7 +16,6 @@ require(kableExtra)
 require(knitr)
 require(devtools)
 options(scipen=999)
-sessionInfo()
 ```
 
 ## Exploración inicial

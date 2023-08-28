@@ -19,7 +19,6 @@ require(ggmap)
 require(leaflet)
 require(devtools)
 options(scipen = 999)
-sessionInfo()
 ```
 
 ## Exploración inicial

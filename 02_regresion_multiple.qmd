@@ -400,6 +400,9 @@ climabici
 knitr::kable(climabici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
+```{r, message=FALSE, warning=FALSE}
+sessionInfo()
+```
 
 # Referencias
 

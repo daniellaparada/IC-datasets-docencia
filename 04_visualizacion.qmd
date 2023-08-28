@@ -42,7 +42,6 @@ Para lo que sigue, trabajamos con el *dataset* reducido `sismos` de la librería
 #datos <- read_csv("./fuente/04_visualizacion/sismos-arg.csv")
 ```
 
-
 ```{r, message=FALSE, warning=FALSE}
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
@@ -858,6 +857,9 @@ data(sismos)
 knitr::kable(sismos[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
+```{r, message=FALSE, warning=FALSE}
+sessionInfo()
+```
 
 # Referencias
 

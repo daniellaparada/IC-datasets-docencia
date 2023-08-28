@@ -57,7 +57,6 @@ mapa19 <- flujo19 %>%
 mapa19
 ```
 
-
 Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar (a efectos creativos, se representan sobre un mapa en formato acuarelas: [conocer más acá](http://maps.stamen.com/)).
 
 ```{r, message=FALSE, warning=FALSE}
@@ -280,7 +279,6 @@ Para lo que sigue, trabajamos con el *dataset* reducido `flujoclima` de la libre
 #datos <- read_csv("./fuente/03_test_hipotesis/flujo-clima.csv")
 ```
 
-
 ```{r, message=FALSE, warning=FALSE}
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
@@ -500,6 +498,9 @@ flujoclima
 knitr::kable(flujoclima[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
 ```
 
+```{r, message=FALSE, warning=FALSE}
+sessionInfo()
+```
 
 # Referencias
 

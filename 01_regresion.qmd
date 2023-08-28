@@ -27,7 +27,6 @@ En el *dataset* `tempbici` de la librería `datosIC` se incluyen datos de viajes
 #datos <- read_csv("./fuente/01_regresion/temp-bici.csv")
 ```
 
-
 ```{r, message=FALSE, warning=FALSE}
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
@@ -273,7 +272,7 @@ knitr::kable(a[c(42, 46, 48), ])
 
 # Acerca de los datos
 
-A continuación, se detallan aspectos de los conjuntos de datos que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea. 
+A continuación, se detallan aspectos de los conjuntos de datos que conformaron el *dataset* reducido para el desarrollo del ejemplo, a la vez que se incluyen las fuentes de los datos y el código utilizado para pre-procesarlo con la sintaxis de `tidyverse`. De esta forma, puede fácilmente replicarse y/o adaptarse si así se lo desea.
 
 El dataset reducido con el que se desarrolló el ejemplo y que surge de tal pre-procesamiento, es `tempbici` de la librería `datosIC`.
 
@@ -365,6 +364,10 @@ tempbici
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(tempbici[1:10,], caption = "Dataset reducido disponible en la librería 'datosIC'.")
+```
+
+```{r, message=FALSE, warning=FALSE}
+sessionInfo()
 ```
 
 # Referencias

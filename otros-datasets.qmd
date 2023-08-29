@@ -6,6 +6,7 @@ A continuación se referencian otros **dataset** incluidos en la librería `dato
 |--------------------------------|-------------------------|
 | [`bateria`](#sec-bateria)      | Regresión               |
 | [`nombrarg`](#sec-nombres-arg) | Estadística descriptiva |
+| [`jugadores`](#sec-jugadores)  | Estadística descriptiva |
 
 ## Descripción, variables y fuente
 
@@ -107,3 +108,46 @@ webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
 ```
 
 ------------------------------------------------------------------------
+
+### `jugadores`{#sec-jugadores}
+
+-   **Descripción**: Datos de jugadores de fútbol de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.
+
+-   **Variables**:
+
+    -   `Equipo`: equipo en el que juega a la fecha.
+    -   `Puesto`: posición en la que juega a la fecha.
+    -   `Jugador`: nombre del jugador.
+    -   `Edad`: edad del jugador al 2023.
+    -   `Nacimiento`: fecha de nacimiento del jugador, en el formato día-mes-año.
+    -   `Altura`: altura (cm) del jugador.
+    -   `Ciudad`: ciudad de nacimiento del jugador.
+    -   `Pais`: país de nacimiento del jugador.
+    -   `Mes`: mes de nacimiento del jugador.
+    -   `Anio`: año de nacimiento del jugador.
+
+-   **Fuente**: Consultar con Pablo Mislej.
+
+Disponible en la librería `datosIC` bajo el nombre de `jugadores`.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(jugadores[1:10, ], caption = "Primeros 10 datos de 'jugadores'.")
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplotly(ggplot(jugadores %>%
+                  drop_na() %>%
+                  filter(Puesto != "DT")%>%
+                  group_by(Mes) %>%
+                  summarise(Total = n()), 
+                aes(x=factor(Mes), y=Total,
+                    key=Total)) + 
+  geom_bar(fill="deeppink4",
+           stat = "identity") +
+  labs(x = "Mes de nacimiento", y = "Cantidad") +
+  theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
+```
+

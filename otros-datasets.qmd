@@ -24,6 +24,7 @@ require(htmlwidgets)
 require(webshot)
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
+options(scipen=999)
 ```
 
 ------------------------------------------------------------------------
@@ -104,7 +105,6 @@ ggplotly(ggplot(jugadores %>%
 )
 ```
 
-
 ------------------------------------------------------------------------
 
 ### `nombrarg`{#sec-nombres-arg}
@@ -155,33 +155,47 @@ webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
 ```
 
 ------------------------------------------------------------------------
+
 ### `viviendas`{#sec-viviendas}
 
--   **Descripción**: Datos de 
+-   **Descripción**: Datos de viviendas en venta en Argentina, publicadas en el sitio inmobiliario online *Properati* durante los años 2013 a 2018. Los datos corresponden a viviendas publicadas a menos de 10 millones de dólares y con superficie total cubierta menor a 1000 metros cuadrados.
 
 -   **Variables**:
 
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
-    -   ``: .
+    -   `tipo`: tipo de vivienda en venta.
+    -   `ciudad`: ciudad, municipio (GBA) o barrio (CABA) de la vivienda.
+    -   `provincia`: provincia (con distinción entre zonas de GBA y CABA).
+    -   `lat`: latitud de la ubicación de la vivienda.
+    -   `lon`: longitud de la ubicación de la vivienda.
+    -   `precioUSD`: precio publicado (USD) de la vivienda en venta.
+    -   `sup_tot`: superficie total (m2) de la vivienda.
+    -   `sup_cub`: superficie cubierta (m2) de la vivienda.
+    -   `precio_sup_tot`: precio (USD) del m2 según superficie total de la vivienda.
+    -   `precio_sup_cub`: precio (USD) del m2 según superficie cubierta de la vivienda.
+    -   `ambientes`: cantidad de ambientes de la vivienda reportados en la publicación.
 
--   **Fuente**: 
+-   **Fuente**: [Properati Data](https://blog.properati.com.ar/properati-data-informacion-abierta-y-actualizada-sobre-el-mercado-inmobiliario-2/)
 
 Disponible en la librería `datosIC` bajo el nombre de `viviendas`.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-#knitr::kable(viviendas[1:10, ], caption = "Primeros 10 datos de 'viviendas'.")
+knitr::kable(viviendas[1:10, c(1,2,6,7,9,11)], caption = "Primeros 10 datos de 'viviendas' para algunas variables.")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-
+ggplotly(
+  ggplot(data=viviendas %>% filter(ciudad=="Caballito"),aes(x=precioUSD,y=sup_cub, col=tipo, key=ambientes)) +
+    labs(title= "Caballito (viviendas en venta 2013-2018)",x = "Precio (USD)", y = "Superficie total cubierta (m2)") +
+    ylim(0, 400) +
+    xlim(0, 1000000) +
+    geom_point() +
+    scale_color_manual(values = c("departamento" = "gray",
+                                "casa"="deeppink4",
+                                "PH"="dodgerblue4"))+
+    theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
 ```
 
 ------------------------------------------------------------------------
@@ -226,6 +240,5 @@ ggplotly(
   tooltip = c("key")
 )
 ```
-
 
 ------------------------------------------------------------------------

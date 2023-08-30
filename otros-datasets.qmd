@@ -5,12 +5,14 @@ A continuación se referencian otros **dataset** incluidos en la librería `dato
 | *Dataset*                      | Temas                   |
 |--------------------------------|-------------------------|
 | [`bateria`](#sec-bateria)      | Regresión               |
-| [`nombrarg`](#sec-nombres-arg) | Estadística descriptiva |
 | [`jugadores`](#sec-jugadores)  | Estadística descriptiva |
+| [`nombrarg`](#sec-nombres-arg) | Estadística descriptiva |
+| [`viviendas`](#sec-viviendas)  | Estadística descriptiva |
+| [`xGFIFA22`](#sec-xGFIFA22)    | Estadística descriptiva |
 
 ## Descripción, variables y fuente
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide'}
 require(devtools)
 require(knitr)
 require(tidyverse)
@@ -57,6 +59,51 @@ ggplotly(
 ```
 
 ![Ciclo de vida de baterías de Li-Ion. Tomado de *Simulation of capacity fade in lithium-ion batteries* (Spotnitz, 2003).](./ciclovidabateria.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+### `jugadores`{#sec-jugadores}
+
+-   **Descripción**: Datos de jugadores de fútbol de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.
+
+-   **Variables**:
+
+    -   `Equipo`: equipo en el que juega a la fecha.
+    -   `Puesto`: posición en la que juega a la fecha.
+    -   `Jugador`: nombre del jugador.
+    -   `Edad`: edad del jugador al 2023.
+    -   `Nacimiento`: fecha de nacimiento del jugador, en el formato día-mes-año.
+    -   `Altura`: altura (cm) del jugador.
+    -   `Ciudad`: ciudad de nacimiento del jugador.
+    -   `Pais`: país de nacimiento del jugador.
+    -   `Mes`: mes de nacimiento del jugador.
+    -   `Anio`: año de nacimiento del jugador.
+
+-   **Fuente**: Consultar con Pablo Mislej.
+
+Disponible en la librería `datosIC` bajo el nombre de `jugadores`.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(jugadores[1:10, ], caption = "Primeros 10 datos de 'jugadores'.")
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplotly(ggplot(jugadores %>%
+                  drop_na() %>%
+                  filter(Puesto != "DT")%>%
+                  group_by(Mes) %>%
+                  summarise(Total = n()), 
+                aes(x=factor(Mes), y=Total,
+                    key=Total)) + 
+  geom_bar(fill="deeppink4",
+           stat = "identity") +
+  labs(x = "Mes de nacimiento", y = "Cantidad") +
+  theme_classic(),
+  source = "select",
+  tooltip = c("key")
+)
+```
+
 
 ------------------------------------------------------------------------
 
@@ -108,46 +155,77 @@ webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
 ```
 
 ------------------------------------------------------------------------
+### `viviendas`{#sec-viviendas}
 
-### `jugadores`{#sec-jugadores}
-
--   **Descripción**: Datos de jugadores de fútbol de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.
+-   **Descripción**: Datos de 
 
 -   **Variables**:
 
-    -   `Equipo`: equipo en el que juega a la fecha.
-    -   `Puesto`: posición en la que juega a la fecha.
-    -   `Jugador`: nombre del jugador.
-    -   `Edad`: edad del jugador al 2023.
-    -   `Nacimiento`: fecha de nacimiento del jugador, en el formato día-mes-año.
-    -   `Altura`: altura (cm) del jugador.
-    -   `Ciudad`: ciudad de nacimiento del jugador.
-    -   `Pais`: país de nacimiento del jugador.
-    -   `Mes`: mes de nacimiento del jugador.
-    -   `Anio`: año de nacimiento del jugador.
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
+    -   ``: .
 
--   **Fuente**: Consultar con Pablo Mislej.
+-   **Fuente**: 
 
-Disponible en la librería `datosIC` bajo el nombre de `jugadores`.
+Disponible en la librería `datosIC` bajo el nombre de `viviendas`.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(jugadores[1:10, ], caption = "Primeros 10 datos de 'jugadores'.")
+#knitr::kable(viviendas[1:10, ], caption = "Primeros 10 datos de 'viviendas'.")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-ggplotly(ggplot(jugadores %>%
-                  drop_na() %>%
-                  filter(Puesto != "DT")%>%
-                  group_by(Mes) %>%
-                  summarise(Total = n()), 
-                aes(x=factor(Mes), y=Total,
-                    key=Total)) + 
-  geom_bar(fill="deeppink4",
-           stat = "identity") +
-  labs(x = "Mes de nacimiento", y = "Cantidad") +
-  theme_classic(),
+
+```
+
+------------------------------------------------------------------------
+
+### `xGFIFA22`{#sec-xGFIFA22}
+
+-   **Descripción**: Datos resumen de goles esperados (xG) y de goles esperados asistidos (xGA) para los jugadores del mundial FIFA 2022. En la actualidad, xG es el mejor predictor del rendimiento futuro tanto para jugadores como para equipos. xG es una métrica que mide la probabilidad de que un tiro dado termine en gol. Según [StatsBomb](https://statsbomb.com/es/metricas-de-futbol/que-es-el-xg/), un modelo de xG utiliza información histórica de miles de tiros con características similares para estimar la probabilidad de gol en una escala de 0 a 1. Por ejemplo, un tiro con un valor de xG de 0,2 es uno que razonablemente se puede esperar que termine en gol dos de cada 10 veces. En el dataset, la columna de xG se construyó a partir de los datos de `statsBombR` filtrando todos los *shots* (tiros al arco) que no fueran penales, y sumando sus xG para cada uno de los jugadores. La métrica xGA se construye con una información adicional: la de los pases. De cada tiro al arco, se registra si proviene de un pase de asistencia. Luego, la variable xGA de este *dataset* se construyó a partir de filtrar todos los *shots* asistidos de los datos del mundial 2022 de `statsBombR` y sumar sus xG para cada uno de los jugadores.
+
+-   **Variables**:
+
+    -   `jugador`: nombre del jugador.
+    -   `xG`: goles esperados (sin penales).
+    -   `xGA`: goles esperados asistidos
+
+-   **Fuente**: [StatsBombR](https://statsbomb.com/news/statsbomb-release-free-2022-world-cup-data/)
+
+Disponible en la librería `datosIC` bajo el nombre de `xGFIFA22`.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(xGFIFA22[1:10, ], caption = "Primeros 10 datos de 'xGFIFA22'.")
+```
+
+El gráfico de xG vs XGA que reproducimos a partir de los datos de `xGFIFA22` puede verse en el *carrousel* de imágenes de StatsBomb, [acá](https://statsbomb.com/news/statsbomb-release-free-2022-world-cup-data/).
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplotly(
+  ggplot(data = xGFIFA22, aes(
+    y = xGA,
+    x = xG,
+    label = jugador,
+    key = jugador
+  )) +
+    geom_point(colour = "deeppink4") +
+    labs(x = "Goles esperados (xG) sin penales", y = "Goles esperados asistidos (xGA)") +
+    theme_classic() +
+    geom_text(
+      aes(xGA, xG, label = jugador, size = 4),
+      data = xGFIFA22[xGFIFA22$jugador == "Lionel Andrés Messi Cuccittini", ],
+      color = "#333333"
+    ),
   source = "select",
   tooltip = c("key")
 )
 ```
 
+
+------------------------------------------------------------------------

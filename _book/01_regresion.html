@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.353">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,8 +91,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "resultados adicionales en este documento",
     "search-clear-button-title": "Borrar",
     "search-detached-cancel-button-title": "Cancelar",
-    "search-submit-button-title": "Enviar",
-    "search-label": "Buscar"
+    "search-submit-button-title": "Enviar"
   }
 }</script>
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
@@ -119,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_regresion.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -246,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de la temperatura, distinguiendo por usos en días de semana o fin de semana.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Librerías necesarias</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
@@ -263,7 +262,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En el <em>dataset</em> <code>tempbici</code> de la librería <code>datosIC</code> se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, desde el 4 de junio de 2022 hasta el 1ro de mayo de 2023. A continuación se muestran 10 datos de dicho conjunto.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daniellaparada/datosIC"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> tempbici</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -384,7 +383,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Como puede verse en el siguiente gráfico, la cantidad de registros de viajes de esa duración varía en función de la temperatura máxima del día, y de si se trata de un día de la semana (lunes a viernes) o fin de semana (sábado y domingo).</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(datos), <span class="fu">aes</span>(</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> tmax,</span>
@@ -410,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Este <em>dataset</em> no cuenta con datos de precipitaciones para las fechas observadas, lo que podría ayudar a explicar las mermas en el uso del sistema de Ecobici de ciertas fechas [para más información sobre esto, puede consultarse la <a href="./03_test_hipotesis.html">Sección 3</a>]. Sin embargo, es notable ver que existe cierta tendencia entre la intensidad del uso y la temperatura. Y tal tendencia no obedece únicamente a una cuestión de temporadas climáticas (estaciones del año, por ejemplo). Esto puede observarse en los siguientes gráficos, en donde se muestra que la evolución de la temperatura en función de la fecha del año no exhibe el mismo comportamiento que el uso del sistema Ecobici.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(datos), <span class="fu">aes</span>(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> fecha,</span>
@@ -433,7 +432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(datos), <span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> tmax, <span class="at">key=</span>fecha)) <span class="sc">+</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Fecha"</span>, <span class="at">y =</span> <span class="st">"Temperatura máxima"</span>) <span class="sc">+</span></span>
@@ -455,7 +454,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El ajuste lineal sobre el <em>dataset</em> completo muestra lo que anticipaban los gráficos anteriores. Aun cuando se ajusta por tipo de día, no se capta por completo la relación que se observa entre las variables a partir de los datos.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(datos), <span class="fu">aes</span>(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> tmax,</span>
@@ -484,7 +483,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.2.1.1" class="anchored" data-anchor-id="día-de-semana"><span class="header-section-number">1.2.1.1</span> <strong>Día de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> tmax,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span>,]),</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -547,7 +546,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.2.1.2" class="anchored" data-anchor-id="fin-de-semana"><span class="header-section-number">1.2.1.2</span> <strong>Fin de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> tmax,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Fin de semana"</span>, ]),</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -622,7 +621,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El ajuste cuadrático mejora el ajuste anterior y parece modelar mejor la estructura observada.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(datos), <span class="fu">aes</span>(</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> tmax,</span>
@@ -652,7 +651,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.3.1.1" class="anchored" data-anchor-id="día-de-semana-1"><span class="header-section-number">1.3.1.1</span> <strong>Día de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> <span class="fu">poly</span>(tmax, <span class="dv">2</span>),</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span>, ]),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -733,7 +732,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.3.1.2" class="anchored" data-anchor-id="fin-de-semana-1"><span class="header-section-number">1.3.1.2</span> <strong>Fin de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> <span class="fu">poly</span>(tmax, <span class="dv">2</span>),</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Fin de semana"</span>, ]),</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -799,7 +798,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El ajuste podría ser lineal para explicar el uso del sistema Ecobici para días templados, por ejemplo, con temperaturas máximas inferiores a los 25°C.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(datos, tmax <span class="sc">&lt;</span> <span class="dv">25</span>),</span>
@@ -831,7 +830,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.4.1.1" class="anchored" data-anchor-id="día-de-semana-2"><span class="header-section-number">1.4.1.1</span> <strong>Día de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> tmax,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[(datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span> <span class="sc">&amp;</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                            datos<span class="sc">$</span>tmax <span class="sc">&lt;</span> <span class="dv">25</span>), ]),</span>
@@ -904,7 +903,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="1.4.1.2" class="anchored" data-anchor-id="fin-de-semana-2"><span class="header-section-number">1.4.1.2</span> <strong>Fin de semana</strong></h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">lm</span>(n <span class="sc">~</span> tmax,</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> datos[(datos<span class="sc">$</span>tipo_dia <span class="sc">==</span> <span class="st">"Fin de semana"</span> <span class="sc">&amp;</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                            datos<span class="sc">$</span>tmax <span class="sc">&lt;</span> <span class="dv">25</span>), ]),</span>
@@ -976,7 +975,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Los datos de este ejemplo corresponden a datos de temperatura de los últimos 365 días tomados del Servicio Meterológico Nacional <a href="https://ssl.smn.gob.ar/dpd/zipopendata.php?dato=regtemp">(disponibles acá)</a>. En particular, se considerarán los datos procesados de temperatura mínimas y máximas registradas en Aeroparque desde el 4 de junio de 2022 al 3 de julio de 2023.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>temperatura <span class="ot">&lt;-</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_table</span>(<span class="st">"./fuente/01_regresion/registro_temperatura365d_smn.txt"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">2</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
@@ -997,7 +996,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Ecobici es el sistema de transporte público de bicicletas de la Ciudad de Buenos Aires, que tiene estaciones automáticas con bicicletas a disposición las 24 horas, todos los días del año. El sistema es gratuito para todas las personas residentes del país de lunes a viernes (días hábiles) con hasta cuatro viajes de 30 minutos cada uno. Sin embargo, si se utiliza por un tiempo mayor que el indicado o durante los fines de semana, existen diferentes pases con variados costos. A modo de referencia, el pase que habilita a hacer 6 viajes diarios de hasta 60 minutos cada uno cualquier día de la semana tiene un costo de $1.785 (junio 2023).</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>trips_2022 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"./fuente/01_regresion/trips_2022.csv"</span>,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">fecha_origen_recorrido =</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>))</span>
@@ -1040,7 +1039,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> trips <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fecha <span class="sc">&gt;=</span> <span class="fu">min</span>(temperatura<span class="sc">$</span>fecha) <span class="sc">&amp;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           fecha <span class="sc">&lt;=</span> <span class="fu">max</span>(temperatura<span class="sc">$</span>fecha))</span>
@@ -1058,7 +1057,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El <em>dataset</em> <code>tempbici</code> está disponible en la librería <code>datosIC</code>.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>tempbici</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1177,7 +1176,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">

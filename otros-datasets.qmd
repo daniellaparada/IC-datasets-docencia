@@ -6,9 +6,9 @@ A continuación se referencian otros **dataset** incluidos en la librería `dato
 |--------------------------------|-------------------------|
 | [`bateria`](#sec-bateria)      | Regresión               |
 | [`jugadores`](#sec-jugadores)  | Estadística descriptiva |
-| [`nombrarg`](#sec-nombres-arg) | Estadística descriptiva |
-| [`viviendas`](#sec-viviendas)  | Estadística descriptiva |
-| [`xGFIFA22`](#sec-xGFIFA22)    | Estadística descriptiva |
+| [`nombresARG`](#sec-nombresARG) | Estadística descriptiva |
+| [`viviendas`](#sec-viviendas)  | Datos espaciales, regresión |
+| [`xGFIFA22`](#sec-xGFIFA22)    | Detección de atípicos |
 
 ## Descripción, variables y fuente
 
@@ -107,7 +107,7 @@ ggplotly(ggplot(jugadores %>%
 
 ------------------------------------------------------------------------
 
-### `nombrarg`{#sec-nombres-arg}
+### `nombresARG`{#sec-nombresARG}
 
 -   **Descripción**: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año. Se preprocesó la base de [datos.gob.ar](https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1) excluyendo, entre otros, casos de múltiples nombres (especialmente, muy antiguos).
 
@@ -119,14 +119,14 @@ ggplotly(ggplot(jugadores %>%
 
 -   **Fuente**: [datos.gob.ar](https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1)
 
-Disponible en la librería `datosIC` bajo el nombre de `nombrarg`.
+Disponible en la librería `datosIC` bajo el nombre de `nombresARG`.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(nombrarg[1:10, ], caption = "Primeros 10 datos de 'nombrarg'.")
+knitr::kable(nombresARG[1:10, ], caption = "Primeros 10 datos de 'nombrarg'.")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-nomgrup <- nombrarg %>%
+nomgrup <- nombresARG %>%
   group_by(nombre) %>%
   summarise(total = sum(cantidad)) %>%
   arrange(-total)
@@ -150,8 +150,8 @@ c_trim <- c(
 
 set.seed(1234)
 hw <- wordcloud2(nomgrup[1:100,], color = c_trim, backgroundColor = "white", size=0.8)
-saveWidget(hw,"1.html",selfcontained = F)
-webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
+#saveWidget(hw,"1.html",selfcontained = F)
+#webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
 ```
 
 ------------------------------------------------------------------------

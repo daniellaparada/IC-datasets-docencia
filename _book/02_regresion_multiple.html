@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.353">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,8 +91,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "resultados adicionales en este documento",
     "search-clear-button-title": "Borrar",
     "search-detached-cancel-button-title": "Cancelar",
-    "search-submit-button-title": "Enviar",
-    "search-label": "Buscar"
+    "search-submit-button-title": "Enviar"
   }
 }</script>
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
@@ -121,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_regresion_multiple.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión múltiple</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -244,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A continuación, se muestran algunos posibles ajustes de regresión que vinculan la cantidad de usuarios del sistema Ecobici por día en función de ciertas variables climáticas.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Librerías necesarias</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
@@ -261,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En el <em>dataset</em> <code>climabici</code> de la librería <code>datosIC</code> se incluyen datos de viajes con duración entre 5 y 60 minutos, cualquier día de la semana, durante el año 2022. A continuación, se muestran 10 datos de dicho conjunto.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daniellaparada/datosIC"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> climabici</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -448,7 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Para lo que sigue, removemos esa observación.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos[<span class="sc">-</span><span class="dv">58</span>, ]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> datos, <span class="fu">aes</span>(</span>
@@ -476,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En efecto, los puntos más grandes de cada “nube” de color se encuentran ubicados por debajo de la tendencia general del resto de los puntos de su clase. Es decir, los días con mayor nivel de precipitación, la cantidad de usos del sistema de Ecobici se reduce notablemente, tanto para días hábiles como fines de semana. En particular, las tendencias por tipo de día se observan más “limpias” cuando se filtra por días en los que no se registran precipitaciones, como se observa a continuación.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(datos, lluvia <span class="sc">==</span> <span class="st">"No llueve"</span>),</span>
@@ -507,7 +506,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Se incorpora la variable de precipitaciones (<code>prcp</code>) además de la temperatura (<code>tavg</code>) a un modelo de regresión para predecir la cantidad de bicicletas utilizadas por día (<code>n</code>). En esta primera exploración, no se distingue por tipo de día (<code>tipo_dia</code>).</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fitlm <span class="ot">=</span> <span class="fu">lm</span>(n <span class="sc">~</span> tavg <span class="sc">+</span> prcp, <span class="at">data =</span> datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -539,7 +538,7 @@ F-statistic: 6.001 on 2 and 359 DF,  p-value: 0.002733</code></pre>
 <p>Para lo que sigue, trabajamos con una reducción inicial de los datos a los días “lluviososo y templados”, es decir, a las observaciones que registran precipitación no nula y temperatura media inferior a 25°, e incorporamos la variable de precipitaciones en un modelo de regresión múltiple.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>datosfilt <span class="ot">&lt;-</span> <span class="fu">filter</span>(datos,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                    lluvia <span class="sc">==</span> <span class="st">"Llueve"</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    tavg <span class="sc">&lt;</span> <span class="dv">25</span>)</span>
@@ -570,7 +569,7 @@ F-statistic: 6.001 on 2 and 359 DF,  p-value: 0.002733</code></pre>
 <h4 data-number="2.1.1.1" class="anchored" data-anchor-id="días-de-semana-lluviosos-y-templados"><span class="header-section-number">2.1.1.1</span> Días de semana lluviosos y templados</h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>datosfilt <span class="ot">&lt;-</span> <span class="fu">filter</span>(datos,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                    lluvia <span class="sc">==</span> <span class="st">"Llueve"</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                    tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span>,</span>
@@ -605,7 +604,7 @@ F-statistic:  3.89 on 2 and 54 DF,  p-value: 0.0264</code></pre>
 <h4 data-number="2.1.1.2" class="anchored" data-anchor-id="fines-de-semana-lluviosos-y-templados"><span class="header-section-number">2.1.1.2</span> Fines de semana lluviosos y templados</h4>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>datosfilt <span class="ot">&lt;-</span> <span class="fu">filter</span>(datos,</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                    lluvia <span class="sc">==</span> <span class="st">"Llueve"</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    tipo_dia <span class="sc">==</span> <span class="st">"Fin de semana"</span>,</span>
@@ -667,7 +666,7 @@ F-statistic: 3.757 on 2 and 21 DF,  p-value: 0.04028</code></pre>
 <p>Ajustamos diferentes modelos de acuerdo con la exploración inicial y vemos las predicciones y sus intervalos de confianza de nivel <span class="math inline">\(95\%\)</span>.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>datosfilt <span class="ot">&lt;-</span> <span class="fu">filter</span>(datos,</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                    lluvia <span class="sc">==</span> <span class="st">"Llueve"</span>,</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                    tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span>,</span>
@@ -773,7 +772,7 @@ F-statistic: 3.757 on 2 and 21 DF,  p-value: 0.04028</code></pre>
 <p>Buscamos un modelo más versátil y con buena capacidad predictiva. Para lo que sigue, transformamos la variable <code>tipo_dia</code> en una categórica (<code>finde</code>) representando por 1 a los días de fin de semana, y por 0, a los días de semana. Trabajamos con el <em>dataset</em> completo.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>datos_tr <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">finde =</span> <span class="fu">ifelse</span>(tipo_dia <span class="sc">==</span> <span class="st">"Lunes a viernes"</span>, <span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">10</span>))</span>
@@ -872,7 +871,7 @@ F-statistic: 3.757 on 2 and 21 DF,  p-value: 0.04028</code></pre>
 <p>Evaluamos un modelo que incorpora los datos de temperatura, precipitaciones y tipo de día a través de la variable categórica creada.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fitlm <span class="ot">=</span> <span class="fu">lm</span>(n <span class="sc">~</span> <span class="fu">poly</span>(tavg, <span class="dv">2</span>) <span class="sc">+</span> prcp <span class="sc">+</span> finde, <span class="at">data =</span> datos_tr)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fitlm)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -900,7 +899,7 @@ Multiple R-squared:  0.734, Adjusted R-squared:  0.731
 F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>coef <span class="ot">&lt;-</span> <span class="fu">round</span>(fitlm<span class="sc">$</span>coefficients, <span class="dv">0</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -915,7 +914,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 <p>Volvemos a predecir la cantidad de usos del sistema Ecobici para un día de semana, con temperatura media de 24° y con un nivel de precipitaciones de 5 mm y comparamos con los predichos anteriores.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>nd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tavg =</span> <span class="dv">24</span>, <span class="at">prcp =</span> <span class="dv">5</span>, <span class="at">finde =</span> <span class="dv">0</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>predicho_nuevo <span class="ot">&lt;-</span> <span class="fu">predict</span>(fitlm, nd, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
@@ -999,7 +998,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 <p>Como es de esperar, la predicción dada por el modelo completo parece ser más precisa que las de los restantes. Más aún, como el modelo estima a partir del conjunto de datos completo, su desempeño se mantiene, incluso para la predicción de la cantidad de usos del sistema Ecobici más generales, como por ejemplo, para un fin de semana, con temperatura media de 25°, sin lluvias, y en relación con los predichos anteriores.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nd2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tavg =</span> <span class="dv">20</span>, <span class="at">prcp =</span> <span class="dv">0</span>, <span class="at">finde =</span> <span class="dv">1</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(nd2, <span class="at">caption =</span> <span class="st">"Otra nueva observación a predecir."</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1028,7 +1027,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>predicho_nuevo <span class="ot">&lt;-</span> <span class="fu">predict</span>(fitlm, nd2, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>predicho_nuevo <span class="ot">&lt;-</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(predicho_nuevo, predicho_nuevo[, <span class="dv">3</span>] <span class="sc">-</span> predicho_nuevo[, <span class="dv">2</span>])</span>
@@ -1144,7 +1143,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 <p>Los datos de este ejemplo corresponden a datos de clima del año 2022 tomados de la base de datos meteorológicos y climáticos de MeteoStat <a href="https://meteostat.net/es/station/87582?t=2022-01-01/2022-12-31">(disponibles acá)</a>. En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582), desde el 1ro de enero de 2022 hasta el 31 de diciembre de 2022, y un conjunto reducido de variables.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>clima <span class="ot">&lt;-</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"./fuente/02_regresion_multiple/registro_tiempo_aeroparque.csv"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1157,7 +1156,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 <p>Ecobici es el sistema de transporte público de bicicletas de la Ciudad de Buenos Aires, que tiene estaciones automáticas con bicicletas a disposición las 24 horas, todos los días del año. El sistema es gratuito para todas las personas residentes del país de lunes a viernes (días hábiles) con hasta cuatro viajes de 30 minutos cada uno. Sin embargo, si se utiliza por un tiempo mayor que el indicado o durante los fines de semana, existen diferentes pases con variados costos. A modo de referencia, el pase que habilita a hacer 6 viajes diarios de hasta 60 minutos cada uno cualquier día de la semana tiene un costo de $1.785 (junio 2023).</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"./fuente/02_regresion_multiple/trips_2022.csv"</span>,</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">fecha_origen_recorrido =</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>))</span>
@@ -1188,7 +1187,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 </ul>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> trips <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fecha <span class="sc">&gt;=</span> <span class="fu">min</span>(clima<span class="sc">$</span>date) <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="fu">max</span>(clima<span class="sc">$</span>date))</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1204,7 +1203,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 <p>El <em>dataset</em> <code>climabici</code> está disponible en la librería <code>datosIC</code>.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>climabici</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1345,7 +1344,7 @@ F-statistic: 246.2 on 4 and 357 DF,  p-value: &lt; 0.00000000000000022</code></p
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">

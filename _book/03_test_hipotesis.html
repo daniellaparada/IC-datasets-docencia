@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.353">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,8 +91,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "resultados adicionales en este documento",
     "search-clear-button-title": "Borrar",
     "search-detached-cancel-button-title": "Cancelar",
-    "search-submit-button-title": "Enviar",
-    "search-label": "Buscar"
+    "search-submit-button-title": "Enviar"
   }
 }</script>
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
@@ -130,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_test_hipotesis.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Test de hipótesis</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -247,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A continuación, se muestran algunos posibles análisis para datos de flujo vehicular en CABA incorporando, en algunos casos, variables climáticas.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Librerías necesarias</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
@@ -268,7 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En el siguiente mapa se muestra el total de flujo vehicular para cada uno de los radares durante 2019.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># importo datos de flujo vehicular 2019</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>flujo19 <span class="ot">&lt;-</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom</span>(<span class="st">"./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2019.csv"</span>) <span class="sc">%&gt;%</span></span>
@@ -304,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Como puede observarse en el mapa, el radar ubicado en la Autopista Lugones altura ESMA (RD 171), es el que mayor flujo registra para el año considerado. Los datos de 2023, que al momento de producir este documento solo se encuentran disponibles para el primer trimestre del año, exhiben una tendencia similar (a efectos creativos, se representan sobre un mapa en formato acuarelas: <a href="http://maps.stamen.com/">conocer más acá</a>).</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># importo datos de flujo vehicular 2023</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flujo23 <span class="ot">&lt;-</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom</span>(<span class="st">"./fuente/03_test_hipotesis/flujo-vehicular-por-radares-2023.csv"</span>)</span>
@@ -352,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El dataset <code>flujo-vehicular.csv</code> se encuentra <a href="https://www.dropbox.com/scl/fi/4lzzhbi3avqq945wno0e2/flujo-clima.csv?rlkey=nl9m3bxm9jhfrbpjs08pcg4af&amp;dl=0">acá</a>. A continuación, se muestran 10 datos de dicho conjunto.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./fuente/03_test_hipotesis/flujo-vehicular.csv"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -493,7 +492,7 @@ d estimate: 0.4958838 (small)
 <p>Para lo que sigue, trabajamos con el <em>dataset</em> reducido <code>flujoclima</code> de la librería <code>datosIC</code> en el que se incluyen datos del flujo vehicular del primer trimestre de 2023 para el radar RD 171 ubicado en la Autopista Lugones, altura ESMA, sentido A, junto con datos de temperatura promedio y precipitaciones. A continuación, se muestran 10 datos de dicho conjunto.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daniellaparada/datosIC"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> flujoclima</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -502,7 +501,7 @@ d estimate: 0.4958838 (small)
 <p>Un gráfico del flujo vehicular por tipo de día y según nivel de precipitaciones, parece mostrar lo esperado: el el flujo vehicular en ese punto de la ciudad es mayor los días de semana que los fines de semana. Sin embargo, no parece haber una tendencia notable que impacte en el flujo vehicular a partir de las precipitaciones. Dicha tendencia podría ser creciente, asumiendo que los días en que se registran mayores niveles de precipitaciones más personas utilizan el auto; o bien decreciente, sugiriendo que hay menor tránsito vehicular porque las personas prefieren suspender aquellas actividades fuera de sus hogares que no sean esenciales.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flujoclima <span class="ot">&lt;-</span> datos</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
@@ -554,7 +553,7 @@ d estimate: 0.4958838 (small)
 <p>Del total de días hábiles, entonces, tenemos <span class="math inline">\(19\)</span> observaciones que resultan de días de semana con lluvia, y <span class="math inline">\(43\)</span> observaciones para días de semana sin lluvia.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Días de semana con lluvia: 19 datos</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>datos1 <span class="ot">&lt;-</span> flujoclima <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(prcp <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
@@ -579,7 +578,7 @@ d estimate: 0.4958838 (small)
 <p>Realizamos un test t para diferencia de medias.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test para diferencia de medias</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> datos1<span class="sc">$</span>n,</span>
@@ -604,7 +603,7 @@ mean of x mean of y
  127948.4  127016.6 </code></pre>
 </div>
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(<span class="at">d =</span> datos1<span class="sc">$</span>n, <span class="at">f =</span> datos2<span class="sc">$</span>n, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -621,7 +620,7 @@ d estimate: 0.1173876 (negligible)
 <p>Podemos hacer otro test para ver si hay diferencia significativa para suponer que el flujo medio de los miércoles difiere del de los lunes. Las observaciones son menos, ya que en el primer trimestre solo se registran <span class="math inline">\(13\)</span> miércoles y <span class="math inline">\(12\)</span> viernes, considerando que se removió el 24 de marzo.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Días de semana con lluvia: 13 datos</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>datos1 <span class="ot">&lt;-</span> flujoclima <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dia <span class="sc">==</span> <span class="st">"miércoles"</span>)</span>
@@ -643,7 +642,7 @@ d estimate: 0.1173876 (negligible)
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> datos1<span class="sc">$</span>n,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> datos2<span class="sc">$</span>n,</span>
@@ -667,7 +666,7 @@ mean of x mean of y
  127669.5  129769.9 </code></pre>
 </div>
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(<span class="at">d =</span> datos1<span class="sc">$</span>n, <span class="at">f =</span> datos2<span class="sc">$</span>n, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -683,7 +682,7 @@ d estimate: -0.2410676 (small)
 <p>Nuevamente, y con un <span class="math inline">\(p-\)</span>valor de <span class="math inline">\(0.5629\)</span>, concluimos que no hay evidencia en la muestra para rechazar la hipótesis de igualdad de flujos medios entre esos días, algo que al “ojo desnudo” podría parecer significativo. Ocurre, sin embargo, que la variabilidad exhibida en los flujos de los días viernes, parece ser mayor, como se observa en ambos gráficos previos. Una comparación que sí esperaría conducir a un rechazo de la igualdad de flujos medios podría ser la de miércoles y sábados.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Días de semana con lluvia: 13 datos</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>datos1 <span class="ot">&lt;-</span> flujoclima <span class="sc">%&gt;%</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dia <span class="sc">==</span> <span class="st">"miércoles"</span>)</span>
@@ -705,7 +704,7 @@ d estimate: -0.2410676 (small)
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> datos1<span class="sc">$</span>n,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> datos2<span class="sc">$</span>n,</span>
@@ -729,7 +728,7 @@ mean of x mean of y
  127669.5  105101.8 </code></pre>
 </div>
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(<span class="at">d =</span> datos1<span class="sc">$</span>n, <span class="at">f =</span> datos2<span class="sc">$</span>n, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -754,7 +753,7 @@ d estimate: 2.82569 (large)
 <p>Los datos de este ejemplo corresponden a datos de clima del año 2023 tomados de la base de datos meteorológicos y climáticos de MeteoStat <a href="https://meteostat.net/es/station/87582?t=2023-01-01/2023-03-31">(disponibles acá)</a>. En particular, se consideran los datos de la estación meteorológica de Aeroparque (ID 87582) y un conjunto reducido de variables para el período considerado.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>clima <span class="ot">&lt;-</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"./fuente/03_test_hipotesis/registro_tiempo_aeroparque_2023.csv"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -787,7 +786,7 @@ d estimate: 2.82569 (large)
 <p>El <em>dataset</em> <code>flujoclima</code> está disponible en la librería <code>datosIC</code>.</p>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>flujoclima</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -893,7 +892,7 @@ d estimate: 2.82569 (large)
 </div>
 <div class="cell">
 <details>
-<summary>Código</summary>
+<summary>Ver código</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">

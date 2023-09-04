@@ -2,13 +2,16 @@
 
 # Introducción {#introduccion .unnumbered}
 
-En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un **repositorio curado** de *datasets* para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universiatrios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.
+En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un **repositorio curado** de *datasets* para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universitarios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.
 
 Los *datasets* fueron revisados para asegurar que sean apropiados para su uso en cursos que dicta el IC, y en los capítulos que siguen se proporcionan descripciones detalladas para cada uno, así como breves sugerencias de **uso reproducible**. En ese sentido, los ejemplos allí desarrollados son simples vehículos para poner a disposición los datos e ilustrar algunas de sus características.
 
 -   En las secciones numeradas, cada *dataset* está preparado para su uso en `R` y se acompaña con una documentación clara y concisa que incluye un diccionario de variables, la fuente de los datos y un código de muestra para su preparación.
 
 -   En el Anexo, se incluyen *datasets* documentados sin ejemplos desarrollados, pero con una grilla que sugiere posibles temas afines.
+
+
+## Librería `datosIC`.
 
 Los *datasets* también se encuentran disponibles en la librería `datosIC`.
 
@@ -17,3 +20,70 @@ require(devtools)
 devtools::install_github("daniellaparada/datosIC")
 library(datosIC)
 ```
+
+### `bateria`{#sec-bateria}
+
+-   **Descripción**: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.
+
+-   **Variables**:
+
+    -   `desde`: fecha de inicio del período, en el formato año-mes-día.
+    -   `hasta`: fecha de finalización del período, en el formato año-mes-día.
+    -   `carga`: carga máxima alcanzada (mWh) durante el período.
+
+### `jugadores`{#sec-jugadores}
+
+-   **Descripción**: Datos de jugadores de fútbol y directores técnicos de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.
+
+-   **Variables**:
+
+    -   `Equipo`: equipo en el que juega (o dirige) a la fecha.
+    -   `Puesto`: posición en la que juega a la fecha. En el caso de director técnico, se indica acá.
+    -   `Jugador`: nombre del jugador (o director técnico).
+    -   `Edad`: edad del jugador (o director técnico) al 2023.
+    -   `Nacimiento`: fecha de nacimiento del jugador (o director técnico), en el formato día-mes-año.
+    -   `Altura`: altura (cm) del jugador (o director técnico).
+    -   `Ciudad`: ciudad de nacimiento del jugador (o director técnico).
+    -   `Pais`: país de nacimiento del jugador (o director técnico).
+    -   `Mes`: mes de nacimiento del jugador (o director técnico).
+    -   `Anio`: año de nacimiento del jugador (o director técnico).
+    
+### `nombrarg`{#sec-nombres-arg}
+
+-   **Descripción**: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año. Se preprocesó la base de [datos.gob.ar](https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1) excluyendo, entre otros, casos de múltiples nombres (especialmente, muy antiguos).
+
+-   **Variables**:
+
+    -   `nombre`: nombre registrado, en mayúsculas y sin tilde.
+    -   `cantidad`: cantidad de nombres registrados en el año.
+    -   `anio`: año de registro.
+    
+### `viviendas`{#sec-viviendas}
+
+-   **Descripción**: Datos de viviendas en venta en Argentina, publicadas en el sitio inmobiliario online *Properati* durante los años 2013 a 2018. Los datos corresponden a viviendas publicadas a menos de 10 millones de dólares y con superficie total cubierta menor a 1000 metros cuadrados.
+
+-   **Variables**:
+
+    -   `tipo`: tipo de vivienda en venta.
+    -   `ciudad`: ciudad, municipio (GBA) o barrio (CABA) de la vivienda.
+    -   `provincia`: provincia (con distinción entre zonas de GBA y CABA).
+    -   `lat`: latitud de la ubicación de la vivienda.
+    -   `lon`: longitud de la ubicación de la vivienda.
+    -   `precioUSD`: precio publicado (USD) de la vivienda en venta.
+    -   `sup_tot`: superficie total (m2) de la vivienda.
+    -   `sup_cub`: superficie cubierta (m2) de la vivienda.
+    -   `precio_sup_tot`: precio (USD) del m2 según superficie total de la vivienda.
+    -   `precio_sup_cub`: precio (USD) del m2 según superficie cubierta de la vivienda.
+    -   `ambientes`: cantidad de ambientes de la vivienda reportados en la publicación.
+    
+
+### `xGFIFA22`{#sec-xGFIFA22}
+
+-   **Descripción**: Datos resumen de goles esperados (xG) y de goles esperados asistidos (xGA) para los jugadores del mundial FIFA 2022. En la actualidad, xG es el mejor predictor del rendimiento futuro tanto para jugadores como para equipos. xG es una métrica que mide la probabilidad de que un tiro dado termine en gol. Según [StatsBomb](https://statsbomb.com/es/metricas-de-futbol/que-es-el-xg/), un modelo de xG utiliza información histórica de miles de tiros con características similares para estimar la probabilidad de gol en una escala de 0 a 1. Por ejemplo, un tiro con un valor de xG de 0,2 es uno que razonablemente se puede esperar que termine en gol dos de cada 10 veces. En el dataset, la columna de xG se construyó a partir de los datos de `statsBombR` filtrando todos los *shots* (tiros al arco) que no fueran penales, y sumando sus xG para cada uno de los jugadores. La métrica xGA se construye con una información adicional: la de los pases. De cada tiro al arco, se registra si proviene de un pase de asistencia. Luego, la variable xGA de este *dataset* se construyó a partir de filtrar todos los *shots* asistidos de los datos del mundial 2022 de `statsBombR` y sumar sus xG para cada uno de los jugadores.
+
+-   **Variables**:
+
+    -   `jugador`: nombre del jugador.
+    -   `xG`: goles esperados (sin penales).
+    -   `xGA`: goles esperados asistidos
+

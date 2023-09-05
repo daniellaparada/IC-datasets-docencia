@@ -13,8 +13,17 @@ book:
     - 02_regresion_multiple.qmd
     - 03_test_hipotesis.qmd
     - 04_visualizacion.qmd
-    - otros-datasets.qmd
     - references.qmd
+  appendices:
+    - otros-datasets.qmd
+  page-navigation: true
+  favicon: cover.png
+  repo-url: https://daniellaparada.github.io/IC-datasets-docencia/
+  downloads: [pdf, epub]
+
+crossref:
+  appendix-title: "Apéndice"
+  appendix-delim: ":"
 
 bibliography: references.bib
 

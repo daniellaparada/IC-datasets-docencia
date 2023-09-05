@@ -29,7 +29,7 @@ options(scipen=999)
 
 ------------------------------------------------------------------------
 
-### `bateria`{#bateria}
+### `bateria`
 
 -   **Descripción**: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.
 
@@ -63,7 +63,7 @@ ggplotly(
 
 ------------------------------------------------------------------------
 
-### `jugadores`{#jugadores}
+### `jugadores`
 
 -   **Descripción**: Datos de jugadores de fútbol y directores técnicos de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.
 
@@ -107,7 +107,7 @@ ggplotly(ggplot(jugadores %>%
 
 ------------------------------------------------------------------------
 
-### `nombresARG`{#nombresARG}
+### `nombresARG`
 
 -   **Descripción**: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año, para nombres de más de 100 ocurrencias anuales. Se preprocesó la base de [datos.gob.ar](https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1) excluyendo, entre otros, casos de múltiples nombres (especialmente, muy antiguos). La librería [guaguas](https://github.com/rivaquiroga/guaguas) contiene un dataset similar, pero para el caso chileno.
 
@@ -156,7 +156,7 @@ webshot::webshot("1.html","1.png",vwidth = 1000, vheight = 1000, delay =10)
 
 ------------------------------------------------------------------------
 
-### `viviendas`{#viviendas}
+### `viviendas`
 
 -   **Descripción**: Datos de viviendas en venta en Argentina, publicadas en el sitio inmobiliario online *Properati* durante los años 2013 a 2018. Los datos corresponden a viviendas publicadas a menos de 10 millones de dólares y con superficie total cubierta menor a 1000 metros cuadrados.
 
@@ -200,7 +200,7 @@ ggplotly(
 
 ------------------------------------------------------------------------
 
-### `xGFIFA22`{#xGFIFA22}
+### `xGFIFA22`
 
 -   **Descripción**: Datos resumen de goles esperados (xG) y de goles esperados asistidos (xGA) para los jugadores del mundial FIFA 2022. En la actualidad, xG es el mejor predictor del rendimiento futuro tanto para jugadores como para equipos. xG es una métrica que mide la probabilidad de que un tiro dado termine en gol. Según [StatsBomb](https://statsbomb.com/es/metricas-de-futbol/que-es-el-xg/), un modelo de xG utiliza información histórica de miles de tiros con características similares para estimar la probabilidad de gol en una escala de 0 a 1. Por ejemplo, un tiro con un valor de xG de 0,2 es uno que razonablemente se puede esperar que termine en gol dos de cada 10 veces. En el dataset, la columna de xG se construyó a partir de los datos de `statsBombR` filtrando todos los *shots* (tiros al arco) que no fueran penales, y sumando sus xG para cada uno de los jugadores. La métrica xGA se construye con una información adicional: la de los pases. De cada tiro al arco, se registra si proviene de un pase de asistencia. Luego, la variable xGA de este *dataset* se construyó a partir de filtrar todos los *shots* asistidos de los datos del mundial 2022 de `statsBombR` y sumar sus xG para cada uno de los jugadores.
 

@@ -185,7 +185,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#introduccion" id="toc-introduccion" class="nav-link active" data-scroll-target="#introduccion">Introducción</a></li>
+  <li><a href="#introduccion" id="toc-introduccion" class="nav-link active" data-scroll-target="#introduccion">Introducción</a>
+  <ul class="collapse">
+  <li><a href="#librería-datosic" id="toc-librería-datosic" class="nav-link" data-scroll-target="#librería-datosic">Librería <code>datosIC</code></a>
+  <ul class="collapse">
+  <li><a href="#tempbici" id="toc-tempbici" class="nav-link" data-scroll-target="#tempbici"><code>tempbici</code></a></li>
+  <li><a href="#climabici" id="toc-climabici" class="nav-link" data-scroll-target="#climabici"><code>climabici</code></a></li>
+  <li><a href="#flujoclima" id="toc-flujoclima" class="nav-link" data-scroll-target="#flujoclima"><code>flujoclima</code></a></li>
+  <li><a href="#sismos" id="toc-sismos" class="nav-link" data-scroll-target="#sismos"><code>sismos</code></a></li>
+  <li><a href="#bateria" id="toc-bateria" class="nav-link" data-scroll-target="#bateria"><code>bateria</code></a></li>
+  <li><a href="#jugadores" id="toc-jugadores" class="nav-link" data-scroll-target="#jugadores"><code>jugadores</code></a></li>
+  <li><a href="#nombresarg" id="toc-nombresarg" class="nav-link" data-scroll-target="#nombresarg"><code>nombresARG</code></a></li>
+  <li><a href="#viviendas" id="toc-viviendas" class="nav-link" data-scroll-target="#viviendas"><code>viviendas</code></a></li>
+  <li><a href="#xgfifa22" id="toc-xgfifa22" class="nav-link" data-scroll-target="#xgfifa22"><code>xGFIFA22</code></a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -211,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">30 de agosto de 2023</p>
+      <p class="date">5 de septiembre de 2023</p>
     </div>
   </div>
   
@@ -224,12 +238,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="cover.png" class="img-fluid" width="126"></p>
 <section id="introduccion" class="level1 unnumbered">
 <h1 class="unnumbered">Introducción</h1>
-<p>En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un <strong>repositorio curado</strong> de <em>datasets</em> para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universiatrios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.</p>
+<p>En el marco de la convocatoria a Proyectos de Asistencia Estadística del Instituto de Cálculo (IC), se propuso la creación de un <strong>repositorio curado</strong> de <em>datasets</em> para ser utilizados en la enseñanza de la Estadística y la Ciencia de Datos. El objetivo es proporcionar a la comunidad de docentes del IC, y de otros centros universitarios, una fuente centralizada de datos abiertos que cubra una amplia variedad de temas y áreas de aplicación.</p>
 <p>Los <em>datasets</em> fueron revisados para asegurar que sean apropiados para su uso en cursos que dicta el IC, y en los capítulos que siguen se proporcionan descripciones detalladas para cada uno, así como breves sugerencias de <strong>uso reproducible</strong>. En ese sentido, los ejemplos allí desarrollados son simples vehículos para poner a disposición los datos e ilustrar algunas de sus características.</p>
 <ul>
 <li><p>En las secciones numeradas, cada <em>dataset</em> está preparado para su uso en <code>R</code> y se acompaña con una documentación clara y concisa que incluye un diccionario de variables, la fuente de los datos y un código de muestra para su preparación.</p></li>
 <li><p>En el Anexo, se incluyen <em>datasets</em> documentados sin ejemplos desarrollados, pero con una grilla que sugiere posibles temas afines.</p></li>
 </ul>
+<hr>
+<section id="librería-datosic" class="level2">
+<h2 class="anchored" data-anchor-id="librería-datosic">Librería <code>datosIC</code></h2>
 <p>Los <em>datasets</em> también se encuentran disponibles en la librería <code>datosIC</code>.</p>
 <div class="cell">
 <details>
@@ -239,8 +256,150 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datosIC)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<section id="tempbici" class="level3">
+<h3 class="anchored" data-anchor-id="tempbici"><code>tempbici</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de temperatura y de uso del sistema EcoBici en la Ciudad de Buenos Aires, Argentina, desde el 4 de junio de 2022, hasta el 1ro de mayo de 2023.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>fecha</code>: fecha, en el formato año-mes-día.</li>
+<li><code>n</code>: cantidad de registros de uso del sistema EcoBici en la fecha indicada.</li>
+<li><code>tmin</code>: temperatura mínima registrada en esa fecha.</li>
+<li><code>tmax</code>: temperatura máxima registrada en esa fecha.</li>
+<li><code>tmed</code>: temperatura media, construida como el promedio entre la temperatura mínima y máxima de esa fecha.</li>
+<li><code>dia</code>: día de la semana de la fecha indicada.</li>
+<li><code>tipo_dia</code>: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.</li>
+</ul></li>
+</ul>
+</section>
+<section id="climabici" class="level3">
+<h3 class="anchored" data-anchor-id="climabici"><code>climabici</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de clima y de uso del sistema EcoBici en la Ciudad de Buenos Aires, Argentina, desde el 1 de enero de 2022, hasta el 31 de diciembre de 2022.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>fecha</code>: fecha, en el formato año-mes-día.</li>
+<li><code>n</code>: cantidad de registros de uso del sistema EcoBici en la fecha indicada.</li>
+<li><code>tmed</code>: temperatura media (°C) registrada en esa fecha.</li>
+<li><code>tmin</code>: temperatura mínima (°C) registrada en esa fecha.</li>
+<li><code>tmax</code>: temperatura máxima (°C) registrada en esa fecha.</li>
+<li><code>prcp</code>: precipitaciones (mm) registrada en esa fecha.</li>
+<li><code>dia</code>: día de la semana de la fecha indicada.</li>
+<li><code>tipo_dia</code>: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.</li>
+<li><code>lluvia</code>: condición de lluvia (Llueve: <code>prcp</code>&gt;0, No llueve: <code>prcp</code>=0) de la fecha indicada.</li>
+</ul></li>
+</ul>
+</section>
+<section id="flujoclima" class="level3">
+<h3 class="anchored" data-anchor-id="flujoclima"><code>flujoclima</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de clima y de uso vehicular en autopista Lugones, altura ESMA sentido A, en la Ciudad de Buenos Aires, Argentina, desde el 1 de enero de 2023, hasta el 31 de marzo de 2023.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>fecha</code>: fecha, en el formato mes-día.</li>
+<li><code>n</code>: flujo vehicular de la fecha indicada.</li>
+<li><code>tavg</code>: temperatura media (°C) registrada en esa fecha.</li>
+<li><code>prcp</code>: precipitaciones (mm) registrada en esa fecha.</li>
+<li><code>dia</code>: día de la semana de la fecha indicada.</li>
+<li><code>tipo_dia</code>: tipo de día (Fin de semana o Lunes a viernes) de la fecha indicada.</li>
+</ul></li>
+</ul>
+</section>
+<section id="sismos" class="level3">
+<h3 class="anchored" data-anchor-id="sismos"><code>sismos</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de sismos de diferente intensidad y magnitud en la región continental del país (excluyendo Tierra del Fuego) desde el 7 de enero de 2012, hasta el 18 de mayo de 2022.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>Fecha</code>: fecha del evento sísmico, en el formato año-mes-día.</li>
+<li><code>Hora</code>: hora del evento sísmico, en el formato hora-minuto-segundo.</li>
+<li><code>Latitud</code>: latitud del evento registrado.</li>
+<li><code>Longitud</code>: longitud del evento registrado.</li>
+<li><code>Provincia</code>: nombre de la provincia del evento registrado.</li>
+<li><code>Percibido</code>: <code>TRUE</code> si la magnitud fue percibida, <code>FALSE</code> si no lo fue.</li>
+<li><code>Magnitud</code>: magnitud del sismo en la escala de Richter.</li>
+<li><code>Profundidad</code>: profundidad (km) registrada del sismo.</li>
+</ul></li>
+</ul>
+</section>
+<section id="bateria" class="level3">
+<h3 class="anchored" data-anchor-id="bateria"><code>bateria</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos del historial de capacidad de carga de una batería de Li-Ion L19M4PC2 con capacidad de fábrica de 80.000 mWh en una Notebook LENOVO 81YT con 505 ciclos de carga.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>desde</code>: fecha de inicio del período, en el formato año-mes-día.</li>
+<li><code>hasta</code>: fecha de finalización del período, en el formato año-mes-día.</li>
+<li><code>carga</code>: carga máxima alcanzada (mWh) durante el período.</li>
+</ul></li>
+</ul>
+</section>
+<section id="jugadores" class="level3">
+<h3 class="anchored" data-anchor-id="jugadores"><code>jugadores</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de jugadores de fútbol y directores técnicos de primera división de Argentina al 2023, que incluyen datos de nacimiento y altura. Datos procesados y puestos a disposición por Pablo Mislej para el DATATÓN llevado a cabo en 2023 en FCEyN UBA, a cargo de Mariela Sued y en colaboración con María Eugenia Szretter Noste.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>Equipo</code>: equipo en el que juega (o dirige) a la fecha.</li>
+<li><code>Puesto</code>: posición en la que juega a la fecha. En el caso de director técnico, se indica acá.</li>
+<li><code>Jugador</code>: nombre del jugador (o director técnico).</li>
+<li><code>Edad</code>: edad del jugador (o director técnico) al 2023.</li>
+<li><code>Nacimiento</code>: fecha de nacimiento del jugador (o director técnico), en el formato día-mes-año.</li>
+<li><code>Altura</code>: altura (cm) del jugador (o director técnico).</li>
+<li><code>Ciudad</code>: ciudad de nacimiento del jugador (o director técnico).</li>
+<li><code>Pais</code>: país de nacimiento del jugador (o director técnico).</li>
+<li><code>Mes</code>: mes de nacimiento del jugador (o director técnico).</li>
+<li><code>Anio</code>: año de nacimiento del jugador (o director técnico).</li>
+</ul></li>
+</ul>
+</section>
+<section id="nombresarg" class="level3">
+<h3 class="anchored" data-anchor-id="nombresarg"><code>nombresARG</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos del histórico de nombres registrados ante el Registro Nacional de las Personas en Argentina desde 1922 y hasta 2015 agrupado por nombre y año, para nombres de más de 100 ocurrencias anuales. Se preprocesó la base de <a href="https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.1">datos.gob.ar</a> excluyendo, entre otros, casos de múltiples nombres (especialmente, aquellos muy antiguos).</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>nombre</code>: nombre registrado, en mayúsculas y sin tilde.</li>
+<li><code>cantidad</code>: cantidad de nombres registrados en el año.</li>
+<li><code>anio</code>: año de registro.</li>
+</ul></li>
+</ul>
+</section>
+<section id="viviendas" class="level3">
+<h3 class="anchored" data-anchor-id="viviendas"><code>viviendas</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos de viviendas en venta en Argentina, publicadas en el sitio inmobiliario online <em>Properati</em> durante los años 2013 a 2018. Los datos corresponden a viviendas publicadas a menos de 10 millones de dólares y con superficie total cubierta menor a 1000 metros cuadrados.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>tipo</code>: tipo de vivienda en venta.</li>
+<li><code>ciudad</code>: ciudad, municipio (GBA) o barrio (CABA) de la vivienda.</li>
+<li><code>provincia</code>: provincia (con distinción entre zonas de GBA y CABA).</li>
+<li><code>lat</code>: latitud de la ubicación de la vivienda.</li>
+<li><code>lon</code>: longitud de la ubicación de la vivienda.</li>
+<li><code>precioUSD</code>: precio publicado (USD) de la vivienda en venta.</li>
+<li><code>sup_tot</code>: superficie total (m2) de la vivienda.</li>
+<li><code>sup_cub</code>: superficie cubierta (m2) de la vivienda.</li>
+<li><code>precio_sup_tot</code>: precio (USD) del m2 según superficie total de la vivienda.</li>
+<li><code>precio_sup_cub</code>: precio (USD) del m2 según superficie cubierta de la vivienda.</li>
+<li><code>ambientes</code>: cantidad de ambientes de la vivienda reportados en la publicación.</li>
+</ul></li>
+</ul>
+</section>
+<section id="xgfifa22" class="level3">
+<h3 class="anchored" data-anchor-id="xgfifa22"><code>xGFIFA22</code></h3>
+<ul>
+<li><p><strong>Descripción</strong>: Datos resumen de goles esperados (xG) y de goles esperados asistidos (xGA) para los jugadores del mundial FIFA 2022. En la actualidad, xG es el mejor predictor del rendimiento futuro tanto para jugadores como para equipos. xG es una métrica que mide la probabilidad de que un tiro dado termine en gol. Según <a href="https://statsbomb.com/es/metricas-de-futbol/que-es-el-xg/">StatsBomb</a>, un modelo de xG utiliza información histórica de miles de tiros con características similares para estimar la probabilidad de gol en una escala de 0 a 1. Por ejemplo, un tiro con un valor de xG de 0,2 es uno que razonablemente se puede esperar que termine en gol dos de cada 10 veces. En el dataset, la columna de xG se construyó a partir de los datos de <code>statsBombR</code> filtrando todos los <em>shots</em> (tiros al arco) que no fueran penales, y sumando sus xG para cada uno de los jugadores. La métrica xGA se construye con una información adicional: la de los pases. De cada tiro al arco, se registra si proviene de un pase de asistencia. Luego, la variable xGA de este <em>dataset</em> se construyó a partir de filtrar todos los <em>shots</em> asistidos de los datos del mundial 2022 de <code>statsBombR</code> y sumar sus xG para cada uno de los jugadores.</p></li>
+<li><p><strong>Variables</strong>:</p>
+<ul>
+<li><code>jugador</code>: nombre del jugador.</li>
+<li><code>xG</code>: goles esperados (sin penales).</li>
+<li><code>xGA</code>: goles esperados asistidos</li>
+</ul></li>
+</ul>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

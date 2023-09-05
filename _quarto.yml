@@ -19,7 +19,6 @@ book:
   page-navigation: true
   favicon: cover.png
   repo-url: https://daniellaparada.github.io/IC-datasets-docencia/
-  downloads: [pdf, epub]
 
 crossref:
   appendix-title: "Apéndice"

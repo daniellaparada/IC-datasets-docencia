@@ -1,6 +1,9 @@
-# Bibliografía {.unnumbered}
+# Otras referencias {.unnumbered}
 
-Ver si va (ejemplo dummy)
+------------------------------------------------------------------------
 
-::: {#refs}
-:::
+-   \(2023\) **Telling Stories with Data**, Rohan Alexander. Disponible [acá](https://tellingstorieswithdata.com/).
+
+-   \(2022\) **Regression and Other Stories**, Andrew Gelman, Jennifer Hill, Aki Vehtari. Disponible [acá](https://avehtari.github.io/ROS-Examples/).
+
+-   \(2021\) **Introduction to Modern Statistics**, Mine Çetinkaya-Rundel and Johanna Hardin. Disponible [acá](https://openintro-ims.netlify.app/).

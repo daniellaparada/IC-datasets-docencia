@@ -90,7 +90,7 @@ knitr::kable(jugadores[1:10, ], caption = "Primeros 10 datos de 'jugadores'.")
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 ggplotly(ggplot(jugadores %>%
-                  drop_na() %>%
+                  #drop_na() %>%
                   filter(Puesto != "DT")%>%
                   group_by(Mes) %>%
                   summarise(Total = n()), 
@@ -184,8 +184,8 @@ knitr::kable(viviendas[1:10, c(1,2,6,7,9,11)], caption = "Primeros 10 datos de '
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 ggplotly(
-  ggplot(data=viviendas %>% filter(ciudad=="Caballito"),aes(x=precioUSD,y=sup_cub, col=tipo, key=ambientes)) +
-    labs(title= "Caballito (viviendas en venta 2013-2018)",x = "Precio (USD)", y = "Superficie total cubierta (m2)") +
+  ggplot(data=viviendas %>% filter(ciudad=="Caballito"),aes(x=sup_cub, y=precioUSD, col=tipo, key=ambientes)) +
+    labs(title= "Caballito (viviendas en venta 2013-2018)", x = "Superficie total cubierta (m2)", y = "Precio (USD)") +
     ylim(0, 400) +
     xlim(0, 1000000) +
     geom_point() +
